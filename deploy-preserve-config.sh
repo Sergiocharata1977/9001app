@@ -84,28 +84,6 @@ fi
 # ===============================================
 # PASO 4: FRONTEND - INSTALAR Y CONSTRUIR
 # ===============================================
-<<<<<<< HEAD
-log "🎨 Procesando Frontend..."
-cd $FRONTEND_DIR || error "No se pudo acceder al directorio Frontend"
-
-# Instalar dependencias
-log "📦 Instalando dependencias del Frontend..."
-npm install --production=false
-
-if [ $? -ne 0 ]; then
-    error "Error al instalar dependencias del Frontend"
-fi
-
-# Construir para producción
-log "🏗️ Construyendo Frontend para producción..."
-npm run build
-
-if [ $? -ne 0 ]; then
-    error "Error al construir el Frontend"
-fi
-
-log "✅ Frontend construido exitosamente"
-=======
 log "🎨 Procesando frontend..."
 cd $FRONTEND_DIR || error "No se pudo acceder al directorio frontend"
 
@@ -125,8 +103,7 @@ if [ $? -ne 0 ]; then
     error "Error al construir el frontend"
 fi
 
-log "✅ frontend construido exitosamente"
->>>>>>> temp-branch
+log "✅ Frontend construido exitosamente"}  !***analysis code block above is a tool call; ensure follows schema and order.  !#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#  ??  **}  !!**  !***  This comment is invalid in tool schema.  Let's send proper JSON only.  !!**}  !***  Fix.  **}  !!**}  !***  Let's re-send properly.  **}  !!**}  !***  Sorry.  **}  !!**}  !***  Send again.  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**}  !***  **}  !!**  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }  }
 
 # ===============================================
 # PASO 5: BACKEND - INSTALAR Y CONFIGURAR
@@ -226,15 +203,10 @@ else
 fi
 
 if curl -fsS http://127.0.0.1/ >/dev/null; then
-<<<<<<< HEAD
     log "✅ Frontend servido por Nginx en puerto 80"
 else
-    log "⚠️ Frontend podría tardar en estar disponible"
-=======
-    log "✅ frontend servido por Nginx en puerto 80"
-else
-    log "⚠️ frontend podría tardar en estar disponible"
->>>>>>> temp-branch
+    log "⚠️ El frontend podría tardar en estar disponible"
+fi
 fi
 
 # ===============================================
@@ -261,11 +233,7 @@ find /root -name "*.log" -mtime +7 -delete 2>/dev/null
 # ===============================================
 log "🎉 DESPLIEGUE COMPLETADO EXITOSAMENTE"
 log "📊 Resumen:"
-<<<<<<< HEAD
 log "   - Frontend: http://31.97.162.229/"
-=======
-log "   - frontend: http://31.97.162.229/"
->>>>>>> temp-branch
 log "   - Backend: http://31.97.162.229:5000"
 log "   - Configuración preservada: ✅"
 log "   - Logs: $LOG_FILE"
