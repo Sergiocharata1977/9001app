@@ -133,7 +133,7 @@ const LoginPage = () => {
                 Regístrate gratis y obtén 7 días de prueba completa
               </p>
               <Link
-                to="/app/register"
+                to="/register"
                 className="inline-flex items-center space-x-2 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <span>Crear cuenta gratuita</span>
@@ -250,7 +250,7 @@ const LoginPage = () => {
                 <p className="text-slate-600">
                   ¿No tienes una cuenta?{' '}
                   <Link
-                    to="/app/register"
+                    to="/register"
                     className="text-emerald-600 hover:text-emerald-700 font-medium"
                   >
                     Regístrate gratis
