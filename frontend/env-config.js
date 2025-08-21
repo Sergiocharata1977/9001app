@@ -19,7 +19,7 @@ const getConfig = (key, defaultValue) => {
 
 export const config = {
   // 🌐 URL del Backend API
-  API_URL: getConfig('API_URL', 'http://localhost:5000/api'),
+  API_URL: getConfig('API_URL', 'http://localhost:5001/api'),
   
   // 🔒 Configuración de autenticación
   AUTH_ENABLED: getConfig('AUTH_ENABLED', true) !== false && getConfig('AUTH_ENABLED', true) !== 'false',

@@ -7,6 +7,20 @@ El **Sistema de Coordinación de Agentes** es una arquitectura automatizada que 
 
 ## 📒 Bitácora de Tareas de Agentes
 
+### 📝 Tarea #012
+- 📅 Fecha: 20-01-2025
+- ⏰ Hora inicio: 15:45
+- 🖊️ Descripción: Resolución de Error EADDRINUSE Puerto 5000 - Configuración Automática Puerto 5001.
+- 🎯 Objetivos:
+  Resolver el error "EADDRINUSE: address already in use :::5000" que impedía el inicio del backend del sistema SGC. El objetivo es diagnosticar el problema del puerto ocupado, implementar una solución automática que cambie la configuración del backend al puerto 5001, actualizar las configuraciones del frontend para mantener la conectividad, y crear scripts de utilidad para prevenir futuros problemas de puertos. Se busca garantizar que el backend pueda iniciarse correctamente sin conflictos de puertos y que todo el sistema SGC funcione sin interrupciones.
+- 🔄 Estado: ✅ Terminado
+- 📦 Entregable: Backend funcionando en puerto 5001 con scripts de diagnóstico y solución automática de conflictos de puertos.
+- 📁 Archivos trabajados: `backend/index.js`, `backend/.env`, `frontend/src/services/apiService.js`, `frontend/public/env-config.js`
+- 📄 Archivos creados: `backend/scripts/permanentes/fix-port-issue.js`, `backend/scripts/permanentes/change-backend-port.js`, `kill-node-processes.bat`, `fix-backend.ps1`
+- 🗑️ Archivos eliminados: Ninguno
+- 📑 Informe:
+  Se resolvió exitosamente el error de puerto ocupado que impedía el inicio del backend. Se creó un script de diagnóstico (fix-port-issue.js) que identifica procesos usando el puerto 5000 y sugiere soluciones. Se implementó un script automático (change-backend-port.js) que cambió la configuración del backend del puerto 5000 al 5001, actualizando automáticamente backend/index.js (PORT = 5001), creando/actualizando el archivo .env con PORT=5001, y actualizando las configuraciones del frontend en apiService.js y env-config.js para mantener la conectividad. Se crearon scripts de utilidad adicionales: kill-node-processes.bat para terminar procesos Node.js conflictivos y fix-backend.ps1 (PowerShell) para diagnóstico y solución integral en Windows. Todos los scripts incluyen verificaciones de seguridad y mensajes informativos claros. El backend ahora se inicia correctamente en puerto 5001 y el sistema SGC mantiene plena funcionalidad.
+
 ### 📝 Tarea #011
 - 📅 Fecha: 20-08-2025
 - ⏰ Hora inicio: 02:15
