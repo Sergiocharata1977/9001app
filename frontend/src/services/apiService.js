@@ -14,7 +14,7 @@ const getApiBaseUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
   // Valor por defecto
-  return 'http://localhost:5001/api';
+  return 'http://localhost:5000/api';
 };
 
 // Servicio base para llamadas HTTP al backend
