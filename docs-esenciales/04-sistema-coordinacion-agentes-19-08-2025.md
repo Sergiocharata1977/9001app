@@ -7,6 +7,20 @@ El **Sistema de Coordinación de Agentes** es una arquitectura automatizada que 
 
 ## 📒 Bitácora de Tareas de Agentes
 
+### 📝 Tarea #013
+- 📅 Fecha: 20-01-2025
+- ⏰ Hora inicio: 16:15
+- 🖊️ Descripción: Corrección de Consultas SQL CRM y Restauración de Configuración Puerto 5000.
+- 🎯 Objetivos:
+  Resolver los errores SQL "no such column: v.nombre" y "no such column: p.puesto" que impedían el funcionamiento del módulo CRM tras la migración de la tabla personal. El objetivo es corregir todas las consultas SQL en crm.routes.js para usar la nueva estructura de campos (nombres+apellidos en lugar de nombre, especialidad_ventas en lugar de puesto), restaurar la configuración del sistema al puerto 5000 como estaba originalmente configurado, y deshabilitar completamente el servicio RAG que estaba causando errores. Se busca garantizar que el módulo CRM funcione completamente sin errores SQL y que el sistema mantenga su configuración original estable.
+- 🔄 Estado: ✅ Terminado
+- 📦 Entregable: Sistema CRM funcionando completamente con consultas SQL corregidas, configuración restaurada al puerto 5000 y RAG deshabilitado.
+- 📁 Archivos trabajados: `backend/routes/crm.routes.js`, `backend/index.js`, `backend/.env`, `frontend/src/services/apiService.js`, `frontend/public/env-config.js`, `frontend/src/components/menu/Sidebar.jsx`
+- 📄 Archivos creados: `backend/routes/crm.routes.js.backup`
+- 🗑️ Archivos eliminados: Ninguno
+- 📑 Informe:
+  Se resolvieron exitosamente todos los errores SQL del módulo CRM causados por la migración de la tabla personal. Se corrigieron las consultas SQL en crm.routes.js reemplazando v.nombre por (v.nombres || ' ' || v.apellidos), s.nombre por (s.nombres || ' ' || s.apellidos), y p.puesto por p.especialidad_ventas. Se corrigió la sintaxis CONCAT() incompatible con SQLite usando la concatenación nativa de SQLite con operador ||. Se restauró la configuración completa del sistema al puerto 5000 original, actualizando backend/index.js, backend/.env, frontend apiService.js y env-config.js. Se deshabilitó completamente el servicio RAG en Sidebar.jsx comentando imports, estados y botones relacionados. Se creó backup automático antes de aplicar cambios. Todas las consultas SQL ahora funcionan correctamente con la nueva estructura de la tabla personal, eliminando los errores 500 que impedían cargar clientes, oportunidades, actividades y vendedores. El sistema CRM ahora está completamente operativo en el puerto 5000 original.
+
 ### 📝 Tarea #012
 - 📅 Fecha: 20-01-2025
 - ⏰ Hora inicio: 15:45

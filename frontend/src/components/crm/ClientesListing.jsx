@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -30,8 +31,12 @@ import {
   CATEGORIAS_CLIENTE
 } from '@/types/crm';
 import ClienteCard from './ClienteCard';
+import ClienteModal from './ClienteModal';
+import { toast } from 'sonner';
 
 const ClientesListing = () => {
+  const navigate = useNavigate();
+  
   const [clientes, setClientes] = useState([]);
   const [filteredClientes, setFilteredClientes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,6 +44,8 @@ const ClientesListing = () => {
   const [selectedTipo, setSelectedTipo] = useState('all');
   const [selectedCategoria, setSelectedCategoria] = useState('all');
   const [viewMode, setViewMode] = useState('table'); // 'table' o 'cards'
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCliente, setSelectedCliente] = useState(null);
 
   useEffect(() => {
     cargarDatos();
@@ -82,6 +89,35 @@ const ClientesListing = () => {
     setFilteredClientes(filtered);
   };
 
+  const handleOpenModal = (cliente = null) => {
+    setSelectedCliente(cliente);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCliente(null);
+    setIsModalOpen(false);
+  };
+
+  const handleSaveCliente = (clienteData) => {
+    // Recargar datos después de guardar
+    cargarDatos();
+    handleCloseModal();
+  };
+
+  const handleDeleteCliente = async (cliente) => {
+    if (window.confirm(`¿Estás seguro de que deseas eliminar el cliente "${cliente.nombre}"?`)) {
+      try {
+        await crmService.deleteCliente(cliente.id);
+        toast.success('Cliente eliminado exitosamente');
+        cargarDatos();
+      } catch (error) {
+        console.error('Error eliminando cliente:', error);
+        toast.error('Error eliminando cliente');
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -119,7 +155,7 @@ const ClientesListing = () => {
               Tarjetas
             </Button>
           </div>
-          <Button size="sm">
+          <Button size="sm" onClick={() => handleOpenModal()}>
             <Plus className="w-3 h-3 mr-1" />
             Nuevo Cliente
           </Button>
@@ -266,13 +302,25 @@ const ClientesListing = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-1">
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => navigate(`/app/crm/clientes/${cliente.id}`)}
+                      >
                         <Eye className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => handleOpenModal(cliente)}
+                      >
                         <Edit className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => handleDeleteCliente(cliente)}
+                      >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
