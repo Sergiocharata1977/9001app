@@ -27,7 +27,7 @@ import {
   Calendar,
   Star
 } from 'lucide-react';
-import { crmService } from '@/services/crmService';
+import { crmService, vendedoresService } from '@/services/crmService';
 
 const VendedoresListing = () => {
   const [vendedores, setVendedores] = useState([]);
@@ -47,7 +47,8 @@ const VendedoresListing = () => {
   const cargarDatos = async () => {
     try {
       setIsLoading(true);
-      const response = await crmService.getVendedores();
+      // Usar tabla personal filtrada por tipo_personal='vendedor'
+      const response = await vendedoresService.getVendedoresPersonal();
       setVendedores(response.data);
     } catch (error) {
       console.error('Error cargando vendedores:', error);
@@ -61,7 +62,8 @@ const VendedoresListing = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(vendedor =>
-        vendedor.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vendedor.nombres?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vendedor.apellidos?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vendedor.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vendedor.telefono?.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -197,8 +199,8 @@ const VendedoresListing = () => {
                         <User className="w-5 h-5 text-blue-600" />
                       </div>
                       <div>
-                        <div className="font-medium">{vendedor.nombre}</div>
-                        <div className="text-sm text-gray-500">{vendedor.cargo}</div>
+                        <div className="font-medium">{vendedor.nombres} {vendedor.apellidos}</div>
+                        <div className="text-sm text-gray-500">{vendedor.especialidad_ventas || 'Vendedor General'}</div>
                       </div>
                     </div>
                   </TableCell>
