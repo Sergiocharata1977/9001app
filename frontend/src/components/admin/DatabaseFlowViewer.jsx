@@ -198,7 +198,7 @@ graph TD
                     Activo
                   </Badge>
                   <span className="text-sm text-gray-600">
-                    Frecuencia: Cada 12 horas | Última ejecución: Hace 2h 15m
+                    Frecuencia: Cada 20 minutos | Última ejecución: Hace 5m
                   </span>
                 </div>
               </div>

@@ -64,6 +64,15 @@ module.exports = {
       env: {
         NODE_ENV: 'development'
       }
+    },
+    {
+      name: 'docs-updater',
+      script: 'scripts/update-docs.js',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      cron_restart: '*/20 * * * *', // Cada 20 minutos
+      env: { NODE_ENV: 'development' }
     }
   ]
 };

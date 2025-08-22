@@ -61,7 +61,10 @@
     "db-schema:update": "node backend/scripts/database-schema-updater.js",
     "db-schema:start": "node backend/scripts/database-schema-updater.js --continuous",
     "db-schema:stop": "pkill -f database-schema-updater",
-    "db-schema:status": "node backend/scripts/database-schema-status.js"
+    "db-schema:status": "node backend/scripts/database-schema-status.js",
+    "docs:map:files": "node scripts/generate-file-map.js",
+    "docs:map:db": "node scripts/generate-db-map.js",
+    "docs:update": "node scripts/update-docs.js"
   },
   "dependencies": {
     "@libsql/client": "^0.15.12",

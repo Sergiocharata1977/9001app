@@ -149,54 +149,16 @@ graph TD
     B --> K[📁 Database]
     B --> L[📁 RAG-Backend]
     
-    G --> G1[🔍 authController.js]
-    G --> G2[👥 personalController.js]
-    G --> G3[📋 hallazgosController.js]
-    G --> G4[📊 auditoriasController.js]
-    
-    H --> H1[🛣️ auth.routes.js]
-    H --> H2[🛣️ personal.routes.js]
-    H --> H3[🛣️ hallazgos.routes.js]
-    H --> H4[🛣️ auditorias.routes.js]
-    
-    K --> K1[🗄️ Migrations]
-    K --> K2[📊 data.db]
-    K --> K3[🔗 Relations]
-    
     C --> M[📁 Components]
     C --> N[📁 Pages]
     C --> O[📁 Services]
     C --> P[📁 Hooks]
     C --> Q[📁 Types]
     
-    M --> M1[👥 Personal]
-    M --> M2[📋 Hallazgos]
-    M --> M3[📊 Auditorias]
-    M --> M4[🎨 UI]
-    M --> M5[📚 Admin]
-    
-    N --> N1[🏠 Dashboard]
-    N --> N2[👤 Personal]
-    N --> N3[⚠️ Hallazgos]
-    N --> N4[🔍 Auditorias]
-    N --> N5[📚 Documentacion]
-    
-    D --> R[📋 COORDINACION-AGENTES.md]
-    D --> S[🗄️ database-flow-diagram.md]
-    D --> T[📁 file-structure-diagram.md]
-    D --> U[📊 INFORME-ESTADO-PROYECTO-ISO9001.md]
-    
-    E --> V[🤖 agent-monitor.js]
-    E --> W[🔄 auto-cleanup.js]
-    E --> X[📊 database-tracker.js]
-    E --> Y[🚀 start-automation-system.js]
-    
-    style A fill:#e3f2fd
-    style B fill:#f3e5f5
-    style C fill:#e8f5e8
-    style D fill:#fff3e0
-    style E fill:#fce4ec
-    style F fill:#f1f8e9
+    D --> R[01-log-tareas-agentes.md]
+    D --> S[04-mapa-archivos.md]
+    D --> T[05-mapa-database.md]
+    D --> U[06-contexto-agentes.md]
               `}
               className="w-full"
             />

@@ -1,0 +1,494 @@
+# 04 - Mapa de Archivos (Generado automáticamente)
+
+No editar manualmente. Este archivo es actualizado por `scripts/generate-file-map.js`.
+
+Última generación: 2025-08-22T14:04:40.939Z
+
+---
+
+## Resumen
+- Directorios: 104
+- Archivos: 374
+- Tamaño aproximado: 3.0 MB
+
+---
+
+## Árbol (hasta 3 niveles)
+- 📁 backend/
+  - 📁 config/
+    - 📄 env-setup.js (1.2 KB)
+    - 📄 isoflow4-config.json (545 B)
+  - 📁 controllers/
+    - 📄 adminController.js (23.1 KB)
+    - 📄 auditoriasController.js (31.5 KB)
+    - 📄 authController.js (10.1 KB)
+    - 📄 competenciasController.js (5.5 KB)
+    - 📄 direccion.controller.js (2.7 KB)
+    - 📄 encuestas.controller.js (5.2 KB)
+    - 📄 evaluacionDetalleController.js (1.7 KB)
+    - 📄 evaluacionesController.js (8.5 KB)
+    - 📄 evaluacionesSgcController.js (16.0 KB)
+    - 📄 evaluacionProgramacionController.js (5.4 KB)
+    - 📄 eventController.js (3.8 KB)
+    - 📄 planesController.js (5.3 KB)
+    - 📄 productosController.js (10.5 KB)
+    - 📄 superAdminController.js (10.4 KB)
+    - 📄 userController.js (19.2 KB)
+  - 📁 database/
+    - 📁 migrations/
+      - 📄 20241201_create_crm_tables.sql (6.5 KB)
+      - 📄 20241201_create_rag_tables.sql (2.8 KB)
+  - 📁 lib/
+    - 📄 tursoClient.js (534 B)
+  - 📁 middleware/
+    - 📄 auditMiddleware.js (7.4 KB)
+    - 📄 authMiddleware.js (2.7 KB)
+    - 📄 basicAuthMiddleware.js (2.8 KB)
+    - 📄 errorHandler.js (1.4 KB)
+    - 📄 permissionsMiddleware.js (5.8 KB)
+    - 📄 planLimits.js (7.8 KB)
+    - 📄 security.js (3.8 KB)
+    - 📄 simpleAuth.js (1.6 KB)
+    - 📄 tenantMiddleware.js (3.9 KB)
+  - 📁 RAG-System/
+    - 📁 controllers/
+      - 📄 ragController.js (11.2 KB)
+    - 📁 models/
+      - 📄 ragDataModel.js (22.1 KB)
+    - 📁 routes/
+      - 📄 ragRoutes.js (3.2 KB)
+    - 📁 services/
+      - 📄 ragService.js (10.4 KB)
+  - 📁 routes/
+    - 📄 acciones.routes.js (6.7 KB)
+    - 📄 actividad.routes.js (3.5 KB)
+    - 📄 admin.routes.js (2.8 KB)
+    - 📄 alternativeSearch.routes.js (3.7 KB)
+    - 📄 auditorias.routes.js (2.1 KB)
+    - 📄 authRoutes.js (1.3 KB)
+    - 📄 capacitaciones.js (5.6 KB)
+    - 📄 capacitaciones.routes.js (14.4 KB)
+    - 📄 competencias.routes.js (668 B)
+    - 📄 coordinacion.routes.js (3.1 KB)
+    - 📄 crm.routes.js (23.3 KB)
+    - 📄 database.routes.js (7.8 KB)
+    - 📄 departamentos.routes.js (8.9 KB)
+    - 📄 direccion.routes.js (548 B)
+    - 📄 documentos.js (5.3 KB)
+    - 📄 documentos.routes.js (7.9 KB)
+    - 📄 encuestas.routes.js (539 B)
+    - 📄 evalcompe-detalle.routes.js (1.3 KB)
+    - 📄 evalcompeProgramacion.routes.js (1.2 KB)
+    - 📄 evaluaciones-grupales.routes.js (1.4 KB)
+    - 📄 evaluaciones-sgc.routes.js (1.6 KB)
+    - 📄 evaluaciones.js (994 B)
+    - 📄 evaluaciones.routes.js (2.4 KB)
+    - 📄 eventRoutes.js (771 B)
+    - 📄 events.routes.js (302 B)
+    - 📄 hallazgos.routes.js (27.4 KB)
+    - 📄 identificacion-procesos.routes.js (4.9 KB)
+    - 📄 indicadores.routes.js (5.4 KB)
+    - 📄 mediciones.routes.js (5.5 KB)
+    - 📄 mejoras.routes.js (10.6 KB)
+    - 📄 minutas.routes.js (28.0 KB)
+    - 📄 normas.routes.js (7.5 KB)
+    - 📄 objetivos_calidad.routes.js (6.0 KB)
+    - 📄 objetivos-calidad.routes.js (5.3 KB)
+    - 📄 personal.routes.js (13.9 KB)
+    - 📄 planes.js (363 B)
+    - 📄 politica-calidad.routes.js (7.0 KB)
+    - 📄 procesos.routes.js (24.0 KB)
+    - 📄 procesos.routes.simple.js (1 B)
+    - 📄 productos.routes.js (513 B)
+    - 📄 puestos.routes.js (8.5 KB)
+    - 📄 relaciones.routes.js (12.1 KB)
+    - 📄 sgc-hierarchy.routes.js (5.3 KB)
+    - 📄 suscripciones.js (801 B)
+    - 📄 tickets.routes.js (5.9 KB)
+    - 📄 tratamientos.routes.js (5.1 KB)
+    - 📄 userRoutes.js (3.1 KB)
+    - 📄 usuarios.routes.js (6.9 KB)
+    - 📄 verificaciones.routes.js (5.1 KB)
+  - 📁 scripts/
+    - 📁 permanentes/
+      - 📄 cargar-datos-crm.js (17.7 KB)
+      - 📄 check-table-structure-detailed.js (1.0 KB)
+      - 📄 check-table-structure.js (999 B)
+      - 📄 check-tables.js (933 B)
+      - 📄 cleanup-temp.js (5.5 KB)
+      - 📄 diagnostico-rag-completo.js (7.4 KB)
+      - 📄 final-rag-test.js (3.3 KB)
+      - 📄 rag-final-status.js (2.6 KB)
+      - 📄 rag-setup.js (7.4 KB)
+      - 📄 rag-system-status.js (4.3 KB)
+      - 📄 README.md (6.2 KB)
+      - 📄 setup-rag-system.js (5.1 KB)
+      - 📄 simple-rag-test.js (1.7 KB)
+      - 📄 solucion-rag-completa.js (25.0 KB)
+      - 📄 update-backend-config.js (7.1 KB)
+  - 📁 services/
+    - 📄 activityLogService.js (6.9 KB)
+    - 📄 directQueryService.js (2.2 KB)
+    - 📄 initAssistant.js (3.1 KB)
+    - 📄 simpleSearchService.js (2.8 KB)
+  - 📁 tests/
+    - 📄 api-integration.test.js (4.4 KB)
+    - 📄 auth.contract.test.js (3.7 KB)
+  - 📁 uploads/
+    - 📁 documentos/
+      - 📄 archivo-1752332290037-276741301.pdf (54.9 KB)
+      - 📄 archivo-1752332834987-46294688.pdf (302.8 KB)
+  - 📄 .env.example (75 B)
+  - 📄 .env.local (819 B)
+  - 📄 .eslintrc.cjs (1.2 KB)
+  - 📄 .gitignore (716 B)
+  - 📄 .prettierrc (177 B)
+  - 📄 ecosystem.config.cjs (768 B)
+  - 📄 env-local-template.txt (867 B)
+  - 📄 env-local.txt (650 B)
+  - 📄 env.example (945 B)
+  - 📄 env.production (832 B)
+  - 📄 index.js (6.0 KB)
+  - 📄 jest.config.js (410 B)
+  - 📄 package-lock.json (238.7 KB)
+  - 📄 package.json (1.2 KB)
+- 📁 docs-esenciales/
+  - 📄 01-log-tareas-agentes.md (1.3 KB)
+  - 📄 01-resumen-ejecutivo-sgc-19-08-2025.md (3.5 KB)
+  - 📄 02-arquitectura-tecnica-sgc-19-08-2025.md (7.1 KB)
+  - 📄 02-bitacora-agentes.md (403 B)
+  - 📄 03-coordinacion-sistema-sgc-19-08-2025.md (7.9 KB)
+  - 📄 03-documentacion-sistema.md (740 B)
+  - 📄 04-mapa-archivos.md (172 B)
+  - 📄 04-sistema-coordinacion-agentes-19-08-2025.md (25.6 KB)
+  - 📄 05-estructura-base-datos-completa-19-08-2025.md (14.3 KB)
+  - 📄 05-mapa-database.md (175 B)
+  - 📄 06-contexto-agentes.md (2.2 KB)
+  - 📄 06-sistema-rag-sgc-iso-9001-19-08-2025.md (12.7 KB)
+  - 📄 07-estudio-completo-crm-19-08-2025.md (11.1 KB)
+  - 📄 08-estandarizacion-componentes-abm-20-08-2025.md (15.0 KB)
+  - 📄 09-sistema-diseno-unificado-20-08-2025.md (16.9 KB)
+  - 📄 PROMPT-MODELO-ALTA-AGENTE.md (5.4 KB)
+- 📁 frontend/
+  - 📁 public/
+    - 📁 images/
+      - 📁 personal/
+    - 📄 .htaccess (366 B)
+    - 📄 env-config.js (685 B)
+    - 📄 favicon.ico (1 B)
+    - 📄 index.html (1.1 KB)
+    - 📄 runtime-config.js (1.6 KB)
+    - 📄 runtime-config.override.js (297 B)
+    - 📄 runtime-config.override.js.example (1.3 KB)
+    - 📄 vite.svg (1.5 KB)
+  - 📁 scripts/
+    - 📄 typescript-status.cjs (13.3 KB)
+  - 📁 src/
+    - 📁 assets/
+      - 📄 react.svg (4.0 KB)
+    - 📁 components/
+      - 📁 acciones/
+      - 📁 admin/
+      - 📁 amfe/
+      - 📁 assistant/
+      - 📁 atoms/
+      - 📁 auditorias/
+      - 📁 calendar/
+      - 📁 calendario/
+      - 📁 capacitaciones/
+      - 📁 chat/
+      - 📁 comments/
+      - 📁 common/
+      - 📁 crm/
+      - 📁 dashboard/
+      - 📁 database/
+      - 📁 departamentos/
+      - 📁 direccion/
+      - 📁 documentos/
+      - 📁 encuestas/
+      - 📁 Evaluacionesdepersonal/
+      - 📁 hallazgos/
+      - 📁 iso/
+      - 📁 layout/
+      - 📁 mejoras/
+      - 📁 menu/
+      - 📁 minutas/
+      - 📁 molecules/
+      - 📁 normas/
+      - 📁 notifications/
+      - 📁 organisms/
+      - 📁 pages/
+      - 📁 personal/
+      - 📁 planes/
+      - 📁 procesos/
+      - 📁 productos/
+      - 📁 puestos/
+      - 📁 sgc/
+      - 📁 shared/
+      - 📁 templates/
+      - 📁 testing/
+      - 📁 theme/
+      - 📁 tickets/
+      - 📁 ui/
+      - 📁 usuarios/
+      - 📄 TestComponent.jsx (6.8 KB)
+      - 📄 TestReactQuerySimple.jsx (865 B)
+      - 📄 TestSimpleComponent.jsx (1.9 KB)
+    - 📁 config/
+      - 📄 accionWorkflow.js (1.8 KB)
+      - 📄 hallazgoWorkflow.js (2.4 KB)
+      - 📄 rag.config.js (1.5 KB)
+      - 📄 routes.js (2.8 KB)
+      - 📄 securityConfig.js (1.9 KB)
+    - 📁 context/
+      - 📄 AuthContext.jsx (2.2 KB)
+      - 📄 ThemeContext.jsx (1.8 KB)
+    - 📁 data/
+      - 📄 database-schema.json (83.2 KB)
+      - 📄 sections.js (2.1 KB)
+    - 📁 docs/
+      - 📄 components.md (7.0 KB)
+    - 📁 hooks/
+      - 📄 use-debounce.js (359 B)
+      - 📄 use-pagination.js (863 B)
+      - 📄 useApi.js (2.0 KB)
+      - 📄 useAuthInitializer.js (1.7 KB)
+      - 📄 useDebounce.js (583 B)
+      - 📄 useDebouncedSearch.js (4.1 KB)
+      - 📄 useDepartamentos.js (3.3 KB)
+      - 📄 useInfiniteScroll.js (4.1 KB)
+      - 📄 useLocalStorage.js (1.3 KB)
+      - 📄 useOptimization.js (4.9 KB)
+      - 📄 useOptimizedCallback.js (5.2 KB)
+      - 📄 useOptimizedList.js (4.7 KB)
+      - 📄 usePagination.js (6.4 KB)
+      - 📄 usePerformanceMonitor.js (7.1 KB)
+      - 📄 usePerformanceOptimization.js (1.8 KB)
+      - 📄 useQueryClient.jsx (1.2 KB)
+      - 📄 useSecuritySystems.js (7.3 KB)
+      - 📄 useToastEffect.js (301 B)
+      - 📄 useWindowSize.js (542 B)
+    - 📁 layouts/
+      - 📄 CRMLayout.jsx (4.4 KB)
+    - 📁 lib/
+      - 📄 cacheService.js (2.7 KB)
+      - 📄 errorHandler.js (4.5 KB)
+      - 📄 hallazgoEstados.js (6.8 KB)
+      - 📄 hallazgoWorkflow.js (2.5 KB)
+      - 📄 mockData.js (3.9 KB)
+      - 📄 queryClient.js (991 B)
+      - 📄 schema.js (19.6 KB)
+      - 📄 updateServices.js (1.2 KB)
+      - 📄 utils.js (137 B)
+      - 📄 utils.ts (170 B)
+      - 📄 validations.js (2.5 KB)
+    - 📁 pages/
+      - 📁 Acciones/
+      - 📁 Admin/
+      - 📁 AMFE/
+      - 📁 Auditorias/
+      - 📁 Calendar/
+      - 📁 Competencias/
+      - 📁 CRM/
+      - 📁 Documentacion/
+      - 📁 EvaluacionCompetencias/
+      - 📁 Hallazgos/
+      - 📁 Registroylogeo/
+      - 📁 SuperAdmin/
+      - 📁 Web/
+      - 📄 Acciones.jsx (190 B)
+      - 📄 Admin.jsx (825 B)
+      - 📄 Auditorias.tsx (12.0 KB)
+      - 📄 Capacitaciones.tsx (18.0 KB)
+      - 📄 ComunicacionesPage.jsx (1.6 KB)
+      - 📄 Configuracion.jsx (871 B)
+      - 📄 ConfiguracionPage.jsx (2.9 KB)
+      - 📄 Dashboard.tsx (12.8 KB)
+      - 📄 DatabaseSchemaPage.jsx (12.5 KB)
+      - 📄 Departamentos.jsx (281 B)
+      - 📄 Documentacion.jsx (834 B)
+      - 📄 Hallazgos.jsx (830 B)
+      - 📄 IdentificacionProcesosPage.jsx (238 B)
+      - 📄 Login.jsx (11.2 KB)
+      - 📄 MedicionesPage.jsx (356 B)
+      - 📄 MinutasPage.jsx (16.1 KB)
+      - 📄 MinutasPage.tsx (15.3 KB)
+      - 📄 Normas.jsx (801 B)
+      - 📄 NormasPage.jsx (7.0 KB)
+      - 📄 ObjetivosMetasPage.jsx (14.6 KB)
+      - 📄 Personal.jsx (251 B)
+      - 📄 PlanificacionDireccionPage.jsx (24.2 KB)
+      - 📄 PlanificacionDireccionPageWithQuery.jsx (22.4 KB)
+      - 📄 PlanificacionEstrategicaPage.jsx (10.1 KB)
+      - 📄 PoliticaCalidadPage.jsx (224 B)
+      - 📄 Procesos.tsx (13.4 KB)
+      - 📄 ProcesosISO.jsx (186 B)
+      - 📄 Puestos.jsx (790 B)
+      - 📄 RevisionDireccionPage.jsx (13.9 KB)
+      - 📄 SatisfaccionClientePage.jsx (16.0 KB)
+      - 📄 TicketsTareasPage.jsx (16.6 KB)
+      - 📄 TratamientosPage.jsx (3.6 KB)
+      - 📄 UserManagementPage.jsx (11.4 KB)
+      - 📄 UsersPage.jsx (15.3 KB)
+      - 📄 Usuarios.jsx (786 B)
+      - 📄 UsuariosSingle.jsx (16.6 KB)
+      - 📄 VerificacionesPage.jsx (3.6 KB)
+    - 📁 routes/
+      - 📄 AppRoutes.jsx (18.9 KB)
+      - 📄 AppRoutes.jsx.backup (16.8 KB)
+      - 📄 ProtectedRoute.jsx (1.3 KB)
+      - 📄 SuperAdminRoutes.jsx (3.3 KB)
+      - 📄 WebRoutes.jsx (723 B)
+    - 📁 schemas/
+      - 📄 auditoriasSchemas.ts (12.3 KB)
+      - 📄 authSchemas.js (1.4 KB)
+      - 📄 capacitacionesSchemas.ts (14.2 KB)
+      - 📄 minutasSchemas.ts (11.5 KB)
+      - 📄 procesosSchemas.ts (11.2 KB)
+    - 📁 scripts/
+      - 📄 control-completo.js (6.4 KB)
+      - 📄 control-tecnico.js (3.9 KB)
+      - 📄 toggle-security-systems.js (5.5 KB)
+    - 📁 services/
+      - 📁 api/
+      - 📄 accionesService.js (1.9 KB)
+      - 📄 adminService.js (1.9 KB)
+      - 📄 agentCoordinationService.js (6.8 KB)
+      - 📄 amfeService.ts (13.2 KB)
+      - 📄 apiService.js (6.1 KB)
+      - 📄 auditorias.js (2.9 KB)
+      - 📄 auditoriasService.js (9.9 KB)
+      - 📄 auditoriasService.ts (8.4 KB)
+      - 📄 auditService.js (929 B)
+      - 📄 auth.js (9.6 KB)
+      - 📄 authService.js (1.2 KB)
+      - 📄 capacitacionesService.js (3.8 KB)
+      - 📄 capacitacionesService.ts (14.0 KB)
+      - 📄 competenciasService.js (2.9 KB)
+      - 📄 crmService.js (10.5 KB)
+      - 📄 departamentos.js (2.9 KB)
+      - 📄 departamentosServiceWithQuery.js (6.9 KB)
+      - 📄 direccionService.js (870 B)
+      - 📄 direccionServiceWithQuery.js (6.5 KB)
+      - 📄 documentosService.js (2.2 KB)
+      - 📄 encuestas.js (867 B)
+      - 📄 encuestasService.js (4.0 KB)
+      - 📄 evalcompeProgramacionService.js (4.8 KB)
+      - 📄 evaluacionDetalleService.js (856 B)
+      - 📄 evaluacionesGrupales.js (4.9 KB)
+      - 📄 evaluacionesService.js (5.2 KB)
+      - 📄 evaluacionesSgcService.js (9.2 KB)
+      - 📄 evaluacionProgramacionService.js (745 B)
+      - 📄 eventosService.js (2.1 KB)
+      - 📄 eventService.js (381 B)
+      - 📄 featureService.js (4.7 KB)
+      - 📄 hallazgosService.js (4.1 KB)
+      - 📄 hallazgosServiceWithQuery.js (10.4 KB)
+      - 📄 identificacionProcesosService.js (2.0 KB)
+      - 📄 index.js (1.8 KB)
+      - 📄 indicadores.js (881 B)
+      - 📄 indicadoresService.js (1.7 KB)
+      - 📄 mediciones.js (872 B)
+      - 📄 medicionesService.js (979 B)
+      - 📄 mejoras.js (1018 B)
+      - 📄 mejorasService.js (3.9 KB)
+      - 📄 messageService.js (757 B)
+      - 📄 minutasService.js (4.7 KB)
+      - 📄 minutasService.ts (13.6 KB)
+      - 📄 mockApiService.js (4.6 KB)
+      - 📄 mockService.js (3.9 KB)
+      - 📄 normasService.js (4.2 KB)
+      - 📄 objetivos.js (867 B)
+      - 📄 objetivosCalidadService.js (736 B)
+      - 📄 personalService.js (9.0 KB)
+      - 📄 politicaCalidadService.js (3.9 KB)
+      - 📄 procesosService.js (2.2 KB)
+      - 📄 procesosService.ts (11.0 KB)
+      - 📄 productosService.js (2.7 KB)
+      - 📄 puestos.js (1.9 KB)
+      - 📄 puestosService.js (3.1 KB)
+      - 📄 puntos-norma.js (869 B)
+      - 📄 relacionesService.js (6.2 KB)
+      - 📄 serviceFactory.js (987 B)
+      - 📄 sgcHierarchyService.js (1.4 KB)
+      - 📄 silos.js (831 B)
+      - 📄 sistemActividadService.js (287 B)
+      - 📄 ticketsService.js (4.3 KB)
+      - 📄 usuarios.js (2.9 KB)
+      - 📄 usuariosService.js (1.8 KB)
+      - 📄 usuariosServiceWithQuery.js (8.5 KB)
+      - 📄 vehiculos.js (2.7 KB)
+    - 📁 store/
+      - 📄 authStore.js (8.3 KB)
+      - 📄 index.js (1002 B)
+      - 📄 permissionsStore.js (2.9 KB)
+    - 📁 styles/
+      - 📄 _base.scss (1.8 KB)
+      - 📄 _components.scss (3.4 KB)
+      - 📄 _layouts.scss (2.6 KB)
+      - 📄 _mixins.scss (2.4 KB)
+      - 📄 _variables.scss (1.8 KB)
+      - 📄 main.scss (129 B)
+      - 📄 sgc-spacing.css (4.8 KB)
+    - 📁 tests/
+      - 📄 services-integration.test.js (4.4 KB)
+    - 📁 types/
+      - 📄 acciones.ts (3.4 KB)
+      - 📄 amfe.ts (483 B)
+      - 📄 api.ts (4.1 KB)
+      - 📄 auditorias.ts (2.2 KB)
+      - 📄 capacitaciones.ts (1.6 KB)
+      - 📄 common.ts (10.1 KB)
+      - 📄 crm.ts (11.9 KB)
+      - 📄 forms.ts (9.2 KB)
+      - 📄 hallazgos.ts (2.0 KB)
+      - 📄 index.ts (14.4 KB)
+      - 📄 minutas.ts (5.3 KB)
+      - 📄 personal.ts (9.1 KB)
+      - 📄 procesos.ts (6.8 KB)
+      - 📄 ui.d.ts (5.4 KB)
+    - 📁 utils/
+      - 📄 constants.js (1.2 KB)
+      - 📄 debug-auth.js (2.1 KB)
+      - 📄 export.js (1.6 KB)
+      - 📄 helpers.js (2.1 KB)
+      - 📄 menuProtection.js (1.7 KB)
+    - 📄 App.jsx (2.1 KB)
+    - 📄 index.css (13.2 KB)
+    - 📄 main.jsx (420 B)
+  - 📄 .env.example (263 B)
+  - 📄 .gitignore (253 B)
+  - 📄 .lintstagedrc.js (143 B)
+  - 📄 .prettierrc (234 B)
+  - 📄 babel.config.cjs (216 B)
+  - 📄 cypress.config.js (213 B)
+  - 📄 env-config.js (1.8 KB)
+  - 📄 env.production (236 B)
+  - 📄 eslint.config.js (734 B)
+  - 📄 index.html (702 B)
+  - 📄 package-lock.json (411.6 KB)
+  - 📄 package.json (3.0 KB)
+  - 📄 postcss.config.js (81 B)
+  - 📄 tailwind.config.js (3.3 KB)
+  - 📄 tsconfig.json (966 B)
+  - 📄 tsconfig.node.json (214 B)
+  - 📄 vite.config.js (1.1 KB)
+- 📁 scripts/
+  - 📄 generate-db-map.js (2.8 KB)
+  - 📄 generate-file-map.js (3.0 KB)
+  - 📄 update-docs.js (1.1 KB)
+- 📄 .gitignore (3.5 KB)
+- 📄 .gitlab-ci.yml (3.6 KB)
+- 📄 .nvmrc (8 B)
+- 📄 control-continuo.ps1 (1.4 KB)
+- 📄 deploy-quick.bat (2.4 KB)
+- 📄 deploy-server.sh (4.1 KB)
+- 📄 e reiniciado automáticamente (16.1 KB)
+- 📄 ecosystem.config.cjs (1.7 KB)
+- 📄 iniciar-sistema-avanzado.ps1 (6.2 KB)
+- 📄 iniciar.bat (625 B)
+- 📄 package-lock.json (73.2 KB)
+- 📄 package.json (4.1 KB)
+- 📄 PM2_ecosystem.config.cjs (784 B)
+- 📄 renombrar-sgc-participantes.sql (2.9 KB)
+- 📄 webhook-config.json (176 B)
