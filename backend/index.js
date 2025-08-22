@@ -42,6 +42,7 @@ const adminRoutes = require('./routes/admin.routes.js');
 const planesRoutes = require('./routes/planes.js');
 const suscripcionesRoutes = require('./routes/suscripciones.js');
 const coordinacionRoutes = require('./routes/coordinacion.routes.js');
+const docsRoutes = require('./routes/docs.routes.js');
 const crmRoutes = require('./routes/crm.routes.js');
 const databaseRoutes = require('./routes/database.routes.js');
 
@@ -123,6 +124,9 @@ app.use('/api/events', eventsRoutes);
 
 // Rutas de coordinación de agentes
 app.use('/api', coordinacionRoutes);
+
+// Rutas de documentación esencial
+app.use('/api', docsRoutes);
 
 // Rutas de CRM
 app.use('/api/crm', crmRoutes);
