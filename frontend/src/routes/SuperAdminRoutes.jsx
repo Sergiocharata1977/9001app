@@ -13,6 +13,7 @@ import AgentWorkflowDemo from '../pages/SuperAdmin/AgentWorkflowDemo';
 import WorkflowStages from '../pages/SuperAdmin/WorkflowStages';
 import AutoPlannerIntegration from '../pages/SuperAdmin/AutoPlannerIntegration';
 import CoordinacionAgentesViewer from '../components/admin/CoordinacionAgentesViewer';
+import DocumentacionEsencialViewer from '../components/admin/DocumentacionEsencialViewer';
 import SystemConfig from '../pages/SuperAdmin/SystemConfig';
 import SystemLogs from '../pages/SuperAdmin/SystemLogs';
 import BackupRestore from '../pages/SuperAdmin/BackupRestore';
@@ -30,7 +31,8 @@ const SuperAdminRoutes = () => {
         <Route path="/stats" element={<SystemStats />} />
         <Route path="/monitoring" element={<SystemMonitoring />} />
         <Route path="/coordination" element={<AgentCoordination />} />
-                            <Route path="/coordinacion-documento" element={<CoordinacionAgentesViewer />} />
+        <Route path="/coordinacion-documento" element={<CoordinacionAgentesViewer />} />
+        <Route path="/documentacion-esencial" element={<DocumentacionEsencialViewer />} />
         <Route path="/workflow-demo" element={<AgentWorkflowDemo />} />
         <Route path="/workflow-stages" element={<WorkflowStages />} />
         <Route path="/auto-planner" element={<AutoPlannerIntegration />} />

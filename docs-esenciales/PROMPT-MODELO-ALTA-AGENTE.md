@@ -11,40 +11,41 @@ Utiliza este prompt modelo para registrar el alta de un nuevo agente en la bitá
 
 ## 📚 DOCUMENTACIÓN ESENCIAL A CONSIDERAR
 
-### 1. **Resumen Ejecutivo** (`01-resumen-ejecutivo-sgc-19-08-2025.md`)
-- Visión general del sistema SGC
-- Objetivos estratégicos
-- Principios fundamentales ISO 9001:2015
+### 1. **Log de Tareas de Agentes** (`01-log-tareas-agentes.md`)
+- Log cronológico de tareas de agentes
+- Formato de registro estandarizado
+- Estadísticas de tareas completadas
+- Reglas del sistema para agentes IA
 
-### 2. **Arquitectura Técnica** (`02-arquitectura-tecnica-sgc-19-08-2025.md`)
-- Stack tecnológico del sistema
-- Patrones de diseño implementados
-- Estructura de microservicios
-- Integración de componentes
+### 2. **Bitácora de Agentes** (`02-bitacora-agentes.md`)
+- Tipos de agentes especializados
+- Flujos de trabajo de agentes
+- Reglas del sistema
+- Formato de tarea estándar
 
-### 3. **Coordinación del Sistema** (`03-coordinacion-sistema-sgc-19-08-2025.md`)
-- Flujos de trabajo del sistema
-- Procesos de coordinación
-- Gestión de dependencias
-- Comunicación entre módulos
+### 3. **Documentación del Sistema** (`03-documentacion-sistema.md`)
+- Arquitectura técnica completa
+- Módulos del sistema
+- Stack tecnológico
+- Funcionalidades principales
 
-### 4. **Bitácora de Agentes** (`04-sistema-coordinacion-agentes-19-08-2025.md`)
-- Reglas del sistema de agentes
-- Formato de registro de tareas
-- Estados y flujos de trabajo
-- Trazabilidad de actividades
+### 4. **Mapa de Archivos** (`04-mapa-archivos.md`)
+- Estructura completa del proyecto
+- Organización de directorios
+- Scripts de automatización
+- Archivos de configuración
 
-### 5. **Estructura de Base de Datos** (`05-estructura-base-datos-completa-19-08-2025.md`)
+### 5. **Mapa de Base de Datos** (`05-mapa-database.md`)
 - Esquema completo de la base de datos
 - Relaciones entre entidades
-- Tablas y campos principales
-- Restricciones y validaciones
+- Índices y optimizaciones
+- Configuración multi-tenant
 
-### 6. **Sistema RAG** (`06-sistema-rag-sgc-iso-9001-19-08-2025.md`)
-- Configuración del sistema RAG
-- Procesamiento de documentación
-- Búsqueda semántica
-- Generación de respuestas inteligentes
+### 6. **Contexto para Agentes** (`06-contexto-agentes.md`)
+- Guía completa para nuevos agentes IA
+- Stack tecnológico detallado
+- Patrones de desarrollo
+- Reglas y mejores prácticas
 
 ---
 

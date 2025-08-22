@@ -57,11 +57,19 @@ const SuperAdminSidebarSimple = ({ isOpen, onClose, isMobile }) => {
       subItems: [
         {
           id: 'coordinacion-documento',
-          label: '📄 Bitácora de Agentes',
+          label: '📄 Log de Tareas',
           path: '/super-admin/coordinacion-documento',
-          description: 'Registro de actividades en tiempo real',
+          description: 'Log cronológico de tareas de agentes',
           icon: FileText,
           color: 'text-blue-500'
+        },
+        {
+          id: 'documentacion-esencial',
+          label: '📚 Documentación Esencial',
+          path: '/super-admin/documentacion-esencial',
+          description: 'Sistema reorganizado sin fechas',
+          icon: FileText,
+          color: 'text-green-500'
         }
       ]
     },

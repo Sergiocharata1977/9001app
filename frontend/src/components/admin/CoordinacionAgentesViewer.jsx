@@ -24,7 +24,7 @@ const CoordinacionAgentesViewer = () => {
       setContent(data);
       setLastUpdate(new Date().toLocaleString('es-ES'));
     } catch (err) {
-      setError('Error al cargar la bitácora de agentes');
+      setError('Error al cargar el log de tareas de agentes');
       console.error('Error loading document:', err);
     } finally {
       setIsLoading(false);
@@ -107,10 +107,10 @@ const CoordinacionAgentesViewer = () => {
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-purple-600 flex items-center gap-3">
                   <RefreshCw className="w-8 h-8" />
-                  Bitácora de Agentes
+                  Log de Tareas de Agentes
                 </h1>
                 <p className="text-slate-600">
-                  Registro de actividades y tareas de agentes en tiempo real
+                  Sistema de documentación reorganizado - Log cronológico de tareas de agentes IA
                 </p>
               </div>
               
@@ -171,7 +171,7 @@ const CoordinacionAgentesViewer = () => {
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
                   <RefreshCw className="w-8 h-8 animate-spin text-purple-600 mx-auto mb-4" />
-                  <p className="text-slate-600">Cargando bitácora de agentes...</p>
+                  <p className="text-slate-600">Cargando log de tareas de agentes...</p>
                 </div>
               </div>
             ) : error ? (
