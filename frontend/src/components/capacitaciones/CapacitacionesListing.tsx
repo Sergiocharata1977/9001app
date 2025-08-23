@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
@@ -11,16 +11,13 @@ import {
   Trash2, 
   Edit, 
   User, 
-  Users, 
   MapPin, 
   Clock,
   Download,
   Grid3X3,
   List,
-  MoreHorizontal,
   Eye,
   Search,
-  Filter,
   Target,
   CheckCircle,
   AlertCircle,
@@ -29,8 +26,10 @@ import {
 } from "lucide-react";
 import { capacitacionesService } from "@/services/capacitacionesService";
 import { useToast } from "@/components/ui/use-toast";
-import CapacitacionModal from "./CapacitacionModal";
+import CapacitacionModal from "./CapacitacionModal"; // types match below
+// @ts-expect-error legacy JSX component
 import CapacitacionSingle from "./CapacitacionSingle";
+// @ts-expect-error legacy JSX component
 import UnifiedHeader from "../common/UnifiedHeader";
 import UnifiedCard from "../common/UnifiedCard";
 import { 
@@ -41,7 +40,7 @@ import {
   CapacitacionField 
 } from "@/types/capacitaciones";
 
-export default function CapacitacionesListing(): JSX.Element {
+export default function CapacitacionesListing(): React.ReactElement {
   const { toast } = useToast();
   const [capacitaciones, setCapacitaciones] = useState<Capacitacion[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -60,7 +59,7 @@ export default function CapacitacionesListing(): JSX.Element {
   const fetchCapacitaciones = async (): Promise<void> => {
     try {
       setLoading(true);
-      const data = await capacitacionesService.getAll();
+      const data = await capacitacionesService.getCapacitaciones();
       setCapacitaciones(data);
       console.log('✅ Capacitaciones cargadas:', data);
     } catch (error) {
@@ -95,10 +94,10 @@ export default function CapacitacionesListing(): JSX.Element {
   const handleSave = async (formData: CapacitacionFormData): Promise<void> => {
     try {
       if (selectedCapacitacion) {
-        await capacitacionesService.update(selectedCapacitacion.id, formData);
+        await capacitacionesService.updateCapacitacion(selectedCapacitacion.id, formData);
         toast({ title: "Éxito", description: "Capacitación actualizada exitosamente" });
       } else {
-        await capacitacionesService.create(formData);
+        await capacitacionesService.createCapacitacion(formData);
         toast({ title: "Éxito", description: "Capacitación creada exitosamente" });
       }
       setModalOpen(false);
@@ -112,7 +111,7 @@ export default function CapacitacionesListing(): JSX.Element {
   const handleDelete = async (capacitacion: Capacitacion): Promise<void> => {
     if (window.confirm("¿Está seguro de que desea eliminar esta capacitación?")) {
       try {
-        await capacitacionesService.delete(capacitacion.id);
+        await capacitacionesService.deleteCapacitacion(capacitacion.id);
         toast({ title: "Éxito", description: "Capacitación eliminada exitosamente" });
         fetchCapacitaciones();
       } catch (error) {
@@ -160,24 +159,7 @@ export default function CapacitacionesListing(): JSX.Element {
     }
   };
 
-  const getEstadoIcon = (estado?: string): React.ComponentType<{ className?: string }> => {
-    if (!estado) return AlertCircle;
-    
-    switch (estado.toLowerCase()) {
-      case 'planificacion':
-        return Calendar;
-      case 'en preparacion':
-        return BookOpen;
-      case 'en curso':
-        return TrendingUp;
-      case 'completada':
-        return CheckCircle;
-      case 'cancelada':
-        return AlertCircle;
-      default:
-        return AlertCircle;
-    }
-  };
+
 
   const formatDate = (dateString?: string): string => {
     if (!dateString) return 'Fecha no definida';
@@ -214,7 +196,7 @@ export default function CapacitacionesListing(): JSX.Element {
 
   const stats = getStats();
 
-  const renderGridView = (): JSX.Element => {
+  const renderGridView = (): React.ReactElement => {
     if (loading) {
       return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -248,7 +230,6 @@ export default function CapacitacionesListing(): JSX.Element {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredCapacitaciones.map((capacitacion: Capacitacion) => {
-          const StatusIcon = getEstadoIcon(capacitacion.estado);
           const fields: CapacitacionField[] = [
             ...(capacitacion.instructor ? [{ 
               icon: User, 
@@ -292,7 +273,7 @@ export default function CapacitacionesListing(): JSX.Element {
     );
   };
 
-  const renderListView = (): JSX.Element => {
+  const renderListView = (): React.ReactElement => {
     if (loading) {
       return (
         <div className="flex items-center justify-center p-8">
@@ -472,8 +453,8 @@ export default function CapacitacionesListing(): JSX.Element {
       {/* Modal */}
       {modalOpen && (
         <CapacitacionModal
-          open={modalOpen}
-          onOpenChange={setModalOpen}
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
           capacitacion={selectedCapacitacion}
           onSave={handleSave}
         />

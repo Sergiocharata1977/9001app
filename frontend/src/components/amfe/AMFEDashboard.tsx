@@ -251,13 +251,11 @@ const AMFEDashboard: React.FC<AMFEDashboardProps> = ({ records }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Object.entries(
             records.reduce((acc, record) => {
-              if (!acc[record.process]) {
-                acc[record.process] = { total: 0, critical: 0, high: 0, averageNPR: 0 };
-              }
-              acc[record.process].total++;
-              if (record.riskLevel === 'critical') acc[record.process].critical++;
-              if (record.riskLevel === 'high') acc[record.process].high++;
-              acc[record.process].averageNPR += record.npr;
+              const group = acc[record.process] ?? (acc[record.process] = { total: 0, critical: 0, high: 0, averageNPR: 0 });
+              group.total += 1;
+              if (record.riskLevel === 'critical') group.critical += 1;
+              if (record.riskLevel === 'high') group.high += 1;
+              group.averageNPR += record.npr;
               return acc;
             }, {} as Record<string, { total: number; critical: number; high: number; averageNPR: number }>)
           ).map(([process, data]) => (
