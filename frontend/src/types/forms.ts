@@ -223,45 +223,12 @@ export interface ActividadFormData extends BaseFormData {
 
 // ========== TIPOS PARA FILTROS ==========
 
-export interface BaseFilters {
+export interface HallazgoFilters {
   search?: string;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-}
-
-export interface AuditoriaFilters extends BaseFilters {
-  estado?: string[];
-  tipo?: string[];
-  fecha_inicio?: string;
-  fecha_fin?: string;
-  auditor_responsable?: string;
-  departamento?: string;
-}
-
-export interface CapacitacionFilters extends BaseFilters {
-  estado?: string[];
-  tipo?: string[];
-  fecha_inicio?: string;
-  fecha_fin?: string;
-  instructor?: string;
-}
-
-export interface HallazgoFilters extends BaseFilters {
   tipo?: string[];
   severidad?: string[];
   estado?: string[];
   departamento_responsable?: string;
-  responsable?: string;
-  fecha_limite_inicio?: string;
-  fecha_limite_fin?: string;
-}
-
-export interface AccionFilters extends BaseFilters {
-  tipo?: string[];
-  estado?: string[];
-  prioridad?: string[];
   responsable?: string;
   fecha_limite_inicio?: string;
   fecha_limite_fin?: string;

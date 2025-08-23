@@ -19,6 +19,7 @@ export interface Capacitacion {
   metodologia?: string;
   evaluacion?: string;
   certificacion?: boolean;
+  temas?: string | string[];
   created_at?: string;
   updated_at?: string;
   tipo?: string;
@@ -110,6 +111,7 @@ export interface CapacitacionFilters {
   departamento?: string;
   searchTerm?: string;
   filterEstado?: string;
+  filterTipo?: string;
 }
 
 export type ViewMode = 'grid' | 'list';

@@ -83,6 +83,7 @@ export interface AuditoriaFilters {
   auditor?: string;
   searchTerm?: string;
   filterEstado?: string;
+  departamento?: string;
   filterTipo?: string;
 }
 

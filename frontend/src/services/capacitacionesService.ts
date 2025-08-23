@@ -5,6 +5,12 @@ import { Capacitacion, CapacitacionFilters, CreateCapacitacionData, UpdateCapaci
 
 class CapacitacionesService {
   private readonly baseUrl = '/api/capacitaciones';
+  
+  // Métodos alias para compatibilidad
+  getAll = () => this.getCapacitaciones();
+  create = (data: CreateCapacitacionData) => this.createCapacitacion(data);
+  update = (id: number, data: UpdateCapacitacionData) => this.updateCapacitacion(id, data);
+  delete = (id: number) => this.deleteCapacitacion(id);
 
   /**
    * Obtiene todas las capacitaciones con filtros opcionales
