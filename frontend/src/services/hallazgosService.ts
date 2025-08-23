@@ -1,15 +1,34 @@
-import { createApiClient } from './apiService.js';
+import { createApiClient } from './apiService';
+import { Hallazgo, HallazgoFormData, HallazgoEstado } from '../types/hallazgos';
+import { ApiResponse } from '../types/api';
 
-const apiClient = createApiClient('/hallazgos');
+interface HallazgosApiClient {
+  get: <T = any>(endpoint?: string) => Promise<T>;
+  post: <T = any>(endpoint?: string, data?: any) => Promise<T>;
+  put: <T = any>(endpoint?: string, data?: any) => Promise<T>;
+  delete: <T = any>(endpoint?: string) => Promise<T>;
+}
 
-export const hallazgosService = {
+const apiClient = createApiClient('/hallazgos') as HallazgosApiClient;
+
+interface HallazgosService {
+  getAllHallazgos(): Promise<Hallazgo[]>;
+  getHallazgoById(id: string | number): Promise<Hallazgo>;
+  createHallazgo(hallazgoData: HallazgoFormData): Promise<Hallazgo>;
+  updateHallazgo(id: string | number, hallazgoData: Partial<HallazgoFormData>): Promise<Hallazgo>;
+  deleteHallazgo(id: string | number): Promise<void>;
+  updateHallazgoEstado(id: string | number, estado: HallazgoEstado): Promise<ApiResponse<Hallazgo>>;
+  updateHallazgosOrder(orderedIds: string[]): Promise<ApiResponse<any>>;
+}
+
+export const hallazgosService: HallazgosService = {
   /**
    * Obtiene todos los hallazgos.
    * @returns {Promise<Array>} Lista de hallazgos.
    */
-  async getAllHallazgos() {
+  async getAllHallazgos(): Promise<Hallazgo[]> {
     try {
-      const data = await apiClient.get('/');
+      const data = await apiClient.get<Hallazgo[]>('/');
       // Validación defensiva
       const safeData = Array.isArray(data) ? data : [];
       console.log('🚀 DEBUG: Hallazgos obtenidos del API:', safeData);
@@ -30,7 +49,7 @@ export const hallazgosService = {
       });
       
       return safeData;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al obtener los hallazgos:', error);
       throw new Error(error.message || 'Error al cargar los hallazgos');
     }
@@ -41,11 +60,11 @@ export const hallazgosService = {
    * @param {string} id - ID del hallazgo.
    * @returns {Promise<Object>} Datos del hallazgo.
    */
-  async getHallazgoById(id) {
+  async getHallazgoById(id: string | number): Promise<Hallazgo> {
     try {
-      const data = await apiClient.get(`/${id}`);
+      const data = await apiClient.get<Hallazgo>(`/${id}`);
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Error al obtener el hallazgo con ID ${id}:`, error);
       throw new Error(error.message || 'Error al cargar el hallazgo');
     }
@@ -56,11 +75,11 @@ export const hallazgosService = {
    * @param {Object} hallazgoData - Datos del hallazgo a crear.
    * @returns {Promise<Object>} El hallazgo creado.
    */
-  async createHallazgo(hallazgoData) {
+  async createHallazgo(hallazgoData: HallazgoFormData): Promise<Hallazgo> {
     try {
-      const data = await apiClient.post('/', hallazgoData);
+      const data = await apiClient.post<Hallazgo>('/', hallazgoData);
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al crear el hallazgo:', error);
       throw new Error(error.message || 'Error al crear el hallazgo');
     }
@@ -72,11 +91,11 @@ export const hallazgosService = {
    * @param {Object} hallazgoData - Datos actualizados del hallazgo.
    * @returns {Promise<Object>} El hallazgo actualizado.
    */
-  async updateHallazgo(id, hallazgoData) {
+  async updateHallazgo(id: string | number, hallazgoData: Partial<HallazgoFormData>): Promise<Hallazgo> {
     try {
-      const data = await apiClient.put(`/${id}`, hallazgoData);
+      const data = await apiClient.put<Hallazgo>(`/${id}`, hallazgoData);
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Error al actualizar el hallazgo con ID ${id}:`, error);
       throw new Error(error.message || 'Error al actualizar el hallazgo');
     }
@@ -87,10 +106,10 @@ export const hallazgosService = {
    * @param {string} id - ID del hallazgo a eliminar.
    * @returns {Promise<void>}
    */
-  async deleteHallazgo(id) {
+  async deleteHallazgo(id: string | number): Promise<void> {
     try {
       await apiClient.delete(`/${id}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Error al eliminar el hallazgo con ID ${id}:`, error);
       throw new Error(error.message || 'Error al eliminar el hallazgo');
     }
@@ -102,11 +121,11 @@ export const hallazgosService = {
    * @param {string} estado - Nuevo estado del hallazgo.
    * @returns {Promise<void>}
    */
-  async updateHallazgoEstado(id, estado) {
+  async updateHallazgoEstado(id: string | number, estado: HallazgoEstado): Promise<ApiResponse<Hallazgo>> {
     try {
-      const response = await apiClient.put(`/mejoras/${id}/estado`, { estado });
-      return response.data;
-    } catch (error) {
+      const response = await apiClient.put<ApiResponse<Hallazgo>>(`/mejoras/${id}/estado`, { estado });
+      return response;
+    } catch (error: any) {
       console.error(`Error al actualizar el estado del hallazgo con ID ${id}:`, error);
       throw new Error(error.message || 'Error al actualizar el estado del hallazgo');
     }
@@ -117,11 +136,11 @@ export const hallazgosService = {
    * @param {Array<string>} orderedIds - Lista de IDs ordenados.
    * @returns {Promise<Object>} La respuesta del servidor.
    */
-  async updateHallazgosOrder(orderedIds) {
+  async updateHallazgosOrder(orderedIds: string[]): Promise<ApiResponse<any>> {
     try {
-      const response = await apiClient.put('/mejoras/orden', { orderedIds });
-      return response.data;
-    } catch (error) {
+      const response = await apiClient.put<ApiResponse<any>>('/mejoras/orden', { orderedIds });
+      return response;
+    } catch (error: any) {
       console.error('Error al actualizar el orden de los hallazgos:', error);
       throw new Error(error.message || 'Error al actualizar el orden de los hallazgos');
     }
