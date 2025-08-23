@@ -5,7 +5,7 @@
     "moduleResolution": "NodeNext",
     "baseUrl": ".",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "sourceMap": true,
     "allowJs": true,
     "esModuleInterop": true,
@@ -19,12 +19,22 @@
   },
   "include": [
     "src/**/*.ts",
-    "**/*.js"
+    "src/**/*.js",
+    "routes/**/*.js",
+    "controllers/**/*.js",
+    "middleware/**/*.js",
+    "services/**/*.js",
+    "config/**/*.js",
+    "lib/**/*.js",
+    "*.js"
   ],
   "exclude": [
     "node_modules",
     "dist",
     "tests",
-    "coverage"
+    "coverage",
+    "scripts/**/*",
+    "RAG-System/**/*",
+    "uploads/**/*"
   ]
 }
