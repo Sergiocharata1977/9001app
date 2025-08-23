@@ -24,8 +24,8 @@ const UsuarioForm: React.FC<UsuarioFormProps> = ({ onSubmit, initialData = {}, i
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleRoleChange = (value: 'employee' | 'manager' | 'admin') => {
-        setFormData(prev => ({ ...prev, role: value }));
+    const handleRoleChange = (value: string) => {
+        setFormData(prev => ({ ...prev, role: value as 'employee' | 'manager' | 'admin' }));
     };
 
     const handleSubmit = (e: React.FormEvent) => {
