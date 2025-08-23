@@ -108,8 +108,6 @@ export interface CapacitacionFilters {
   fechaHasta?: string;
   instructor?: string;
   departamento?: string;
-  searchTerm?: string;
-  filterEstado?: string;
 }
 
 export type ViewMode = 'grid' | 'list';
