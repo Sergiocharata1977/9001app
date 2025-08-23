@@ -23,6 +23,14 @@ interface UseToastReturn {
     type?: 'success' | 'error' | 'warning' | 'info';
     duration?: number;
   }) => void;
+  showToast?: (props: {
+    title?: string;
+    description?: string;
+    action?: ToastActionElement;
+    variant?: 'default' | 'destructive';
+    type?: 'success' | 'error' | 'warning' | 'info';
+    duration?: number;
+  }) => void;
   dismiss: (toastId?: string) => void;
   toasts: Toast[];
 }
@@ -75,6 +83,7 @@ export function useToast(): UseToastReturn {
 
   return {
     toast,
+    showToast: toast, // Alias para compatibilidad
     dismiss,
     toasts
   };

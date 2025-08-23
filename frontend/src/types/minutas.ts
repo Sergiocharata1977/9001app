@@ -225,3 +225,18 @@ export interface MinutaEstadisticas {
 // Tipos adicionales para TypeScript
 export type MinutaTipo = 'reunion' | 'auditoria' | 'revision' | 'capacitacion';
 export type MinutaEstado = 'programada' | 'en_proceso' | 'completada' | 'cancelada';
+
+// Filtros para minutas
+export interface MinutaFilters {
+  search?: string;
+  searchTerm?: string;
+  estado?: string;
+  filterEstado?: string;
+  tipo?: string;
+  filterTipo?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
+  organizador?: string;
+  lugar?: string;
+  departamento?: string;
+}
