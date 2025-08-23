@@ -333,7 +333,7 @@ class AMFEService {
         let filtered = [...this.data];
         
         if (filters.process) {
-          filtered = filtered.filter(r => r.process.toLowerCase().includes(filters.process!.toLowerCase()));
+          filtered = filtered.filter(r => r.process.toLowerCase().includes(filters.process.toLowerCase()));
         }
         
         if (filters.status) {

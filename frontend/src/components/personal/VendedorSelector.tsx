@@ -60,8 +60,8 @@ const VendedorSelector: React.FC<VendedorSelectorProps> = ({
   const [filteredVendedores, setFilteredVendedores] = useState<Personal[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRol, setSelectedRol] = useState<RolComercial>('vendedor');
-  const [selectedZona, setSelectedZona] = useState<ZonaVenta>('');
-  const [selectedEspecialidad, setSelectedEspecialidad] = useState<EspecialidadAgro>('');
+  const [selectedZona, setSelectedZona] = useState<ZonaVenta | ''>('');
+  const [selectedEspecialidad, setSelectedEspecialidad] = useState<EspecialidadAgro | ''>('');
   const [isLoading, setIsLoading] = useState(false);
 
   // Simular datos de estadísticas (en producción vendría de la API)
@@ -358,7 +358,7 @@ const VendedorSelector: React.FC<VendedorSelectorProps> = ({
 
               <div className="space-y-2">
                 <Label>Zona</Label>
-                <Select value={selectedZona} onValueChange={(value) => setSelectedZona(value as ZonaVenta)}>
+                <Select value={selectedZona} onValueChange={(value) => setSelectedZona(value as ZonaVenta | '')}>
                   <SelectTrigger>
                     <SelectValue placeholder="Todas las zonas" />
                   </SelectTrigger>
@@ -375,7 +375,7 @@ const VendedorSelector: React.FC<VendedorSelectorProps> = ({
 
               <div className="space-y-2">
                 <Label>Especialidad</Label>
-                <Select value={selectedEspecialidad} onValueChange={(value) => setSelectedEspecialidad(value as EspecialidadAgro)}>
+                <Select value={selectedEspecialidad} onValueChange={(value) => setSelectedEspecialidad(value as EspecialidadAgro | '')}>
                   <SelectTrigger>
                     <SelectValue placeholder="Todas las especialidades" />
                   </SelectTrigger>
