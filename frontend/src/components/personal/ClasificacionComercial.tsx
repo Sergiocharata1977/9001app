@@ -21,6 +21,7 @@ import {
   RolComercial, 
   ClasificacionComercial, 
   EspecialidadAgro, 
+  ComisionConfig,
   ROLES_COMERCIALES,
   CLASIFICACIONES_COMERCIALES,
   ESPECIALIDADES_AGRO,
