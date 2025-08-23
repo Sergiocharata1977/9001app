@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { hallazgosService } from '@/services/hallazgosService';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Clock, CheckCircle, AlertTriangle, List, Trello, BarChart, Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { FileText, Clock, CheckCircle, AlertTriangle, BarChart, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
@@ -10,8 +10,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import HallazgoForm from './HallazgoForm';
 import HallazgoWorkflowManager from './HallazgoWorkflowManager';
 import HallazgoStatCard from './HallazgoStatCard';
+// @ts-expect-error legacy JSX component
 import DashboardView from '@/components/mejoras/DashboardView';
-import DataTable from '../shared/DataTable/DataTable';
+import { DataTable, Action as DataTableAction, KanbanColumn as DataTableKanbanColumn } from '../shared/DataTable/DataTable';
 import { 
   Hallazgo, 
   HallazgoEstado, 
@@ -19,8 +20,6 @@ import {
   HallazgoStats, 
   HallazgoFormData, 
   DataTableColumn, 
-  DataTableAction, 
-  KanbanColumn, 
   WorkflowFormData 
 } from '@/types/hallazgos';
 
@@ -308,7 +307,7 @@ const HallazgosListingNEW: React.FC = () => {
   ];
 
   // Definición de acciones
-  const actions: DataTableAction[] = [
+  const actions: DataTableAction<Hallazgo>[] = [
     {
       icon: Eye,
       label: 'Ver',
@@ -333,7 +332,7 @@ const HallazgosListingNEW: React.FC = () => {
   ];
 
   // Definición de columnas Kanban
-  const kanbanColumns: KanbanColumn[] = [
+  const kanbanColumns: DataTableKanbanColumn<Hallazgo>[] = [
     {
       key: 'deteccion',
       label: 'Detección',
@@ -606,7 +605,7 @@ const HallazgosListingNEW: React.FC = () => {
           renderCard={renderCard}
           renderKanbanCard={renderKanbanCard}
           onCardClick={handleCardClick}
-          onKanbanCardMove={handleHallazgoStateChange}
+          onKanbanCardMove={(row, _from, to) => handleHallazgoStateChange(row.id, to as HallazgoEstado)}
         />
 
         {/* Workflow Modal */}

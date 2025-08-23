@@ -38,7 +38,7 @@ interface FormErrors {
   [key: string]: string | undefined;
 }
 
-function CapacitacionModal({ isOpen, onClose, onSave, capacitacion }: CapacitacionModalProps): JSX.Element {
+function CapacitacionModal({ isOpen, onClose, onSave, capacitacion }: CapacitacionModalProps): React.ReactElement {
   const [formData, setFormData] = useState<CapacitacionFormData>({
     nombre: "",
     descripcion: "",
@@ -86,7 +86,7 @@ function CapacitacionModal({ isOpen, onClose, onSave, capacitacion }: Capacitaci
         evaluacion: capacitacion.evaluacion || "",
         certificacion: capacitacion.certificacion || false
       });
-      setTemas(capacitacion.temas || []); // Si viene con temas
+      setTemas((capacitacion as any).temas || []); // Si viene con temas
     } else {
       setFormData({
         nombre: "",
@@ -147,8 +147,11 @@ function CapacitacionModal({ isOpen, onClose, onSave, capacitacion }: Capacitaci
   };
 
   const editTema = (index: number): void => {
-    setTemaInput(temas[index]);
-    setTemaEditIndex(index);
+    const selected = temas[index];
+    if (selected) {
+      setTemaInput(selected);
+      setTemaEditIndex(index);
+    }
   };
 
   const removeTema = (index: number): void => {
@@ -188,7 +191,7 @@ function CapacitacionModal({ isOpen, onClose, onSave, capacitacion }: Capacitaci
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogContent className="w-[70vw] max-w-[70vw] bg-slate-800 border-slate-700 text-white">
         <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle className="text-xl font-semibold text-white">
@@ -216,12 +219,12 @@ function CapacitacionModal({ isOpen, onClose, onSave, capacitacion }: Capacitaci
                 value={formData.nombre}
                 onChange={(e) => handleChange('nombre', e.target.value)}
                 className={`bg-slate-700 border-slate-600 text-white placeholder:text-slate-400 focus:border-teal-500 ${
-                  errors.nombre ? "border-red-500" : ""
+                  errors['nombre'] ? "border-red-500" : ""
                 }`}
                 placeholder="Ej: Introducción a ISO 9001"
               />
-              {errors.nombre && (
-                <p className="text-sm text-red-400">{errors.nombre}</p>
+              {errors['nombre'] && (
+                <p className="text-sm text-red-400">{errors['nombre']}</p>
               )}
             </div>
 
@@ -266,11 +269,11 @@ function CapacitacionModal({ isOpen, onClose, onSave, capacitacion }: Capacitaci
                   value={formData.fecha_inicio}
                   onChange={(e) => handleChange('fecha_inicio', e.target.value)}
                   className={`bg-slate-700 border-slate-600 text-white focus:border-teal-500 ${
-                    errors.fecha_inicio ? "border-red-500" : ""
+                    errors['fecha_inicio'] ? "border-red-500" : ""
                   }`}
                 />
-                {errors.fecha_inicio && (
-                  <p className="text-sm text-red-400">{errors.fecha_inicio}</p>
+                {errors['fecha_inicio'] && (
+                  <p className="text-sm text-red-400">{errors['fecha_inicio']}</p>
                 )}
               </div>
 
