@@ -232,20 +232,21 @@ export interface BaseFilters {
 }
 
 export interface AuditoriaFilters extends BaseFilters {
-  estado?: string[];
-  tipo?: string[];
-  fecha_inicio?: string;
-  fecha_fin?: string;
-  auditor_responsable?: string;
+  estado?: string;
+  tipo?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
+  auditor?: string;
   departamento?: string;
 }
 
 export interface CapacitacionFilters extends BaseFilters {
-  estado?: string[];
-  tipo?: string[];
-  fecha_inicio?: string;
-  fecha_fin?: string;
+  estado?: string;
+  tipo?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
   instructor?: string;
+  departamento?: string;
 }
 
 export interface HallazgoFilters extends BaseFilters {

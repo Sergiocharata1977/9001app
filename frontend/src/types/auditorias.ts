@@ -81,9 +81,7 @@ export interface AuditoriaFilters {
   fechaDesde?: string;
   fechaHasta?: string;
   auditor?: string;
-  searchTerm?: string;
-  filterEstado?: string;
-  filterTipo?: string;
+  departamento?: string;
 }
 
 export type AuditoriaViewMode = 'kanban' | 'grid' | 'list';
