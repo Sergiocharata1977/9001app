@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, AxiosProgressEvent } from 'axios';
 import useAuthStore from '../store/authStore';
 
 // Tipos para configuración
@@ -10,11 +10,6 @@ interface ApiConfig {
   baseURL: string;
   timeout: number;
   headers: Record<string, string>;
-}
-
-interface UploadProgressEvent {
-  loaded: number;
-  total: number;
 }
 
 interface ApiRequestConfig extends AxiosRequestConfig {
@@ -190,7 +185,7 @@ export const apiService = {
   uploadFile: async <T = any>(
     endpoint: string, 
     formData: FormData, 
-    onUploadProgress?: (progressEvent: UploadProgressEvent) => void
+    onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
   ): Promise<T> => {
     return apiService.request<T>({
       method: 'POST',
