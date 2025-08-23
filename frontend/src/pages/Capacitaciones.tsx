@@ -3,7 +3,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Plus, 
   Calendar, 
-  BookOpen, 
   Trash2, 
   Edit, 
   User, 
@@ -34,7 +33,7 @@ const Capacitaciones: React.FC = () => {
     departamento: ''
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const queryClient = useQueryClient();
@@ -70,7 +69,7 @@ const Capacitaciones: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (capacitacion: Capacitacion) => {
+  const handleEdit = (_capacitacion: Capacitacion) => {
     // setSelectedCapacitacion(capacitacion); // This line was removed
     // setIsEditMode(true); // This line was removed
     setIsModalOpen(true);
@@ -433,7 +432,7 @@ const Capacitaciones: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
             <h2 className="text-xl font-bold mb-4">
-              {isEditMode ? 'Editar Capacitación' : 'Nueva Capacitación'}
+              Nueva Capacitación
             </h2>
             <p className="text-gray-600">Formulario de capacitación en desarrollo...</p>
             <div className="flex justify-end space-x-2 mt-6">
@@ -441,7 +440,7 @@ const Capacitaciones: React.FC = () => {
                 Cancelar
               </Button>
               <Button>
-                {isEditMode ? 'Actualizar' : 'Crear'}
+                Crear
               </Button>
             </div>
           </div>
