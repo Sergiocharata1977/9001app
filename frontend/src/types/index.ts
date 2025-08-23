@@ -1,5 +1,9 @@
 // ========== EXPORTACIONES CENTRALIZADAS DE TIPOS ==========
 
+// Referencias a declaraciones de UI
+/// <reference path="./ui.d.ts" />
+/// <reference path="./components.d.ts" />
+
 // Tipos comunes (primero para evitar referencias circulares)
 export * from './common';
 
