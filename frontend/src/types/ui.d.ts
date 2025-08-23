@@ -1,6 +1,6 @@
 // Tipos para componentes UI
 
-import { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react';
+import { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes, ImgHTMLAttributes, ReactNode } from 'react';
 
 // Declaraciones para manejar imports con diferentes casings
 declare module '@/components/ui/button' {
@@ -264,4 +264,37 @@ export interface DataTableFiltering {
 }
 
 export { };
+
+// Declaraciones adicionales para módulos UI faltantes
+
+declare module '@/components/ui/alert' {
+  import type { HTMLAttributes } from 'react';
+  export interface AlertProps extends HTMLAttributes<HTMLDivElement> {
+    variant?: 'default' | 'destructive' | 'success';
+  }
+  export const Alert: React.FC<AlertProps>;
+  export const AlertTitle: React.FC<HTMLAttributes<HTMLHeadingElement>>;
+  export const AlertDescription: React.FC<HTMLAttributes<HTMLDivElement>>;
+}
+
+declare module '@/components/ui/separator' {
+  import type { HTMLAttributes } from 'react';
+  export interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
+    orientation?: 'horizontal' | 'vertical';
+    decorative?: boolean;
+  }
+  export const Separator: React.FC<SeparatorProps>;
+}
+
+declare module '@/components/ui/avatar' {
+  import type { HTMLAttributes, ImgHTMLAttributes } from 'react';
+  export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {}
+  export interface AvatarImageProps extends ImgHTMLAttributes<HTMLImageElement> {}
+  export interface AvatarFallbackProps extends HTMLAttributes<HTMLSpanElement> {}
+
+  export const Avatar: React.FC<AvatarProps>;
+  export const AvatarImage: React.FC<AvatarImageProps>;
+  export const AvatarFallback: React.FC<AvatarFallbackProps>;
+}
+
 
