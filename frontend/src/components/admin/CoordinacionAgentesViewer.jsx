@@ -1,6 +1,6 @@
 import { AlertTriangle, Clock, RefreshCw, XCircle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { coordinacionService } from '@/services/coordinacionService';
+import coordinacionService from '@/services/coordinacionService';
 
 const CoordinacionAgentesViewer = () => {
   const [content, setContent] = useState('');
