@@ -3,6 +3,8 @@
 import { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react';
 
 // Declaraciones para manejar imports con diferentes casings
+// Commented out to avoid conflicts with actual component exports
+/*
 declare module '@/components/ui/button' {
   export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
@@ -106,6 +108,7 @@ declare module '@/components/ui/Progress' {
   }
   export const Progress: React.FC<ProgressProps>;
 }
+*/
 
 // Tipos para Modal
 export interface ModalProps {
