@@ -2,15 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { hallazgosService } from '@/services/hallazgosService';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Clock, CheckCircle, AlertTriangle, List, Trello, BarChart, Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { FileText, Clock, CheckCircle, AlertTriangle, BarChart, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+
 import HallazgoForm from './HallazgoForm';
 import HallazgoWorkflowManager from './HallazgoWorkflowManager';
 import HallazgoStatCard from './HallazgoStatCard';
-import DashboardView from '@/components/mejoras/DashboardView';
+
 import DataTable from '../shared/DataTable/DataTable';
 import { 
   Hallazgo, 
@@ -216,7 +216,7 @@ const HallazgosListingNEW: React.FC = () => {
       sortable: true,
       filterable: true,
       width: '120px',
-      render: (value: any, row: Hallazgo) => (
+      render: (value: any) => (
         <div className="font-bold text-lg text-blue-600">
           {value || 'N/A'}
         </div>
@@ -228,11 +228,11 @@ const HallazgosListingNEW: React.FC = () => {
       sortable: true,
       filterable: true,
       width: '300px',
-      render: (value: any, row: Hallazgo) => (
+      render: (value: any, _row: Hallazgo) => (
         <div>
           <div className="font-semibold text-lg">{value || 'Sin título'}</div>
           <div className="text-sm text-gray-500 mt-1">
-            {row.descripcion}
+            {_row.descripcion}
           </div>
         </div>
       )
@@ -243,7 +243,7 @@ const HallazgosListingNEW: React.FC = () => {
       sortable: true,
       filterable: true,
       width: '150px',
-      render: (value: any, row: Hallazgo) => {
+      render: (value: any, _row: Hallazgo) => {
         const StatusIcon = getEstadoIcon(value as HallazgoEstado);
         return (
           <div className="flex items-center">
@@ -261,7 +261,7 @@ const HallazgosListingNEW: React.FC = () => {
       sortable: true,
       filterable: true,
       width: '150px',
-      render: (value: any, row: Hallazgo) => (
+      render: (value: any) => (
         <div className="text-sm">
           {formatDate(value)}
         </div>
@@ -273,7 +273,7 @@ const HallazgosListingNEW: React.FC = () => {
       sortable: true,
       filterable: true,
       width: '150px',
-      render: (value: any, row: Hallazgo) => (
+      render: (value: any) => (
         <div className="text-sm">
           {value || 'No asignado'}
         </div>
@@ -285,7 +285,7 @@ const HallazgosListingNEW: React.FC = () => {
       sortable: true,
       filterable: true,
       width: '120px',
-      render: (value: any, row: Hallazgo) => {
+      render: (value: any, _row: Hallazgo) => {
         const getPrioridadColor = (prioridad: HallazgoPrioridad | undefined): string => {
           switch (prioridad?.toLowerCase()) {
             case 'alta':
