@@ -102,11 +102,11 @@ export const auditoriaBaseSchema = z.object({
   es_recurrente: z.boolean().default(false),
   
   frecuencia_recurrencia: z.enum(['mensual', 'trimestral', 'semestral', 'anual'])
-    .optional()
-    .refine((val) => {
-      // Solo requerido si es_recurrente es true
-      return true;
-    }, 'Debe especificar la frecuencia de recurrencia'),
+      .optional()
+  .refine(() => {
+    // Solo requerido si es_recurrente es true
+    return true;
+  }, 'Debe especificar la frecuencia de recurrencia'),
   
   fecha_fin_recurrencia: z.string()
     .optional()
