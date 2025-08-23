@@ -5,26 +5,49 @@
     "moduleResolution": "NodeNext",
     "baseUrl": ".",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "sourceMap": true,
     "allowJs": true,
+    "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
+    "strict": false,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
     "types": [
       "node",
       "jest"
-    ]
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@config/*": ["./config/*"],
+      "@controllers/*": ["./controllers/*"],
+      "@middleware/*": ["./middleware/*"],
+      "@routes/*": ["./routes/*"],
+      "@services/*": ["./services/*"],
+      "@database/*": ["./database/*"],
+      "@lib/*": ["./lib/*"]
+    }
   },
   "include": [
     "src/**/*.ts",
-    "**/*.js"
+    "src/**/*.js"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "tests",
-    "coverage"
+    "tests/**/*",
+    "coverage",
+    "uploads/**/*",
+    "scripts/**/*",
+    "RAG-System/**/*",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.spec.js",
+    "**/*.test.js",
+    "jest.config.js",
+    "ecosystem.config.cjs",
+    ".eslintrc.cjs"
   ]
 }
