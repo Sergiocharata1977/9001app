@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -12,18 +11,18 @@ import {
   Target, 
   DollarSign, 
   MapPin, 
-  Award,
   TrendingUp,
   Calendar,
   Building2,
   GraduationCap
 } from 'lucide-react';
-import { 
+import type { 
   Personal, 
   RolComercial, 
-  ClasificacionComercial, 
-  EspecialidadAgro, 
-  ZonaVenta,
+  ClasificacionComercial as ClasificacionComercialType, 
+  EspecialidadAgro
+} from '@/types/personal';
+import { 
   ROLES_COMERCIALES,
   CLASIFICACIONES_COMERCIALES,
   ESPECIALIDADES_AGRO,
@@ -294,7 +293,7 @@ const ClasificacionComercial: React.FC<ClasificacionComercialProps> = ({
               <Building2 className="h-4 w-4 text-muted-foreground" />
               <div>
                 <p className="text-sm text-muted-foreground">Clasificación</p>
-                <p className="font-medium">{CLASIFICACIONES_COMERCIALES[formData.clasificacion_comercial as ClasificacionComercial]}</p>
+                <p className="font-medium">{CLASIFICACIONES_COMERCIALES[formData.clasificacion_comercial as ClasificacionComercialType]}</p>
               </div>
             </div>
 
