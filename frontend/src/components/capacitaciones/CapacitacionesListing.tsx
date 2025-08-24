@@ -38,7 +38,9 @@ import {
   CapacitacionFormData, 
   CapacitacionStats, 
   ViewMode, 
-  CapacitacionField 
+  CapacitacionField,
+  CreateCapacitacionData,
+  UpdateCapacitacionData 
 } from "@/types/capacitaciones";
 
 export default function CapacitacionesListing(): React.JSX.Element {
@@ -60,7 +62,7 @@ export default function CapacitacionesListing(): React.JSX.Element {
   const fetchCapacitaciones = async (): Promise<void> => {
     try {
       setLoading(true);
-      const data = await capacitacionesService.getAll();
+      const data = await capacitacionesService.getCapacitaciones();
       setCapacitaciones(data);
       console.log('✅ Capacitaciones cargadas:', data);
     } catch (error) {
@@ -95,10 +97,10 @@ export default function CapacitacionesListing(): React.JSX.Element {
   const handleSave = async (formData: CapacitacionFormData): Promise<void> => {
     try {
       if (selectedCapacitacion) {
-        await capacitacionesService.update(selectedCapacitacion.id, formData);
+        await capacitacionesService.updateCapacitacion(selectedCapacitacion.id, formData as UpdateCapacitacionData);
         toast({ title: "Éxito", description: "Capacitación actualizada exitosamente" });
       } else {
-        await capacitacionesService.create(formData);
+        await capacitacionesService.createCapacitacion(formData as CreateCapacitacionData);
         toast({ title: "Éxito", description: "Capacitación creada exitosamente" });
       }
       setModalOpen(false);
@@ -112,7 +114,7 @@ export default function CapacitacionesListing(): React.JSX.Element {
   const handleDelete = async (capacitacion: Capacitacion): Promise<void> => {
     if (window.confirm("¿Está seguro de que desea eliminar esta capacitación?")) {
       try {
-        await capacitacionesService.delete(capacitacion.id);
+        await capacitacionesService.deleteCapacitacion(capacitacion.id);
         toast({ title: "Éxito", description: "Capacitación eliminada exitosamente" });
         fetchCapacitaciones();
       } catch (error) {

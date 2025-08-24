@@ -9,9 +9,9 @@ import { exportToPDF, exportToExcel } from '@/utils/export';
 
 export interface Column {
   key: string;
-  label: string;
+  header: string;
   type?: string;
-  width?: string;
+  width?: number;
   align?: 'left' | 'center' | 'right';
   render?: (value: any, row: any) => React.ReactNode;
 }
@@ -226,11 +226,11 @@ const BulkExport: React.FC<BulkExportProps> = ({
               {columns.slice(0, 6).map((column) => (
                 <div key={column.key} className="space-y-1">
                   <label className="text-xs font-medium text-gray-600">
-                    {column.label}
+                    {column.header}
                   </label>
                   <input
                     type="text"
-                    placeholder={`Filtrar ${column.label.toLowerCase()}`}
+                    placeholder={`Filtrar ${column.header.toLowerCase()}`}
                     value={filters[column.key] || ''}
                     onChange={(e) => updateFilter(column.key, e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -258,7 +258,7 @@ const BulkExport: React.FC<BulkExportProps> = ({
                   disabled={isExporting}
                   className="rounded"
                 />
-                <span className="text-sm">{column.label}</span>
+                <span className="text-sm">{column.header}</span>
               </label>
             ))}
           </div>
