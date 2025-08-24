@@ -108,8 +108,16 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 description: `${file.name} ha sido adjuntado`,
             });
 
-            if (onDocumentUploaded) {
-                onDocumentUploaded(response.data);
+            if (onDocumentUploaded && response?.data) {
+                const mapped: Document = {
+                    id: String(response.data.id),
+                    name: response.data.nombre,
+                    url: response.data.ruta_archivo,
+                    size: response.data.tamaño,
+                    type: response.data.mime_type || response.data.tipo,
+                    uploaded_at: new Date().toISOString(),
+                };
+                onDocumentUploaded(mapped);
             }
 
         } catch (error) {
@@ -168,7 +176,7 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
     };
 
     const formatFileSize = (bytes: number): string => {
-        if (bytes === 0) return '0 Bytes';
+        if (!bytes || bytes <= 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -176,7 +184,7 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
     };
 
     const getFileIcon = (fileName: string) => {
-        const extension = fileName.split('.').pop()?.toLowerCase();
+        const extension = fileName?.split('.').pop()?.toLowerCase();
         switch (extension) {
             case 'pdf':
                 return <File className="h-4 w-4 text-red-500" />;
@@ -201,7 +209,7 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 <CardTitle className="flex items-center gap-2">
                     <Upload className="h-5 w-5" />
                     Subir Documentos
-                    <Badge variant="outline">{existingDocuments.length}/{maxFiles}</Badge>
+                    <Badge variant="outline">{(existingDocuments?.length || 0)}/{maxFiles}</Badge>
                 </CardTitle>
             </CardHeader>
 
@@ -271,7 +279,7 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                                         <div>
                                             <p className="text-sm font-medium">{doc.name}</p>
                                             <p className="text-xs text-gray-500">
-                                                {formatFileSize(doc.size)} • {new Date(doc.uploaded_at).toLocaleDateString()}
+                                                {formatFileSize(doc.size || 0)} • {doc.uploaded_at ? new Date(doc.uploaded_at).toLocaleDateString() : ''}
                                             </p>
                                         </div>
                                     </div>
