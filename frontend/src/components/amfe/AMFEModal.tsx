@@ -24,7 +24,7 @@ const AMFEModal: React.FC<AMFEModalProps> = ({ isOpen, onClose, onSave, record, 
     recommendedActions: '',
     responsible: '',
     dueDate: '',
-    status: 'pending' as const
+    status: 'pending' as 'pending' | 'in-progress' | 'completed'
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
