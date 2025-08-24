@@ -10,6 +10,7 @@ import { exportToPDF, exportToExcel } from '@/utils/export';
 export interface Column {
   key: string;
   label: string;
+  header?: string;
   type?: string;
   width?: string;
   align?: 'left' | 'center' | 'right';
@@ -99,11 +100,18 @@ const BulkExport: React.FC<BulkExportProps> = ({
       if (onExport) {
         await onExport(filteredData, filteredColumns, selectedFormat);
       } else {
-        // Exportación por defecto
+        // Exportación por defecto - convertir Column a ExportColumn
+        const exportColumns = filteredColumns.map(col => ({
+          key: col.key,
+          header: col.header || col.label,
+          width: col.width,
+          align: col.align
+        }));
+        
         if (selectedFormat === 'excel') {
-          exportToExcel(filteredData, title, filteredColumns);
+          exportToExcel(filteredData, title, exportColumns);
         } else if (selectedFormat === 'pdf') {
-          exportToPDF(filteredData, title, filteredColumns);
+          exportToPDF(filteredData, title, exportColumns);
         }
       }
 

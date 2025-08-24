@@ -89,7 +89,7 @@ const AuditoriasListing2: React.FC = () => {
       setError(null);
       console.log('🔄 [AuditoriasListing2] Cargando auditorías...');
       
-      const data = await auditoriasService.getAllAuditorias();
+      const data = await auditoriasService.getAuditorias();
       console.log('📊 [AuditoriasListing2] Datos recibidos:', data);
       
       if (Array.isArray(data)) {
@@ -218,7 +218,7 @@ const AuditoriasListing2: React.FC = () => {
     };
   };
 
-  const formatAreas = (areas?: string): string => {
+  const formatAreas = (areas?: string | string[]): string => {
     if (!areas) return 'Sin áreas definidas';
     if (typeof areas === 'string') return areas;
     if (Array.isArray(areas)) return areas.join(', ');

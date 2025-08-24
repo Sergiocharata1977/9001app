@@ -108,7 +108,7 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 description: `${file.name} ha sido adjuntado`,
             });
 
-            if (onDocumentUploaded) {
+            if (onDocumentUploaded && response.data) {
                 onDocumentUploaded(response.data);
             }
 

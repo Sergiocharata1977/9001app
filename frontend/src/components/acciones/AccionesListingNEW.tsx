@@ -375,7 +375,6 @@ const AccionesListingNEW: React.FC<AccionesListingProps> = ({
                   e.stopPropagation();
                   action.onClick(accion);
                 }}
-                className={action.className}
                 title={action.label}
               >
                 <Icon className="h-4 w-4" />

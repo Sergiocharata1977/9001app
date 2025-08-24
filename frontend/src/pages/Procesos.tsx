@@ -16,6 +16,9 @@ import {
   CheckCircle
 } from 'lucide-react';
 
+// Tipo para ProcesoTipo
+type ProcesoTipo = 'estrategico' | 'operativo' | 'apoyo' | 'mejora';
+
 interface ProcesosPageProps {
   // Props específicas de la página si las hay
 }
@@ -26,6 +29,9 @@ const ProcesosPage: React.FC<ProcesosPageProps> = () => {
   const [filtros, setFiltros] = useState<ProcesoSgcFiltros>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [showModalCrear, setShowModalCrear] = useState<boolean>(false);
+  const [showModalDetalle, setShowModalDetalle] = useState<boolean>(false);
+  const [procesoSeleccionado, setProcesoSeleccionado] = useState<ProcesoSgcCompleto | null>(null);
 
   useEffect(() => {
     cargarProcesos();
