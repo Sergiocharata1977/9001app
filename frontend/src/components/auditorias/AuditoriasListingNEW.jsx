@@ -15,7 +15,7 @@ import { auditoriasService } from '../../services/auditoriasService.js';
 import { Button } from '../ui/button.jsx';
 import { Badge } from '../ui/badge.jsx';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../ui/use-toast.js';
+import { useToast } from '@/components/ui/use-toast';
 import DataTable from '../shared/DataTable/DataTable';
 
 // ===============================================

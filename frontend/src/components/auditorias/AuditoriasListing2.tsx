@@ -28,7 +28,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auditoriasService } from '../../services/auditoriasService.js';
-import { useToast } from '../ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import AuditoriaKanbanBoard from './AuditoriaKanbanBoard.jsx';
 
 // ===============================================

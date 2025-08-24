@@ -1,4 +1,5 @@
 import { createApiClient } from './apiService';
+import type { ApiResponse } from '../types/api';
 import type { Hallazgo, HallazgoFormData, HallazgoEstado } from '../types/hallazgos';
 
 const apiClient = createApiClient('/hallazgos');

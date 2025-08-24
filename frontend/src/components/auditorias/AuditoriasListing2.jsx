@@ -21,7 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card.jsx';
 import { Badge } from '../ui/badge.jsx';
 import { Input } from '../ui/input.jsx';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../ui/use-toast.js';
+import { useToast } from '@/components/ui/use-toast';
 import AuditoriaKanbanBoard from './AuditoriaKanbanBoard.jsx';
 
 // ===============================================
