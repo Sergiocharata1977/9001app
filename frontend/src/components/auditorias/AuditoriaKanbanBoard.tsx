@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import AuditoriaKanbanColumn from './AuditoriaKanbanColumn';
+import React, { useState, useEffect } from 'react'
+import { DndContext, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
+import AuditoriaKanbanColumn from './AuditoriaKanbanColumn'
+import { type Auditoria, type AuditoriaEstado } from '@/types/auditorias'
 
-// Definición de las columnas del Kanban para auditorías
-const columnConfig = [
+interface ColumnConfigItem {
+  id: string
+  title: string
+  states: AuditoriaEstado[] | string[]
+  colorClasses: string
+  bgColor: string
+}
+
+const columnConfig: ColumnConfigItem[] = [
   { 
     id: 'planificacion', 
     title: 'Planificación', 
@@ -46,57 +54,57 @@ const columnConfig = [
     colorClasses: 'bg-green-100 dark:bg-green-900/40',
     bgColor: 'bg-green-50'
   },
-];
+]
 
-const AuditoriaKanbanBoard = ({ auditorias, onCardClick, onAuditoriaStateChange }) => {
+export interface AuditoriaKanbanBoardProps {
+  auditorias: Auditoria[]
+  onCardClick?: (id: number) => void
+  onAuditoriaStateChange?: (id: number, estado: AuditoriaEstado | string) => void
+}
+
+const AuditoriaKanbanBoard: React.FC<AuditoriaKanbanBoardProps> = ({ auditorias, onCardClick, onAuditoriaStateChange }) => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8, // Permite clics si el cursor no se mueve más de 8px
+        distance: 8,
       },
     })
-  );
+  )
   
-  const [items, setItems] = useState({});
+  const [items, setItems] = useState<Record<string, Auditoria[]>>({})
 
   useEffect(() => {
-    // Agrupa las auditorías en las columnas definidas en columnConfig
-    const auditoriasPorColumna = columnConfig.reduce((acc, column) => {
-      acc[column.id] = auditorias.filter(a => column.states.includes(a.estado));
-      return acc;
-    }, {});
-    setItems(auditoriasPorColumna);
+    const auditoriasPorColumna = columnConfig.reduce<Record<string, Auditoria[]>>((acc, column) => {
+      acc[column.id] = auditorias.filter(a => column.states.includes((a.estado || '') as any))
+      return acc
+    }, {})
+    setItems(auditoriasPorColumna)
+  }, [auditorias])
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over) return
+
+    const auditoria = auditorias.find(a => a.id === Number(active.id))
+    if (!auditoria) return
+
+    const activeColumn = columnConfig.find(c => c.states.includes((auditoria.estado || '') as any))
     
-    console.log('🔄 Agrupando auditorías por columna:', auditoriasPorColumna);
-    console.log('📊 Total auditorías recibidas:', auditorias.length);
-  }, [auditorias]);
+    if (over.id === activeColumn?.id) return
 
-  const handleDragEnd = (event) => {
-    const { active, over } = event;
+    const auditoriaId = Number(active.id)
+    const newColumnId = String(over.id)
 
-    if (!over) return;
+    const targetColumn = columnConfig.find(c => c.id === newColumnId)
+    if (!targetColumn) return
 
-    const auditoria = auditorias.find(a => a.id === active.id);
-    if (!auditoria) return;
-
-    const activeColumn = columnConfig.find(c => c.states.includes(auditoria.estado));
-    
-    // Si se suelta sobre la misma columna, no hacer nada
-    if (over.id === activeColumn?.id) return;
-
-    const auditoriaId = active.id;
-    const newColumnId = over.id;
-
-    const targetColumn = columnConfig.find(c => c.id === newColumnId);
-    if (!targetColumn) return;
-
-    // Al mover una tarjeta, se asigna el primer estado definido para esa columna
-    const newEstado = targetColumn.states[0];
+    const newEstado = targetColumn.states[0] as AuditoriaEstado | string
     
     if (onAuditoriaStateChange) {
-      onAuditoriaStateChange(auditoriaId, newEstado);
+      onAuditoriaStateChange(auditoriaId, newEstado)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col flex-grow">
@@ -118,7 +126,7 @@ const AuditoriaKanbanBoard = ({ auditorias, onCardClick, onAuditoriaStateChange 
         </div>
       </DndContext>
     </div>
-  );
-};
+  )
+}
 
-export default AuditoriaKanbanBoard;
+export default AuditoriaKanbanBoard

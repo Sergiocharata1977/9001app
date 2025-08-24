@@ -1,58 +1,66 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+import React, { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { toast } from 'react-toastify';
-import accionesService from '@/services/accionesService';
+} from '@/components/ui/select'
+import { toast } from 'react-toastify'
+import accionesService, { type CreateAccionInput } from '@/services/accionesService'
 
-const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
-  const [formData, setFormData] = useState({
+export interface CrearAccionFormProps {
+  onSubmit?: () => void
+  onCancel?: () => void
+  isLoading?: boolean
+}
+
+const CrearAccionForm: React.FC<CrearAccionFormProps> = ({ onSubmit, onCancel, isLoading }) => {
+  const [formData, setFormData] = useState<CreateAccionInput>({
     titulo: '',
     descripcion: '',
     responsable: '',
     prioridad: 'media',
     fechaVencimiento: '',
-    hallazgo_id: null
-  });
+    hallazgo_id: null,
+    estado: undefined,
+    fechaCreacion: undefined,
+  })
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     
     if (!formData.titulo.trim()) {
-      toast.error('El título es obligatorio');
-      return;
+      toast.error('El título es obligatorio')
+      return
     }
 
     try {
-      const nuevaAccion = {
+      const nuevaAccion: CreateAccionInput = {
         ...formData,
         estado: 'p1_planificacion_accion',
-        fechaCreacion: new Date().toISOString()
-      };
+        fechaCreacion: new Date().toISOString(),
+      }
 
-      await accionesService.createAccion(nuevaAccion);
-      toast.success('Acción creada con éxito');
-      onSubmit && onSubmit();
-    } catch (error) {
-      console.error('Error al crear la acción:', error);
-      toast.error(error.response?.data?.message || 'Error al crear la acción');
+      await accionesService.createAccion(nuevaAccion)
+      toast.success('Acción creada con éxito')
+      onSubmit && onSubmit()
+    } catch (error: any) {
+      console.error('Error al crear la acción:', error)
+      toast.error(error?.response?.data?.message || 'Error al crear la acción')
     }
-  };
+  }
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: keyof CreateAccionInput, value: string | number | null | undefined) => {
     setFormData(prev => ({
       ...prev,
-      [field]: value
-    }));
-  };
+      [field]: value as any,
+    }))
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -92,7 +100,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
         <Label htmlFor="prioridad">Prioridad</Label>
         <Select
           value={formData.prioridad}
-          onValueChange={(value) => handleChange('prioridad', value)}
+          onValueChange={(value) => handleChange('prioridad', value as 'baja' | 'media' | 'alta')}
         >
           <SelectTrigger>
             <SelectValue placeholder="Seleccionar prioridad" />
@@ -110,7 +118,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
         <Input
           id="fechaVencimiento"
           type="date"
-          value={formData.fechaVencimiento}
+          value={formData.fechaVencimiento || ''}
           onChange={(e) => handleChange('fechaVencimiento', e.target.value)}
         />
       </div>
@@ -124,7 +132,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
         </Button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default CrearAccionForm;
+export default CrearAccionForm

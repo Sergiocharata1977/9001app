@@ -1,0 +1,56 @@
+import React from 'react'
+import { accionWorkflow, ACCION_ESTADOS, type AccionEstado } from '@/config/accionWorkflow'
+
+export interface AccionEntity {
+  id?: number
+  estado?: AccionEstado | string
+  [key: string]: unknown
+}
+
+export interface AccionWorkflowManagerProps {
+  accion: AccionEntity | null
+  onUpdate: (update: Record<string, unknown>) => void
+  isLoading?: boolean
+}
+
+const AccionWorkflowManager: React.FC<AccionWorkflowManagerProps> = ({ accion, onUpdate, isLoading }) => {
+  const currentState = accion?.estado as AccionEstado | undefined
+
+  if (!currentState || currentState === ACCION_ESTADOS.CERRADA) {
+    return (
+      <div className="p-4 text-center bg-gray-100 rounded-lg">
+        <h3 className="font-semibold text-lg">Acción Cerrada</h3>
+        <p className="text-gray-600">Esta acción ha sido completada y cerrada. No hay más pasos a seguir.</p>
+      </div>
+    )
+  }
+
+  const workflowStep = accionWorkflow[currentState as AccionEstado]
+
+  if (!workflowStep || !workflowStep.component) {
+    return <div className="p-4 text-center">Estado de la acción no válido o sin componente asociado.</div>
+  }
+
+  const FormComponent = workflowStep.component as React.ComponentType<any>
+
+  const handleSubmit = async (formData: Record<string, unknown>) => {
+    const dataToUpdate = {
+      ...formData,
+      estado: workflowStep.nextState,
+    }
+    onUpdate(dataToUpdate)
+  }
+
+  return (
+    <div>
+      <h2 className="text-xl font-bold mb-4">{workflowStep.title}</h2>
+      <FormComponent
+        accion={accion}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+      />
+    </div>
+  )
+}
+
+export default AccionWorkflowManager

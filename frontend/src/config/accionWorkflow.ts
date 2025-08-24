@@ -1,7 +1,7 @@
-import PlanificacionAccionForm from '@/components/acciones/forms/PlanificacionAccionForm';
-import EjecucionAccionForm from '@/components/acciones/forms/EjecucionAccionForm';
-import PlanificarVerificacionForm from '@/components/acciones/forms/PlanificarVerificacionForm';
-import EjecutarVerificacionForm from '@/components/acciones/forms/EjecutarVerificacionForm';
+import PlanificacionAccionForm from '@/components/acciones/forms/PlanificacionAccionForm'
+import EjecucionAccionForm from '@/components/acciones/forms/EjecucionAccionForm'
+import PlanificarVerificacionForm from '@/components/acciones/forms/PlanificarVerificacionForm'
+import EjecutarVerificacionForm from '@/components/acciones/forms/EjecutarVerificacionForm'
 
 export const ACCION_ESTADOS = {
   PLANIFICACION: 'p1_planificacion_accion',
@@ -9,9 +9,19 @@ export const ACCION_ESTADOS = {
   PLANIFICACION_VERIFICACION: 'v3_planificacion_verificacion',
   EJECUCION_VERIFICACION: 'v4_ejecucion_verificacion',
   CERRADA: 'c5_cerrada',
-};
+} as const
 
-export const accionWorkflow = {
+export type AccionEstado = typeof ACCION_ESTADOS[keyof typeof ACCION_ESTADOS]
+
+interface WorkflowStepConfig {
+  title: string
+  component: React.ComponentType<any> | null
+  nextState?: AccionEstado
+  color: string
+  colorClasses: string
+}
+
+export const accionWorkflow: Record<AccionEstado, WorkflowStepConfig> = {
   [ACCION_ESTADOS.PLANIFICACION]: {
     title: 'Planificación de la Acción',
     component: PlanificacionAccionForm,
@@ -46,4 +56,4 @@ export const accionWorkflow = {
     color: 'bg-gray-500',
     colorClasses: 'bg-gray-100 dark:bg-gray-800',
   },
-};
+}

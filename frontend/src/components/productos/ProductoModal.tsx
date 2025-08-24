@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Dialog,
   DialogContent,
@@ -10,19 +10,46 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog';
+} from '@/components/ui/dialog'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Package, Calendar, User } from 'lucide-react';
+} from '@/components/ui/select'
+import { Badge } from '@/components/ui/badge'
+import { Package, Calendar, User } from 'lucide-react'
 
-const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
-  const [formData, setFormData] = useState({
+export interface ProductoData {
+  id?: number
+  nombre?: string
+  descripcion?: string
+  codigo?: string
+  estado?: string
+  tipo?: string
+  categoria?: string
+  responsable?: string
+  fecha_creacion?: string
+  fecha_revision?: string
+  version?: string
+  especificaciones?: string
+  requisitos_calidad?: string
+  proceso_aprobacion?: string
+  documentos_asociados?: string
+  observaciones?: string
+}
+
+export interface ProductoModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onSave: (data: ProductoData) => void
+  producto?: ProductoData | null
+}
+
+const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, onClose, onSave, producto }) => {
+  const [formData, setFormData] = useState<Required<ProductoData>>({
+    id: 0,
     nombre: '',
     descripcion: '',
     codigo: '',
@@ -38,9 +65,8 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     proceso_aprobacion: '',
     documentos_asociados: '',
     observaciones: ''
-  });
+  })
 
-  // Estados ISO 9001:8.3 - Proceso de Diseño y Desarrollo
   const estadosISO = [
     { value: 'planificacion', label: 'Planificación', color: 'bg-blue-100 text-blue-800' },
     { value: 'entrada', label: 'Entradas', color: 'bg-purple-100 text-purple-800' },
@@ -50,7 +76,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     { value: 'aprobado', label: 'Aprobado', color: 'bg-green-100 text-green-800' },
     { value: 'produccion', label: 'En Producción', color: 'bg-emerald-100 text-emerald-800' },
     { value: 'obsoleto', label: 'Obsoleto', color: 'bg-red-100 text-red-800' }
-  ];
+  ] as const
 
   const tiposProducto = [
     'Producto',
@@ -58,16 +84,17 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     'Software',
     'Documento',
     'Proceso'
-  ];
+  ] as const
 
   useEffect(() => {
     if (producto) {
       setFormData({
+        id: producto.id ?? 0,
         nombre: producto.nombre || '',
         descripcion: producto.descripcion || '',
         codigo: producto.codigo || '',
         estado: producto.estado || 'planificacion',
-        tipo: producto.tipo || 'Producto',
+        tipo: (producto.tipo as any) || 'Producto',
         categoria: producto.categoria || '',
         responsable: producto.responsable || '',
         fecha_creacion: producto.fecha_creacion || new Date().toISOString().split('T')[0],
@@ -78,9 +105,10 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
         proceso_aprobacion: producto.proceso_aprobacion || '',
         documentos_asociados: producto.documentos_asociados || '',
         observaciones: producto.observaciones || ''
-      });
+      })
     } else {
       setFormData({
+        id: 0,
         nombre: '',
         descripcion: '',
         codigo: '',
@@ -96,21 +124,21 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
         proceso_aprobacion: '',
         documentos_asociados: '',
         observaciones: ''
-      });
+      })
     }
-  }, [producto]);
+  }, [producto])
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    onSave(formData)
+  }
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: keyof ProductoData, value: string) => {
     setFormData(prev => ({
       ...prev,
-      [field]: value
-    }));
-  };
+      [field]: value as any
+    }))
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -126,7 +154,6 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Información Básica */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="nombre">Nombre del Producto *</Label>
@@ -171,7 +198,6 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
             />
           </div>
 
-          {/* Clasificación y Estado */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="tipo">Tipo *</Label>
@@ -218,7 +244,6 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
             </div>
           </div>
 
-          {/* Responsabilidad y Fechas */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="responsable">Responsable</Label>
@@ -249,11 +274,9 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
             </div>
           </div>
 
-          {/* ISO 9001:8.3 - Campos Específicos */}
           <div className="border-t pt-6">
             <h3 className="text-lg font-semibold mb-4 text-gray-800">ISO 9001:8.3 - Proceso de Diseño y Desarrollo</h3>
             
-            {/* 8.3.3 - Entradas del Diseño */}
             <div className="space-y-4 mb-6">
               <h4 className="text-md font-medium text-gray-700">8.3.3 - Entradas del Diseño</h4>
               
@@ -280,7 +303,6 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
               </div>
             </div>
 
-            {/* 8.3.4 - Controles del Diseño */}
             <div className="space-y-4 mb-6">
               <h4 className="text-md font-medium text-gray-700">8.3.4 - Controles del Diseño</h4>
               
@@ -310,7 +332,6 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
               </div>
             </div>
 
-            {/* 8.3.2 - Planificación y 8.3.6 - Cambios */}
             <div className="space-y-4 mb-6">
               <h4 className="text-md font-medium text-gray-700">8.3.2 - Planificación y 8.3.6 - Control de Cambios</h4>
               
@@ -349,7 +370,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default ProductoModal;
+export default ProductoModal

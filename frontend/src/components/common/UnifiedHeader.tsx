@@ -1,25 +1,45 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Download, LayoutGrid, List, FileText, Calendar } from 'lucide-react';
+import React from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { Plus, Search, Download, LayoutGrid, List, FileText, Calendar } from 'lucide-react'
 
-const UnifiedHeader = ({ 
+export type ViewMode = 'grid' | 'list' | 'kanban'
+
+export interface UnifiedHeaderProps {
+  title: string
+  description?: string
+  searchTerm: string
+  onSearchChange: (value: string) => void
+  onNew?: () => void
+  onExport?: () => void
+  viewMode?: ViewMode
+  onViewModeChange?: (mode: ViewMode) => void
+  showViewToggle?: boolean
+  showExport?: boolean
+  newButtonText?: string
+  totalCount?: number
+  lastUpdated?: string | null
+  icon?: React.ComponentType<{ className?: string }>
+  primaryColor?: 'emerald' | 'blue'
+}
+
+const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({ 
   title, 
-  description, 
+  description = '', 
   searchTerm, 
   onSearchChange, 
   onNew, 
   onExport, 
-  viewMode, 
+  viewMode = 'grid', 
   onViewModeChange, 
   showViewToggle = true,
   showExport = true,
-  newButtonText = "Nuevo",
+  newButtonText = 'Nuevo',
   totalCount = 0,
   lastUpdated = null,
   icon: Icon = FileText,
-  primaryColor = "emerald"
+  primaryColor = 'emerald'
 }) => {
   const getColorClasses = () => {
     switch (primaryColor) {
@@ -28,23 +48,23 @@ const UnifiedHeader = ({
           gradient: 'from-emerald-500 to-emerald-600',
           button: 'bg-emerald-600 hover:bg-emerald-700 text-white',
           badge: 'bg-emerald-100 text-emerald-800 border-emerald-200'
-        };
+        }
       case 'blue':
         return {
           gradient: 'from-blue-500 to-blue-600',
           button: 'bg-blue-600 hover:bg-blue-700 text-white',
           badge: 'bg-blue-100 text-blue-800 border-blue-200'
-        };
+        }
       default:
         return {
           gradient: 'from-emerald-500 to-emerald-600',
           button: 'bg-emerald-600 hover:bg-emerald-700 text-white',
           badge: 'bg-emerald-100 text-emerald-800 border-emerald-200'
-        };
+        }
     }
-  };
+  }
 
-  const colors = getColorClasses();
+  const colors = getColorClasses()
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
@@ -91,7 +111,7 @@ const UnifiedHeader = ({
 
           {/* Controles */}
           <div className="flex items-center gap-2">
-            {showViewToggle && (
+            {showViewToggle && onViewModeChange && (
               <div className="flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
                 <Button
                   variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
@@ -129,7 +149,7 @@ const UnifiedHeader = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UnifiedHeader; 
+export default UnifiedHeader
