@@ -1,7 +1,14 @@
 import React from 'react';
 import { accionWorkflow, ACCION_ESTADOS } from '@/config/accionWorkflow';
+import type { Accion } from '@/types/acciones';
 
-const AccionWorkflowManager = ({ accion, onUpdate, isLoading }) => {
+interface AccionWorkflowManagerProps {
+  accion: Accion | null;
+  onUpdate: (updateData: Partial<Accion>) => Promise<void> | void;
+  isLoading?: boolean;
+}
+
+const AccionWorkflowManager: React.FC<AccionWorkflowManagerProps> = ({ accion, onUpdate, isLoading }) => {
   const currentState = accion?.estado;
 
   if (!currentState || currentState === ACCION_ESTADOS.CERRADA) {
@@ -21,7 +28,7 @@ const AccionWorkflowManager = ({ accion, onUpdate, isLoading }) => {
 
   const FormComponent = workflowStep.component;
 
-  const handleSubmit = async (formData) => {
+  const handleSubmit = async (formData: Record<string, any>) => {
     const dataToUpdate = {
       ...formData,
       estado: workflowStep.nextState,

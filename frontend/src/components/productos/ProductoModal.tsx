@@ -20,9 +20,44 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Package, Calendar, User } from 'lucide-react';
+import type { Producto } from '@/types/index';
 
-const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
-  const [formData, setFormData] = useState({
+type ProductoEstado = 'planificacion' | 'entrada' | 'diseno' | 'verificacion' | 'validacion' | 'aprobado' | 'produccion' | 'obsoleto';
+type TipoProducto = 'Producto' | 'Servicio' | 'Software' | 'Documento' | 'Proceso';
+
+interface EstadoConfig {
+  value: ProductoEstado;
+  label: string;
+  color: string;
+}
+
+interface ProductoFormData {
+  nombre: string;
+  descripcion: string;
+  codigo: string;
+  estado: ProductoEstado;
+  tipo: TipoProducto;
+  categoria: string;
+  responsable: string;
+  fecha_creacion: string;
+  fecha_revision: string;
+  version: string;
+  especificaciones: string;
+  requisitos_calidad: string;
+  proceso_aprobacion: string;
+  documentos_asociados: string;
+  observaciones: string;
+}
+
+interface ProductoModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (data: ProductoFormData) => void;
+  producto?: Producto | null;
+}
+
+const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, onClose, onSave, producto }) => {
+  const [formData, setFormData] = useState<ProductoFormData>({
     nombre: '',
     descripcion: '',
     codigo: '',
@@ -41,7 +76,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
   });
 
   // Estados ISO 9001:8.3 - Proceso de Diseño y Desarrollo
-  const estadosISO = [
+  const estadosISO: EstadoConfig[] = [
     { value: 'planificacion', label: 'Planificación', color: 'bg-blue-100 text-blue-800' },
     { value: 'entrada', label: 'Entradas', color: 'bg-purple-100 text-purple-800' },
     { value: 'diseno', label: 'Diseño', color: 'bg-orange-100 text-orange-800' },
@@ -52,7 +87,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     { value: 'obsoleto', label: 'Obsoleto', color: 'bg-red-100 text-red-800' }
   ];
 
-  const tiposProducto = [
+  const tiposProducto: TipoProducto[] = [
     'Producto',
     'Servicio',
     'Software',
@@ -67,7 +102,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
         descripcion: producto.descripcion || '',
         codigo: producto.codigo || '',
         estado: producto.estado || 'planificacion',
-        tipo: producto.tipo || 'Producto',
+        tipo: (producto.tipo === 'producto' ? 'Producto' : producto.tipo === 'servicio' ? 'Servicio' : 'Producto') as TipoProducto,
         categoria: producto.categoria || '',
         responsable: producto.responsable || '',
         fecha_creacion: producto.fecha_creacion || new Date().toISOString().split('T')[0],
@@ -100,12 +135,12 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     }
   }, [producto]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSave(formData);
   };
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: keyof ProductoFormData, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -175,7 +210,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="tipo">Tipo *</Label>
-              <Select value={formData.tipo} onValueChange={(value) => handleInputChange('tipo', value)}>
+              <Select value={formData.tipo} onValueChange={(value: TipoProducto) => handleInputChange('tipo', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -191,7 +226,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
 
             <div className="space-y-2">
               <Label htmlFor="estado">Estado *</Label>
-              <Select value={formData.estado} onValueChange={(value) => handleInputChange('estado', value)}>
+              <Select value={formData.estado} onValueChange={(value: ProductoEstado) => handleInputChange('estado', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -199,7 +234,9 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                   {estadosISO.map((estado) => (
                     <SelectItem key={estado.value} value={estado.value}>
                       <div className="flex items-center gap-2">
-                        <Badge className={estado.color}>{estado.label}</Badge>
+                        <Badge className={`${estado.color} border-none text-xs`} variant="secondary">
+                          {estado.label}
+                        </Badge>
                       </div>
                     </SelectItem>
                   ))}
@@ -213,12 +250,12 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                 id="version"
                 value={formData.version}
                 onChange={(e) => handleInputChange('version', e.target.value)}
-                placeholder="1.0"
+                placeholder="Ej: 1.0"
               />
             </div>
           </div>
 
-          {/* Responsabilidad y Fechas */}
+          {/* Información de Gestión */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="responsable">Responsable</Label>
@@ -235,106 +272,82 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="fecha_creacion">Fecha de Creación</Label>
+              <Label htmlFor="fecha_revision">Fecha de Próxima Revisión</Label>
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
-                  id="fecha_creacion"
+                  id="fecha_revision"
                   type="date"
-                  value={formData.fecha_creacion}
-                  onChange={(e) => handleInputChange('fecha_creacion', e.target.value)}
+                  value={formData.fecha_revision}
+                  onChange={(e) => handleInputChange('fecha_revision', e.target.value)}
                   className="pl-10"
                 />
               </div>
             </div>
           </div>
 
-          {/* ISO 9001:8.3 - Campos Específicos */}
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800">ISO 9001:8.3 - Proceso de Diseño y Desarrollo</h3>
+          {/* Especificaciones técnicas y de calidad */}
+          <div className="space-y-4 mb-6">
+            <h4 className="text-md font-medium text-gray-700">8.3.3 - Entradas y 8.3.4 - Controles de Diseño</h4>
             
-            {/* 8.3.3 - Entradas del Diseño */}
-            <div className="space-y-4 mb-6">
-              <h4 className="text-md font-medium text-gray-700">8.3.3 - Entradas del Diseño</h4>
-              
-              <div className="space-y-2">
-                <Label htmlFor="especificaciones">Especificaciones Técnicas (Requisitos Funcionales)</Label>
-                <Textarea
-                  id="especificaciones"
-                  value={formData.especificaciones}
-                  onChange={(e) => handleInputChange('especificaciones', e.target.value)}
-                  placeholder="Define los requisitos funcionales y de desempeño del producto/servicio..."
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="requisitos_calidad">Requisitos de Calidad y Legales</Label>
-                <Textarea
-                  id="requisitos_calidad"
-                  value={formData.requisitos_calidad}
-                  onChange={(e) => handleInputChange('requisitos_calidad', e.target.value)}
-                  placeholder="Normas ISO aplicables, requisitos legales y reglamentarios..."
-                  rows={3}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="especificaciones">Especificaciones Técnicas (Entradas del Diseño)</Label>
+              <Textarea
+                id="especificaciones"
+                value={formData.especificaciones}
+                onChange={(e) => handleInputChange('especificaciones', e.target.value)}
+                placeholder="Requisitos funcionales, de rendimiento, legales, reglamentarios..."
+                rows={3}
+              />
             </div>
 
-            {/* 8.3.4 - Controles del Diseño */}
-            <div className="space-y-4 mb-6">
-              <h4 className="text-md font-medium text-gray-700">8.3.4 - Controles del Diseño</h4>
-              
-              <div className="space-y-2">
-                <Label htmlFor="proceso_aprobacion">Proceso de Aprobación (Verificación y Validación)</Label>
-                <Textarea
-                  id="proceso_aprobacion"
-                  value={formData.proceso_aprobacion}
-                  onChange={(e) => handleInputChange('proceso_aprobacion', e.target.value)}
-                  placeholder="Actividades de verificación y validación programadas..."
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="fecha_revision">Fecha de Última Revisión</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="fecha_revision"
-                    type="date"
-                    value={formData.fecha_revision}
-                    onChange={(e) => handleInputChange('fecha_revision', e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="requisitos_calidad">Requisitos de Calidad (Criterios de Aceptación)</Label>
+              <Textarea
+                id="requisitos_calidad"
+                value={formData.requisitos_calidad}
+                onChange={(e) => handleInputChange('requisitos_calidad', e.target.value)}
+                placeholder="Criterios de aceptación, normas aplicables, especificaciones de calidad..."
+                rows={3}
+              />
             </div>
 
-            {/* 8.3.2 - Planificación y 8.3.6 - Cambios */}
-            <div className="space-y-4 mb-6">
-              <h4 className="text-md font-medium text-gray-700">8.3.2 - Planificación y 8.3.6 - Control de Cambios</h4>
-              
-              <div className="space-y-2">
-                <Label htmlFor="documentos_asociados">Documentos Asociados (Planificación y Evidencias)</Label>
-                <Textarea
-                  id="documentos_asociados"
-                  value={formData.documentos_asociados}
-                  onChange={(e) => handleInputChange('documentos_asociados', e.target.value)}
-                  placeholder="Documentos de planificación, evidencias de revisiones, autorizaciones..."
-                  rows={3}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="proceso_aprobacion">8.3.5 - Salidas del Diseño y Proceso de Aprobación</Label>
+              <Textarea
+                id="proceso_aprobacion"
+                value={formData.proceso_aprobacion}
+                onChange={(e) => handleInputChange('proceso_aprobacion', e.target.value)}
+                placeholder="Información para producción, criterios de aceptación, características esenciales para el uso seguro..."
+                rows={3}
+              />
+            </div>
+          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="observaciones">Observaciones (Registros de Cambios y Revisiones)</Label>
-                <Textarea
-                  id="observaciones"
-                  value={formData.observaciones}
-                  onChange={(e) => handleInputChange('observaciones', e.target.value)}
-                  placeholder="Registros de revisiones, cambios realizados, autorizaciones..."
-                  rows={3}
-                />
-              </div>
+          {/* 8.3.2 - Planificación y 8.3.6 - Cambios */}
+          <div className="space-y-4 mb-6">
+            <h4 className="text-md font-medium text-gray-700">8.3.2 - Planificación y 8.3.6 - Control de Cambios</h4>
+            
+            <div className="space-y-2">
+              <Label htmlFor="documentos_asociados">Documentos Asociados (Planificación y Evidencias)</Label>
+              <Textarea
+                id="documentos_asociados"
+                value={formData.documentos_asociados}
+                onChange={(e) => handleInputChange('documentos_asociados', e.target.value)}
+                placeholder="Documentos de planificación, evidencias de revisiones, autorizaciones..."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="observaciones">Observaciones (Registros de Cambios y Revisiones)</Label>
+              <Textarea
+                id="observaciones"
+                value={formData.observaciones}
+                onChange={(e) => handleInputChange('observaciones', e.target.value)}
+                placeholder="Registros de revisiones, cambios realizados, autorizaciones..."
+                rows={3}
+              />
             </div>
           </div>
 

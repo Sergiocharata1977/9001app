@@ -1,34 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import AuditoriaKanbanColumn from './AuditoriaKanbanColumn';
+import type { Auditoria, AuditoriaEstado } from '@/types/auditorias';
+
+interface ColumnConfig {
+  id: string;
+  title: string;
+  states: AuditoriaEstado[];
+  colorClasses: string;
+  bgColor: string;
+}
+
+interface AuditoriasPorColumna {
+  [key: string]: Auditoria[];
+}
+
+interface AuditoriaKanbanBoardProps {
+  auditorias: Auditoria[];
+  onCardClick?: (auditoria: Auditoria) => void;
+  onAuditoriaStateChange?: (auditoriaId: number, newEstado: AuditoriaEstado) => void;
+}
 
 // Definición de las columnas del Kanban para auditorías
-const columnConfig = [
+const columnConfig: ColumnConfig[] = [
   { 
     id: 'planificacion', 
     title: 'Planificación', 
-    states: ['planificacion', 'planificada'], 
+    states: ['planificacion'], 
     colorClasses: 'bg-blue-100 dark:bg-blue-900/40',
     bgColor: 'bg-blue-50'
   },
   { 
     id: 'programacion', 
     title: 'Programación', 
-    states: ['programacion', 'programada'], 
+    states: ['programacion'], 
     colorClasses: 'bg-purple-100 dark:bg-purple-900/40',
     bgColor: 'bg-purple-50'
   },
   { 
     id: 'ejecucion', 
     title: 'Ejecución', 
-    states: ['ejecucion', 'en_ejecucion'], 
+    states: ['ejecucion'], 
     colorClasses: 'bg-orange-100 dark:bg-orange-900/40',
     bgColor: 'bg-orange-50'
   },
   { 
     id: 'informe', 
     title: 'Informe', 
-    states: ['informe', 'informes'], 
+    states: ['informe'], 
     colorClasses: 'bg-yellow-100 dark:bg-yellow-900/40',
     bgColor: 'bg-yellow-50'
   },
@@ -42,13 +61,17 @@ const columnConfig = [
   { 
     id: 'cerrada', 
     title: 'Cerrada', 
-    states: ['cerrada', 'completada', 'finalizada'], 
+    states: ['cerrada'], 
     colorClasses: 'bg-green-100 dark:bg-green-900/40',
     bgColor: 'bg-green-50'
   },
 ];
 
-const AuditoriaKanbanBoard = ({ auditorias, onCardClick, onAuditoriaStateChange }) => {
+const AuditoriaKanbanBoard: React.FC<AuditoriaKanbanBoardProps> = ({ 
+  auditorias, 
+  onCardClick, 
+  onAuditoriaStateChange 
+}) => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -57,21 +80,21 @@ const AuditoriaKanbanBoard = ({ auditorias, onCardClick, onAuditoriaStateChange 
     })
   );
   
-  const [items, setItems] = useState({});
+  const [items, setItems] = useState<AuditoriasPorColumna>({});
 
   useEffect(() => {
     // Agrupa las auditorías en las columnas definidas en columnConfig
     const auditoriasPorColumna = columnConfig.reduce((acc, column) => {
-      acc[column.id] = auditorias.filter(a => column.states.includes(a.estado));
+      acc[column.id] = auditorias.filter(a => column.states.includes(a.estado as AuditoriaEstado));
       return acc;
-    }, {});
+    }, {} as AuditoriasPorColumna);
     setItems(auditoriasPorColumna);
     
     console.log('🔄 Agrupando auditorías por columna:', auditoriasPorColumna);
     console.log('📊 Total auditorías recibidas:', auditorias.length);
   }, [auditorias]);
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: any) => {
     const { active, over } = event;
 
     if (!over) return;
@@ -79,7 +102,7 @@ const AuditoriaKanbanBoard = ({ auditorias, onCardClick, onAuditoriaStateChange 
     const auditoria = auditorias.find(a => a.id === active.id);
     if (!auditoria) return;
 
-    const activeColumn = columnConfig.find(c => c.states.includes(auditoria.estado));
+    const activeColumn = columnConfig.find(c => c.states.includes(auditoria.estado as AuditoriaEstado));
     
     // Si se suelta sobre la misma columna, no hacer nada
     if (over.id === activeColumn?.id) return;

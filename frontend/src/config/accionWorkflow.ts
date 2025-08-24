@@ -2,16 +2,11 @@ import PlanificacionAccionForm from '@/components/acciones/forms/PlanificacionAc
 import EjecucionAccionForm from '@/components/acciones/forms/EjecucionAccionForm';
 import PlanificarVerificacionForm from '@/components/acciones/forms/PlanificarVerificacionForm';
 import EjecutarVerificacionForm from '@/components/acciones/forms/EjecutarVerificacionForm';
+import { ACCION_ESTADOS, type AccionWorkflow } from '../types/acciones';
 
-export const ACCION_ESTADOS = {
-  PLANIFICACION: 'p1_planificacion_accion',
-  EJECUCION: 'e2_ejecucion_accion',
-  PLANIFICACION_VERIFICACION: 'v3_planificacion_verificacion',
-  EJECUCION_VERIFICACION: 'v4_ejecucion_verificacion',
-  CERRADA: 'c5_cerrada',
-};
+export { ACCION_ESTADOS };
 
-export const accionWorkflow = {
+export const accionWorkflow: AccionWorkflow = {
   [ACCION_ESTADOS.PLANIFICACION]: {
     title: 'Planificación de la Acción',
     component: PlanificacionAccionForm,

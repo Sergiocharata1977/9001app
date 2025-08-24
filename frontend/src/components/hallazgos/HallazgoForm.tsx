@@ -4,10 +4,38 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import procesosService from '@/services/procesosService'; // Asumiendo que tienes un servicio para procesos
+import procesosService from '@/services/procesosService';
+import type { HallazgoFormData, HallazgoPrioridad } from '@/types/hallazgos';
+import type { ProcesoSgc } from '@/types/procesos';
 
-const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
-  const [formData, setFormData] = useState({
+interface HallazgoFormDataLocal {
+  titulo: string;
+  descripcion: string;
+  origen: string;
+  tipo_hallazgo: string;
+  prioridad: string;
+  proceso_id: string;
+  requisito_incumplido: string;
+}
+
+interface HallazgoFormProps {
+  onSubmit: (formData: HallazgoFormDataLocal) => void;
+  onCancel?: () => void;
+  initialData?: Partial<HallazgoFormDataLocal>;
+}
+
+interface OrigenOption {
+  value: string;
+  label: string;
+}
+
+interface PrioridadOption {
+  value: HallazgoPrioridad;
+  label: string;
+}
+
+const HallazgoForm: React.FC<HallazgoFormProps> = ({ onSubmit, onCancel, initialData }) => {
+  const [formData, setFormData] = useState<HallazgoFormDataLocal>({
     titulo: '',
     descripcion: '',
     origen: '',
@@ -16,7 +44,7 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
     proceso_id: '',
     requisito_incumplido: '',
   });
-  const [procesos, setProcesos] = useState([]);
+  const [procesos, setProcesos] = useState<ProcesoSgc[]>([]);
 
   useEffect(() => {
     const fetchProcesos = async () => {
@@ -32,25 +60,25 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData(prev => ({ ...prev, ...initialData }));
     }
   }, [initialData]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (name, value) => {
+  const handleSelectChange = (name: keyof HallazgoFormDataLocal, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(formData);
   };
 
-  const origenOptions = [
+  const origenOptions: OrigenOption[] = [
     { value: 'auditoria_interna', label: 'Auditoría Interna' },
     { value: 'auditoria_externa', label: 'Auditoría Externa' },
     { value: 'reclamo_cliente', label: 'Reclamo de Cliente' },
@@ -58,14 +86,16 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
     { value: 'analisis_datos', label: 'Análisis de Datos' },
     { value: 'otro', label: 'Otro' }
   ];
-  const tipoOptions = [
+
+  const tipoOptions: string[] = [
     'No Conformidad Mayor',
     'No Conformidad Menor',
     'Riesgo',
     'Oportunidad de Mejora',
     'Recomendación de Dirección'
   ];
-  const prioridadOptions = [
+
+  const prioridadOptions: PrioridadOption[] = [
     { value: 'baja', label: 'Baja' },
     { value: 'media', label: 'Media' },
     { value: 'alta', label: 'Alta' }
@@ -122,7 +152,11 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
           <Select onValueChange={(value) => handleSelectChange('proceso_id', value)} value={formData.proceso_id}>
             <SelectTrigger><SelectValue placeholder="Seleccione un proceso" /></SelectTrigger>
             <SelectContent>
-              {procesos.map(proceso => <SelectItem key={proceso.id} value={proceso.id.toString()}>{proceso.nombre}</SelectItem>)}
+              {procesos.map(proceso => (
+                <SelectItem key={proceso.id} value={proceso.id.toString()}>
+                  {proceso.nombre}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -130,7 +164,12 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
 
       <div>
         <Label htmlFor="requisito_incumplido">Requisito Incumplido (si aplica)</Label>
-        <Input id="requisito_incumplido" name="requisito_incumplido" value={formData.requisito_incumplido} onChange={handleChange} />
+        <Input 
+          id="requisito_incumplido" 
+          name="requisito_incumplido" 
+          value={formData.requisito_incumplido} 
+          onChange={handleChange} 
+        />
       </div>
 
       <div className="flex justify-end gap-2">

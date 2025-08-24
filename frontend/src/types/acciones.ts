@@ -1,3 +1,4 @@
+import React from 'react';
 import type { FileUpload } from './api';
 
 // Estados de acciones según el workflow
@@ -74,6 +75,7 @@ export interface AccionEstadoConfig {
   color: string;
   colorClasses: string;
   nextState?: AccionEstado;
+  component?: React.ComponentType<any> | null;
 }
 
 // Columna de Kanban

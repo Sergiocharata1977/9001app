@@ -1,9 +1,26 @@
 import React from 'react';
 import { hallazgoWorkflow } from '@/config/hallazgoWorkflow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import type { Hallazgo, HallazgoEstado } from '@/types/hallazgos';
 
-const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
-  const handleSubmit = async (formData, nextState) => {
+interface HallazgoWorkflowManagerProps {
+  hallazgo: Hallazgo;
+  onUpdate: (updateData: Partial<Hallazgo>) => void;
+  onCancel?: () => void;
+}
+
+interface FormSubmitData {
+  [key: string]: any;
+  decision?: string;
+  eficacia_verificacion?: string;
+}
+
+const HallazgoWorkflowManager: React.FC<HallazgoWorkflowManagerProps> = ({ 
+  hallazgo, 
+  onUpdate, 
+  onCancel 
+}) => {
+  const handleSubmit = async (formData: Record<string, any>, nextState: HallazgoEstado) => {
     const dataToUpdate = {
       ...formData,
       estado: nextState,
@@ -19,7 +36,9 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
         <Card>
           <CardHeader>
             <CardTitle>Estado no reconocido</CardTitle>
-            <CardDescription>El estado actual del hallazgo ({hallazgo.estado}) no corresponde a un paso procesable.</CardDescription>
+            <CardDescription>
+              El estado actual del hallazgo ({hallazgo.estado}) no corresponde a un paso procesable.
+            </CardDescription>
           </CardHeader>
         </Card>
       );
@@ -41,20 +60,20 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
       );
     }
 
-    const handleFormSubmit = (formData) => {
+    const handleFormSubmit = (formData: FormSubmitData) => {
       let finalNextState = nextState;
       // Lógica de bifurcación centralizada
       if (typeof nextState === 'object' && nextState !== null) {
         // Para FormAnalisisAccion
         if (formData.decision) {
-          finalNextState = nextState[formData.decision];
+          finalNextState = (nextState as Record<string, HallazgoEstado>)[formData.decision];
         }
         // Para FormVerificacionCierre
         else if (formData.eficacia_verificacion) {
-          finalNextState = nextState[formData.eficacia_verificacion];
+          finalNextState = (nextState as Record<string, HallazgoEstado>)[formData.eficacia_verificacion];
         }
       }
-      handleSubmit(formData, finalNextState);
+      handleSubmit(formData, finalNextState as HallazgoEstado);
     };
 
     return <Component hallazgo={hallazgo} onSubmit={handleFormSubmit} onCancel={onCancel} />;
