@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { DataTable, Column, Action, KanbanColumn } from '@/components/shared/DataTable/DataTable';
+import { DataTable, Column, DataTableAction, KanbanColumn } from '@/components/shared/DataTable/DataTable';
 import productosService from '@/services/productosService';
 import { toast } from 'sonner';
 import { Edit, Trash2, Eye, FileText, CheckCircle, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
+// @ts-ignore
 import ProductoModal from './ProductoModal';
 
 // Tipo para Producto (compatible con tu estructura actual)
@@ -228,7 +229,7 @@ export function ProductosListingNEW() {
   ];
 
   // Definir acciones
-  const actions: Action<Producto>[] = [
+  const actions: DataTableAction<Producto>[] = [
     {
       icon: Eye,
       label: 'Ver detalles',

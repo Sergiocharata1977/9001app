@@ -89,8 +89,9 @@ export interface AccionTableAction {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   onClick: (accion: Accion) => void;
-  variant?: 'ghost' | 'destructive' | 'default';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
   show?: (accion: Accion) => boolean;
+  className?: string;
 }
 
 // Columna de tabla
