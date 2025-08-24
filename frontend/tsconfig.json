@@ -30,14 +30,14 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.js",
-    "src/**/*.jsx",
     "src/**/*.d.ts",
     "src/types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src/**/*.js",
+    "src/**/*.jsx"
   ]
 }
 

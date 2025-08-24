@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import type { JSX } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -86,7 +87,7 @@ function CapacitacionModal({ open, onOpenChange, onSave, capacitacion }: Capacit
         evaluacion: capacitacion.evaluacion || "",
         certificacion: capacitacion.certificacion || false
       });
-      setTemas(capacitacion.temas || []); // Si viene con temas
+      setTemas((capacitacion as any).temas || []); // Si viene con temas
     } else {
       setFormData({
         nombre: "",

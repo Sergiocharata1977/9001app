@@ -5,15 +5,14 @@ import { ReactNode, HTMLAttributes, ButtonHTMLAttributes, InputHTMLAttributes, T
 // Declaraciones para componentes custom
 declare module '@/components/ui/confirm-dialog' {
   export interface ConfirmDialogProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    title: string;
-    description?: string;
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+    title?: string;
+    message?: string;
     confirmText?: string;
     cancelText?: string;
-    onConfirm: () => void;
-    onCancel?: () => void;
-    variant?: 'default' | 'destructive';
+    isDestructive?: boolean;
   }
   
   export const ConfirmDialog: React.FC<ConfirmDialogProps>;
@@ -240,6 +239,63 @@ declare module '@/components/ui/popover' {
   export const Popover: React.FC<PopoverProps>;
   export const PopoverTrigger: React.FC<PopoverTriggerProps>;
   export const PopoverContent: React.FC<PopoverContentProps>;
+}
+
+// Ambient modules for JS/JSX files used in TS components
+declare module '@/services/accionesService' {
+  const accionesService: any;
+  export default accionesService;
+}
+
+declare module '@/components/acciones/AccionWorkflowManager' {
+  const AccionWorkflowManager: React.ComponentType<any>;
+  export default AccionWorkflowManager;
+}
+
+declare module '@/components/acciones/forms/CrearAccionForm' {
+  const CrearAccionForm: React.ComponentType<any>;
+  export default CrearAccionForm;
+}
+
+declare module '@/config/accionWorkflow' {
+  export const ACCION_ESTADOS: any;
+  export const accionWorkflow: any;
+}
+
+declare module '@/components/common/UnifiedHeader' {
+  const UnifiedHeader: React.ComponentType<any>;
+  export default UnifiedHeader;
+}
+
+declare module '@/components/common/UnifiedCard' {
+  const UnifiedCard: React.ComponentType<any>;
+  export default UnifiedCard;
+}
+
+declare module '@/components/capacitaciones/CapacitacionSingle' {
+  const CapacitacionSingle: React.ComponentType<any>;
+  export default CapacitacionSingle;
+}
+
+declare module '@/components/hallazgos/HallazgoForm' {
+  const HallazgoForm: React.ComponentType<any>;
+  export default HallazgoForm;
+}
+
+declare module '@/components/hallazgos/HallazgoWorkflowManager' {
+  const HallazgoWorkflowManager: React.ComponentType<any>;
+  export default HallazgoWorkflowManager;
+}
+
+declare module '@/components/hallazgos/HallazgoStatCard' {
+  const HallazgoStatCard: React.ComponentType<any>;
+  export default HallazgoStatCard;
+}
+
+declare module '@/components/ui/alert' {
+  export const Alert: React.ComponentType<any>;
+  export const AlertTitle: React.ComponentType<any>;
+  export const AlertDescription: React.ComponentType<any>;
 }
 
 declare module '@/components/ui/tooltip' {
