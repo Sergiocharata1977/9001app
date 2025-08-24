@@ -1,7 +1,24 @@
 import React from 'react';
 import { accionWorkflow, ACCION_ESTADOS } from '@/config/accionWorkflow';
+import type { Accion, AccionUpdateData } from '@/types/acciones';
 
-const AccionWorkflowManager = ({ accion, onUpdate, isLoading }) => {
+interface AccionWorkflowManagerProps {
+  accion: Accion | null;
+  onUpdate: (data: AccionUpdateData) => void;
+  isLoading?: boolean;
+}
+
+interface WorkflowStep {
+  title: string;
+  component: React.ComponentType<any>;
+  nextState: string;
+}
+
+const AccionWorkflowManager: React.FC<AccionWorkflowManagerProps> = ({ 
+  accion, 
+  onUpdate, 
+  isLoading = false 
+}) => {
   const currentState = accion?.estado;
 
   if (!currentState || currentState === ACCION_ESTADOS.CERRADA) {
@@ -13,7 +30,7 @@ const AccionWorkflowManager = ({ accion, onUpdate, isLoading }) => {
     );
   }
 
-  const workflowStep = accionWorkflow[currentState];
+  const workflowStep: WorkflowStep = accionWorkflow[currentState];
 
   if (!workflowStep || !workflowStep.component) {
     return <div className="p-4 text-center">Estado de la acción no válido o sin componente asociado.</div>;
@@ -21,8 +38,8 @@ const AccionWorkflowManager = ({ accion, onUpdate, isLoading }) => {
 
   const FormComponent = workflowStep.component;
 
-  const handleSubmit = async (formData) => {
-    const dataToUpdate = {
+  const handleSubmit = async (formData: any) => {
+    const dataToUpdate: AccionUpdateData = {
       ...formData,
       estado: workflowStep.nextState,
     };

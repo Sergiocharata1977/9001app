@@ -4,10 +4,42 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import procesosService from '@/services/procesosService'; // Asumiendo que tienes un servicio para procesos
+import procesosService from '@/services/procesosService';
+import type { HallazgoFormData, HallazgoPrioridad } from '@/types/hallazgos';
 
-const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
-  const [formData, setFormData] = useState({
+interface Proceso {
+  id: number;
+  nombre: string;
+}
+
+interface OrigenOption {
+  value: string;
+  label: string;
+}
+
+interface PrioridadOption {
+  value: HallazgoPrioridad;
+  label: string;
+}
+
+interface FormData {
+  titulo: string;
+  descripcion: string;
+  origen: string;
+  tipo_hallazgo: string;
+  prioridad: string;
+  proceso_id: string;
+  requisito_incumplido: string;
+}
+
+interface HallazgoFormProps {
+  onSubmit: (data: FormData) => void;
+  onCancel: () => void;
+  initialData?: Partial<FormData>;
+}
+
+const HallazgoForm: React.FC<HallazgoFormProps> = ({ onSubmit, onCancel, initialData }) => {
+  const [formData, setFormData] = useState<FormData>({
     titulo: '',
     descripcion: '',
     origen: '',
@@ -16,10 +48,10 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
     proceso_id: '',
     requisito_incumplido: '',
   });
-  const [procesos, setProcesos] = useState([]);
+  const [procesos, setProcesos] = useState<Proceso[]>([]);
 
   useEffect(() => {
-    const fetchProcesos = async () => {
+    const fetchProcesos = async (): Promise<void> => {
       try {
         const data = await procesosService.getProcesos();
         setProcesos(data);
@@ -32,25 +64,25 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData(prev => ({ ...prev, ...initialData }));
     }
   }, [initialData]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (name, value) => {
+  const handleSelectChange = (name: keyof FormData, value: string): void => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     onSubmit(formData);
   };
 
-  const origenOptions = [
+  const origenOptions: OrigenOption[] = [
     { value: 'auditoria_interna', label: 'Auditoría Interna' },
     { value: 'auditoria_externa', label: 'Auditoría Externa' },
     { value: 'reclamo_cliente', label: 'Reclamo de Cliente' },
@@ -58,14 +90,16 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
     { value: 'analisis_datos', label: 'Análisis de Datos' },
     { value: 'otro', label: 'Otro' }
   ];
-  const tipoOptions = [
+
+  const tipoOptions: string[] = [
     'No Conformidad Mayor',
     'No Conformidad Menor',
     'Riesgo',
     'Oportunidad de Mejora',
     'Recomendación de Dirección'
   ];
-  const prioridadOptions = [
+
+  const prioridadOptions: PrioridadOption[] = [
     { value: 'baja', label: 'Baja' },
     { value: 'media', label: 'Media' },
     { value: 'alta', label: 'Alta' }

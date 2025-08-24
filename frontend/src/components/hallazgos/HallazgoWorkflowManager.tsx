@@ -1,9 +1,25 @@
 import React from 'react';
 import { hallazgoWorkflow } from '@/config/hallazgoWorkflow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import type { Hallazgo, HallazgoEstado, WorkflowFormData } from '@/types/hallazgos';
 
-const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
-  const handleSubmit = async (formData, nextState) => {
+interface HallazgoWorkflowManagerProps {
+  hallazgo: Hallazgo;
+  onUpdate: (data: any) => void;
+  onCancel: () => void;
+}
+
+interface WorkflowStep {
+  Component?: React.ComponentType<any>;
+  nextState?: HallazgoEstado | Record<string, HallazgoEstado>;
+}
+
+const HallazgoWorkflowManager: React.FC<HallazgoWorkflowManagerProps> = ({ 
+  hallazgo, 
+  onUpdate, 
+  onCancel 
+}) => {
+  const handleSubmit = async (formData: WorkflowFormData, nextState: HallazgoEstado): Promise<void> => {
     const dataToUpdate = {
       ...formData,
       estado: nextState,
@@ -11,8 +27,8 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
     onUpdate(dataToUpdate);
   };
 
-  const renderCurrentStep = () => {
-    const currentStateConfig = hallazgoWorkflow[hallazgo.estado];
+  const renderCurrentStep = (): React.ReactNode => {
+    const currentStateConfig: WorkflowStep = hallazgoWorkflow[hallazgo.estado];
 
     if (!currentStateConfig) {
       return (
@@ -41,17 +57,18 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
       );
     }
 
-    const handleFormSubmit = (formData) => {
-      let finalNextState = nextState;
+    const handleFormSubmit = (formData: WorkflowFormData): void => {
+      let finalNextState: HallazgoEstado = nextState as HallazgoEstado;
+      
       // Lógica de bifurcación centralizada
       if (typeof nextState === 'object' && nextState !== null) {
         // Para FormAnalisisAccion
         if (formData.decision) {
-          finalNextState = nextState[formData.decision];
+          finalNextState = (nextState as Record<string, HallazgoEstado>)[formData.decision];
         }
         // Para FormVerificacionCierre
         else if (formData.eficacia_verificacion) {
-          finalNextState = nextState[formData.eficacia_verificacion];
+          finalNextState = (nextState as Record<string, HallazgoEstado>)[formData.eficacia_verificacion];
         }
       }
       handleSubmit(formData, finalNextState);

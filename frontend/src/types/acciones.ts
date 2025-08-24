@@ -73,6 +73,7 @@ export interface AccionEstadoConfig {
   title: string;
   color: string;
   colorClasses: string;
+  component?: React.ComponentType<any> | null;
   nextState?: AccionEstado;
 }
 
