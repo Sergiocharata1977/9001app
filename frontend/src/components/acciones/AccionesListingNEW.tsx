@@ -27,10 +27,10 @@ import {
   Accion, 
   AccionStats, 
   AccionTableColumn, 
-  AccionTableAction, 
   AccionKanbanColumn,
   AccionesListingProps 
 } from '@/types/acciones';
+import type { Action as DataTableAction } from '@/components/shared/DataTable/DataTable';
 
 const AccionesListingNEW: React.FC<AccionesListingProps> = ({
   initialData,
@@ -202,7 +202,7 @@ const AccionesListingNEW: React.FC<AccionesListingProps> = ({
   ];
 
   // Configuración de acciones
-  const actions: AccionTableAction[] = [
+  const actions: DataTableAction<Accion>[] = [
     {
       icon: Eye,
       label: 'Ver Detalle',
@@ -269,7 +269,7 @@ const AccionesListingNEW: React.FC<AccionesListingProps> = ({
   ];
 
   // Renderizado personalizado de tarjeta para Kanban
-  const renderKanbanCard = (accion: Accion, actions: AccionTableAction[]): React.ReactNode => (
+  const renderKanbanCard = (accion: Accion, actions: DataTableAction<Accion>[]): React.ReactNode => (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border p-3 mb-3 hover:shadow-md transition-shadow cursor-pointer">
       <div className="space-y-2">
         <div className="flex justify-between items-start">
@@ -327,7 +327,7 @@ const AccionesListingNEW: React.FC<AccionesListingProps> = ({
   );
 
   // Renderizado personalizado de tarjeta para Grid
-  const renderCard = (accion: Accion, actions: AccionTableAction[]): React.ReactNode => (
+  const renderCard = (accion: Accion, actions: DataTableAction<Accion>[]): React.ReactNode => (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border p-4 hover:shadow-md transition-shadow cursor-pointer">
       <div className="space-y-3">
         <div className="flex justify-between items-start">
@@ -375,7 +375,6 @@ const AccionesListingNEW: React.FC<AccionesListingProps> = ({
                   e.stopPropagation();
                   action.onClick(accion);
                 }}
-                className={action.className}
                 title={action.label}
               >
                 <Icon className="h-4 w-4" />

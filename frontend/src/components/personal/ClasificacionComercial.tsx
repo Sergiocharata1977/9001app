@@ -16,11 +16,13 @@ import {
   Building2,
   GraduationCap
 } from 'lucide-react';
-import { 
+import type { 
   Personal, 
   RolComercial, 
   ClasificacionComercial, 
-  EspecialidadAgro, 
+  EspecialidadAgro
+} from '@/types/personal';
+import { 
   ROLES_COMERCIALES,
   CLASIFICACIONES_COMERCIALES,
   ESPECIALIDADES_AGRO,
