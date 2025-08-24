@@ -7,7 +7,7 @@ export interface ConfirmDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  title?: string;
+  dialogTitle?: string;
   message?: string;
   confirmText?: string;
   cancelText?: string;
@@ -31,7 +31,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   isOpen,
   onClose,
   onConfirm,
-  title = "Confirmar acción",
+  dialogTitle = "Confirmar acción",
   message = "¿Estás seguro que deseas realizar esta acción?",
   confirmText = "Confirmar",
   cancelText = "Cancelar",
@@ -48,7 +48,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
             <AlertTriangle className={`h-5 w-5 ${isDestructive ? 'text-red-500' : 'text-amber-500'}`} />
-            {title}
+            {dialogTitle}
           </DialogTitle>
         </DialogHeader>
         

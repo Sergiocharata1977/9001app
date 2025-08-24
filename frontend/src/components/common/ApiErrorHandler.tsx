@@ -1,3 +1,4 @@
+// @ts-expect-error - alert.jsx is JS, relying on ambient types
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
