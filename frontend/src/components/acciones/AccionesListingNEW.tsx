@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { DataTable } from '@/components/shared/DataTable/DataTable';
+import type { Action } from '@/components/shared/DataTable/DataTable';
 import accionesService from '@/services/accionesService';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +28,6 @@ import {
   Accion, 
   AccionStats, 
   AccionTableColumn, 
-  AccionTableAction, 
   AccionKanbanColumn,
   AccionesListingProps 
 } from '@/types/acciones';
@@ -202,7 +202,7 @@ const AccionesListingNEW: React.FC<AccionesListingProps> = ({
   ];
 
   // Configuración de acciones
-  const actions: AccionTableAction[] = [
+  const actions: Action<Accion>[] = [
     {
       icon: Eye,
       label: 'Ver Detalle',
@@ -269,7 +269,7 @@ const AccionesListingNEW: React.FC<AccionesListingProps> = ({
   ];
 
   // Renderizado personalizado de tarjeta para Kanban
-  const renderKanbanCard = (accion: Accion, actions: AccionTableAction[]): React.ReactNode => (
+  const renderKanbanCard = (accion: Accion, actions: Action<Accion>[]): React.ReactNode => (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border p-3 mb-3 hover:shadow-md transition-shadow cursor-pointer">
       <div className="space-y-2">
         <div className="flex justify-between items-start">
@@ -327,7 +327,7 @@ const AccionesListingNEW: React.FC<AccionesListingProps> = ({
   );
 
   // Renderizado personalizado de tarjeta para Grid
-  const renderCard = (accion: Accion, actions: AccionTableAction[]): React.ReactNode => (
+  const renderCard = (accion: Accion, actions: Action<Accion>[]): React.ReactNode => (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border p-4 hover:shadow-md transition-shadow cursor-pointer">
       <div className="space-y-3">
         <div className="flex justify-between items-start">

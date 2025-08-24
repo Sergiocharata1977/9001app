@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
 import { exportToPDF, exportToExcel } from '@/utils/export';
+import type { ExportColumn } from '@/types';
 
 export interface Column {
   key: string;
@@ -94,6 +95,7 @@ const BulkExport: React.FC<BulkExportProps> = ({
 
       // Filtrar columnas seleccionadas
       const filteredColumns = columns.filter(col => selectedColumns.includes(col.key));
+      const exportColumns: ExportColumn[] = filteredColumns.map(col => ({ key: col.key, header: col.label }));
 
       // Ejecutar exportación
       if (onExport) {
@@ -101,9 +103,9 @@ const BulkExport: React.FC<BulkExportProps> = ({
       } else {
         // Exportación por defecto
         if (selectedFormat === 'excel') {
-          exportToExcel(filteredData, title, filteredColumns);
+          exportToExcel(filteredData, title, exportColumns);
         } else if (selectedFormat === 'pdf') {
-          exportToPDF(filteredData, title, filteredColumns);
+          exportToPDF(filteredData, title, exportColumns);
         }
       }
 

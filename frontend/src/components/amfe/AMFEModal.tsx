@@ -9,8 +9,10 @@ interface AMFEModalProps {
   isEditing?: boolean;
 }
 
+type AMFEFormData = Omit<AMFERecord, 'id' | 'npr' | 'riskLevel' | 'createdAt' | 'updatedAt'>;
+
 const AMFEModal: React.FC<AMFEModalProps> = ({ isOpen, onClose, onSave, record, isEditing = false }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<AMFEFormData>({
     year: new Date().getFullYear(),
     process: '',
     function: '',
@@ -24,7 +26,7 @@ const AMFEModal: React.FC<AMFEModalProps> = ({ isOpen, onClose, onSave, record, 
     recommendedActions: '',
     responsible: '',
     dueDate: '',
-    status: 'pending' as const
+    status: 'pending'
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
