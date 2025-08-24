@@ -441,6 +441,23 @@ class CapacitacionesService {
       throw new Error('Error al obtener reporte de capacitación');
     }
   }
+
+  // Métodos alias para compatibilidad con la interfaz CapacitacionService
+  async getAll(): Promise<Capacitacion[]> {
+    return this.getCapacitaciones();
+  }
+
+  async create(data: CreateCapacitacionData): Promise<Capacitacion> {
+    return this.createCapacitacion(data);
+  }
+
+  async update(id: number, data: UpdateCapacitacionData): Promise<Capacitacion> {
+    return this.updateCapacitacion(id, data);
+  }
+
+  async delete(id: number): Promise<void> {
+    return this.deleteCapacitacion(id);
+  }
 }
 
 export const capacitacionesService = new CapacitacionesService();

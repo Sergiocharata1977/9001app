@@ -110,7 +110,8 @@ export interface AuditoriaField {
 }
 
 export interface AuditoriaService {
-  getAllAuditorias: () => Promise<Auditoria[]>;
+  getAuditorias: () => Promise<Auditoria[]>;
+  getAllAuditorias: () => Promise<Auditoria[]>; // Alias para compatibilidad
   getAuditoriaById: (id: number) => Promise<Auditoria>;
   createAuditoria: (data: AuditoriaFormData) => Promise<Auditoria>;
   updateAuditoria: (id: number, data: Partial<AuditoriaFormData>) => Promise<Auditoria>;

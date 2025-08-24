@@ -23,6 +23,7 @@ interface UseToastReturn {
     type?: 'success' | 'error' | 'warning' | 'info';
     duration?: number;
   }) => void;
+  showToast: (message: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
   dismiss: (toastId?: string) => void;
   toasts: Toast[];
 }
@@ -73,8 +74,18 @@ export function useToast(): UseToastReturn {
     }
   }, []);
 
+  // Método showToast para compatibilidad
+  const showToast = useCallback((message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+    toast({
+      description: message,
+      type,
+      variant: type === 'error' ? 'destructive' : 'default'
+    });
+  }, [toast]);
+
   return {
     toast,
+    showToast,
     dismiss,
     toasts
   };

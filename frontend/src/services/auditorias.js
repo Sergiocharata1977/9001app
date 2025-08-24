@@ -85,7 +85,8 @@ export async function createPunto(data) {
 
 // Exportar todas las funciones
 export default {
-  getAllAuditorias,
+  getAuditorias: getAllAuditorias, // Alias principal
+  getAllAuditorias, // Mantener para compatibilidad
   getAuditoriaById,
   createAuditoria,
   updateAuditoria,

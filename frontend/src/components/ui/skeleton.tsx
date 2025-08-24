@@ -18,6 +18,9 @@ const Skeleton = React.memo<SkeletonProps>(({ className = '', ...props }) => {
 
 Skeleton.displayName = 'Skeleton';
 
+// Export Skeleton as named export
+export { Skeleton };
+
 export interface PersonalCardSkeletonProps {
   cards?: number;
 }

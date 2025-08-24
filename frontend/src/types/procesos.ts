@@ -2,6 +2,12 @@
 
 import { SgcPersonalRelacion, SgcDocumentoRelacionado, SgcNormaRelacionada } from './index';
 
+// Type aliases para los valores de los procesos
+export type ProcesoTipo = 'estrategico' | 'operativo' | 'apoyo' | 'mejora';
+export type ProcesoCategoria = 'proceso' | 'subproceso' | 'actividad';
+export type ProcesoNivelCritico = 'bajo' | 'medio' | 'alto' | 'critico';
+export type ProcesoEstado = 'activo' | 'inactivo' | 'obsoleto' | 'en_revision';
+
 // Tipo principal de Proceso SGC
 export interface ProcesoSgc {
   id: string;
@@ -12,10 +18,10 @@ export interface ProcesoSgc {
   objetivo?: string;
   alcance?: string;
   version: string;
-  tipo: 'estrategico' | 'operativo' | 'apoyo' | 'mejora';
-  categoria: 'proceso' | 'subproceso' | 'actividad';
-  nivel_critico: 'bajo' | 'medio' | 'alto' | 'critico';
-  estado: 'activo' | 'inactivo' | 'obsoleto' | 'en_revision';
+  tipo: ProcesoTipo;
+  categoria: ProcesoCategoria;
+  nivel_critico: ProcesoNivelCritico;
+  estado: ProcesoEstado;
   responsable_id?: string;
   departamento_id?: string;
   supervisor_id?: string;
