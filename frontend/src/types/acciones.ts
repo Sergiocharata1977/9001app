@@ -89,7 +89,8 @@ export interface AccionTableAction {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   onClick: (accion: Accion) => void;
-  variant?: 'ghost' | 'destructive' | 'default';
+  variant?: 'ghost' | 'destructive' | 'default' | 'outline' | 'secondary';
+  className?: string;
   show?: (accion: Accion) => boolean;
 }
 

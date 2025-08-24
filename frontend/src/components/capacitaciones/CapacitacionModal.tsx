@@ -38,7 +38,7 @@ interface FormErrors {
   [key: string]: string | undefined;
 }
 
-function CapacitacionModal({ open, onOpenChange, onSave, capacitacion }: CapacitacionModalProps): JSX.Element {
+function CapacitacionModal({ open, onOpenChange, onSave, capacitacion }: CapacitacionModalProps): React.JSX.Element {
   const [formData, setFormData] = useState<CapacitacionFormData>({
     nombre: "",
     descripcion: "",

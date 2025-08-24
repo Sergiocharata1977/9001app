@@ -443,4 +443,15 @@ class CapacitacionesService {
   }
 }
 
-export const capacitacionesService = new CapacitacionesService();
+// Create instance and add aliases to match interface
+const service = new CapacitacionesService();
+
+// Add aliases to match the expected interface
+export const capacitacionesService = {
+  ...service,
+  getAll: service.getCapacitaciones.bind(service),
+  getById: service.getCapacitacionById.bind(service),
+  create: service.createCapacitacion.bind(service),
+  update: service.updateCapacitacion.bind(service),
+  delete: service.deleteCapacitacion.bind(service)
+};
