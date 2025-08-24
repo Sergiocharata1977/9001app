@@ -11,7 +11,7 @@ export interface Auditoria {
   tipo?: string;
   alcance?: string;
   criterios?: string;
-  areas_auditadas?: string;
+  areas_auditadas?: string | string[];
   hallazgos_count?: number;
   no_conformidades_count?: number;
   observaciones_count?: number;

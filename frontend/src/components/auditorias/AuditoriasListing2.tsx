@@ -218,7 +218,7 @@ const AuditoriasListing2: React.FC = () => {
     };
   };
 
-  const formatAreas = (areas?: string): string => {
+  const formatAreas = (areas?: string | string[]): string => {
     if (!areas) return 'Sin áreas definidas';
     if (typeof areas === 'string') return areas;
     if (Array.isArray(areas)) return areas.join(', ');

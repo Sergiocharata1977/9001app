@@ -10,6 +10,7 @@ import { exportToPDF, exportToExcel } from '@/utils/export';
 export interface Column {
   key: string;
   label: string;
+  header?: string;
   type?: string;
   width?: string;
   align?: 'left' | 'center' | 'right';

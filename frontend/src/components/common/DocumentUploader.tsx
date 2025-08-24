@@ -58,8 +58,8 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
         for (const file of fileArray) {
             // Validar tipo de archivo
-            const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-            if (!acceptedTypes.includes(fileExtension || '')) {
+            const fileExtension = '.' + (file.name.split('.').pop()?.toLowerCase() || '');
+            if (!acceptedTypes.includes(fileExtension)) {
                 toast({
                     title: "❌ Tipo de archivo no válido",
                     description: `Solo se permiten: ${acceptedTypes.join(', ')}`,
@@ -176,7 +176,7 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
     };
 
     const getFileIcon = (fileName: string) => {
-        const extension = fileName.split('.').pop()?.toLowerCase();
+        const extension = fileName.split('.').pop()?.toLowerCase() || '';
         switch (extension) {
             case 'pdf':
                 return <File className="h-4 w-4 text-red-500" />;
