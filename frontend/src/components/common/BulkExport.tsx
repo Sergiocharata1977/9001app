@@ -99,11 +99,17 @@ const BulkExport: React.FC<BulkExportProps> = ({
       if (onExport) {
         await onExport(filteredData, filteredColumns, selectedFormat);
       } else {
+        // Convertir columnas al formato esperado por las funciones de exportación
+        const exportColumns = filteredColumns.map(col => ({
+          key: col.key,
+          header: col.label
+        }));
+        
         // Exportación por defecto
         if (selectedFormat === 'excel') {
-          exportToExcel(filteredData, title, filteredColumns);
+          exportToExcel(filteredData, title, exportColumns);
         } else if (selectedFormat === 'pdf') {
-          exportToPDF(filteredData, title, filteredColumns);
+          exportToPDF(filteredData, title, exportColumns);
         }
       }
 
