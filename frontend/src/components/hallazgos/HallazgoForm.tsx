@@ -1,13 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import procesosService from '@/services/procesosService'; // Asumiendo que tienes un servicio para procesos
+import React, { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import procesosService from '@/services/procesosService'
 
-const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
-  const [formData, setFormData] = useState({
+export interface HallazgoFormData {
+  titulo: string
+  descripcion: string
+  origen: string
+  tipo_hallazgo: string
+  prioridad: string
+  proceso_id: string
+  requisito_incumplido: string
+}
+
+export interface ProcesoItem { id: number; nombre: string }
+
+export interface HallazgoFormProps {
+  onSubmit: (data: HallazgoFormData) => void
+  onCancel: () => void
+  initialData?: Partial<HallazgoFormData>
+}
+
+const HallazgoForm: React.FC<HallazgoFormProps> = ({ onSubmit, onCancel, initialData }) => {
+  const [formData, setFormData] = useState<HallazgoFormData>({
     titulo: '',
     descripcion: '',
     origen: '',
@@ -15,40 +33,40 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
     prioridad: '',
     proceso_id: '',
     requisito_incumplido: '',
-  });
-  const [procesos, setProcesos] = useState([]);
+  })
+  const [procesos, setProcesos] = useState<ProcesoItem[]>([])
 
   useEffect(() => {
     const fetchProcesos = async () => {
       try {
-        const data = await procesosService.getProcesos();
-        setProcesos(data);
+        const data = await procesosService.getProcesos()
+        setProcesos(data as ProcesoItem[])
       } catch (error) {
-        console.error('Error al cargar los procesos:', error);
+        console.error('Error al cargar los procesos:', error)
       }
-    };
-    fetchProcesos();
-  }, []);
+    }
+    fetchProcesos()
+  }, [])
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData(prev => ({ ...prev, ...(initialData as HallazgoFormData) }))
     }
-  }, [initialData]);
+  }, [initialData])
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const handleChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
 
-  const handleSelectChange = (name, value) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const handleSelectChange = (name: keyof HallazgoFormData, value: string) => {
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault()
+    onSubmit(formData)
+  }
 
   const origenOptions = [
     { value: 'auditoria_interna', label: 'Auditoría Interna' },
@@ -57,19 +75,19 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
     { value: 'revision_direccion', label: 'Revisión por la Dirección' },
     { value: 'analisis_datos', label: 'Análisis de Datos' },
     { value: 'otro', label: 'Otro' }
-  ];
+  ] as const
   const tipoOptions = [
     'No Conformidad Mayor',
     'No Conformidad Menor',
     'Riesgo',
     'Oportunidad de Mejora',
     'Recomendación de Dirección'
-  ];
+  ] as const
   const prioridadOptions = [
     { value: 'baja', label: 'Baja' },
     { value: 'media', label: 'Media' },
     { value: 'alta', label: 'Alta' }
-  ];
+  ] as const
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -138,7 +156,7 @@ const HallazgoForm = ({ onSubmit, onCancel, initialData }) => {
         <Button type="submit">Registrar Hallazgo</Button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default HallazgoForm;
+export default HallazgoForm

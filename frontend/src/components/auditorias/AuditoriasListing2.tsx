@@ -29,7 +29,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auditoriasService } from '../../services/auditoriasService.js';
 import { useToast } from '../ui/use-toast';
-import AuditoriaKanbanBoard from './AuditoriaKanbanBoard.jsx';
+import AuditoriaKanbanBoard from './AuditoriaKanbanBoard';
 
 // ===============================================
 // COMPONENTE DE LISTADO DE AUDITORÍAS v2 - SGC PRO
