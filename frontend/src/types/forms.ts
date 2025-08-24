@@ -266,15 +266,15 @@ export interface ValidationResult {
 }
 
 // ========== TIPOS PARA RESPUESTAS DE API ==========
-
-export interface ApiResponse<T> {
+// Evitar conflicto con ApiResponse exportado en '@/types/api'
+export interface FormApiResponse<T> {
   success: boolean;
   data?: T;
   message?: string;
   errors?: ValidationError[];
 }
 
-export interface PaginatedResponse<T> {
+export interface FormPaginatedResponse<T> {
   data: T[];
   pagination: {
     page: number;

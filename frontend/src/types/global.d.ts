@@ -10,20 +10,8 @@ declare module '*.js' {
   export default content;
 }
 
-declare module '@/components/ui/*' {
-  const component: React.ComponentType<any>;
-  export default component;
-}
-
-declare module '@/hooks/*' {
-  const hook: any;
-  export default hook;
-}
-
-declare module '@/services/*' {
-  const service: any;
-  export default service;
-}
+// Nota: Las declaraciones con comodín para '@/components/ui/*', '@/hooks/*' y '@/services/*'
+// fueron removidas para evitar conflictos con los tipos específicos de UI y servicios.
 
 // Tipos globales para APIs
 interface ApiResponse<T = any> {

@@ -361,6 +361,26 @@ declare module '@/components/ui/toast' {
   export const Toaster: React.FC<ToasterProps>;
 }
 
+// Declaraciones adicionales para alias de UI en archivos .jsx
+declare module '@/components/ui/alert' {
+  export interface AlertProps extends HTMLAttributes<HTMLDivElement> {
+    variant?: 'default' | 'destructive' | 'success';
+  }
+  export const Alert: React.FC<AlertProps>;
+  export const AlertTitle: React.FC<HTMLAttributes<HTMLHeadingElement>>;
+  export const AlertDescription: React.FC<HTMLAttributes<HTMLDivElement>>;
+}
+
+declare module '@/components/ui/separator' {
+  export const Separator: React.FC<HTMLAttributes<HTMLDivElement>>;
+}
+
+declare module '@/components/ui/avatar' {
+  export const Avatar: React.FC<HTMLAttributes<HTMLDivElement>>;
+  export const AvatarImage: React.FC<HTMLAttributes<HTMLImageElement>>;
+  export const AvatarFallback: React.FC<HTMLAttributes<HTMLDivElement>>;
+}
+
 // Declaraciones para rutas relativas de componentes UI
 // Algunas importaciones usan rutas relativas en lugar de alias
 declare module '../../ui/button' {

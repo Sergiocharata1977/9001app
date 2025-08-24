@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, AxiosProgressEvent, InternalAxiosRequestConfig } from 'axios';
+import type { ApiResponse } from '@/types';
 // @ts-ignore - módulo JS sin tipos
 import useAuthStore from '../store/authStore';
 
@@ -8,13 +9,6 @@ interface RuntimeConfig {
 }
 
 // Tipos locales
-
-interface ApiResponse<T = any> {
-  success: boolean;
-  data: T;
-  message?: string;
-  error?: string;
-}
 
 interface ApiClient {
   get: <T = any>(endpoint?: string, config?: AxiosRequestConfig) => Promise<ApiResponse<T>>;
