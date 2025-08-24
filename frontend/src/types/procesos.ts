@@ -42,6 +42,8 @@ export interface ProcesoSgc {
   is_active: boolean;
 }
 
+export type ProcesoTipo = ProcesoSgc['tipo'];
+
 // Proceso SGC con información completa
 export interface ProcesoSgcCompleto extends ProcesoSgc {
   responsable?: {

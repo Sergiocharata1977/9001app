@@ -29,6 +29,13 @@ class AuditoriasService {
   }
 
   /**
+   * Alias de compatibilidad: obtener todas las auditorías sin filtros
+   */
+  async getAllAuditorias(): Promise<Auditoria[]> {
+    return this.getAuditorias({});
+  }
+
+  /**
    * Obtiene una auditoría por ID
    */
   async getAuditoriaById(id: number): Promise<Auditoria> {

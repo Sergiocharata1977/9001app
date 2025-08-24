@@ -25,6 +25,7 @@ interface UseToastReturn {
   }) => void;
   dismiss: (toastId?: string) => void;
   toasts: Toast[];
+  showToast: (message: string, type?: 'success' | 'error' | 'warning' | 'info', duration?: number) => void;
 }
 
 export function useToast(): UseToastReturn {
@@ -73,10 +74,15 @@ export function useToast(): UseToastReturn {
     }
   }, []);
 
+  const showToast = useCallback((message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', duration = 4000) => {
+    toast({ title: message, type, duration, variant: type === 'error' ? 'destructive' : 'default' });
+  }, [toast]);
+
   return {
     toast,
     dismiss,
-    toasts
+    toasts,
+    showToast
   };
 }
 

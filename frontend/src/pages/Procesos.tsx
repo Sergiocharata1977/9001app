@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ProcesoSgc, ProcesoSgcCompleto, ProcesoSgcFiltros, ProcesoSgcDashboard } from '@/types';
+import { ProcesoSgc, ProcesoSgcCompleto, ProcesoSgcFiltros, ProcesoSgcDashboard, ProcesoTipo } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +26,9 @@ const ProcesosPage: React.FC<ProcesosPageProps> = () => {
   const [filtros, setFiltros] = useState<ProcesoSgcFiltros>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [showModalCrear, setShowModalCrear] = useState<boolean>(false);
+  const [showModalDetalle, setShowModalDetalle] = useState<boolean>(false);
+  const [procesoSeleccionado, setProcesoSeleccionado] = useState<ProcesoSgcCompleto | null>(null);
 
   useEffect(() => {
     cargarProcesos();

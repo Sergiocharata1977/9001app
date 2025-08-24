@@ -45,7 +45,7 @@ class CapacitacionesService {
   /**
    * Crea una nueva capacitación
    */
-  async createCapacitacion(data: CreateCapacitacionData): Promise<Capacitacion> {
+  async createCapacitacion(data: CreateCapacitacionData | import('@/types/capacitaciones').CapacitacionFormData): Promise<Capacitacion> {
     try {
       const response = await apiClient.post(this.baseUrl, data);
       return response.data;
@@ -58,7 +58,7 @@ class CapacitacionesService {
   /**
    * Actualiza una capacitación existente
    */
-  async updateCapacitacion(id: number, data: UpdateCapacitacionData): Promise<Capacitacion> {
+  async updateCapacitacion(id: number, data: UpdateCapacitacionData | Partial<import('@/types/capacitaciones').CapacitacionFormData>): Promise<Capacitacion> {
     try {
       const response = await apiClient.put(`${this.baseUrl}/${id}`, data);
       return response.data;
@@ -78,6 +78,27 @@ class CapacitacionesService {
       console.error('Error deleting capacitacion:', error);
       throw new Error('Error al eliminar la capacitación');
     }
+  }
+
+  // ======== Métodos de compatibilidad (nombres legacy) ========
+  async getAll(): Promise<Capacitacion[]> {
+    return this.getCapacitaciones({});
+  }
+
+  async getById(id: number): Promise<Capacitacion> {
+    return this.getCapacitacionById(id);
+  }
+
+  async create(data: import('@/types/capacitaciones').CapacitacionFormData): Promise<Capacitacion> {
+    return this.createCapacitacion(data);
+  }
+
+  async update(id: number, data: Partial<import('@/types/capacitaciones').CapacitacionFormData>): Promise<Capacitacion> {
+    return this.updateCapacitacion(id, data);
+  }
+
+  async delete(id: number): Promise<void> {
+    return this.deleteCapacitacion(id);
   }
 
   /**
