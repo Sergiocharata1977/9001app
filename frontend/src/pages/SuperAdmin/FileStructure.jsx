@@ -1,6 +1,6 @@
 import React from 'react';
 import FileStructureViewer from '../../components/database/FileStructureViewer';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { DocumentIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 
 const FileStructure = () => {

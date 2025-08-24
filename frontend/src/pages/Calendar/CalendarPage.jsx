@@ -8,7 +8,7 @@ import esLocale from '@fullcalendar/core/locales/es';
 
 import eventService from '../../services/eventService';
 import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import Skeleton from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

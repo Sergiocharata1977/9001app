@@ -4,7 +4,7 @@ import { ArrowLeft, Edit, Trash2, FileText, CheckCircle, XCircle, AlertTriangle 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
+import Skeleton from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/use-toast';
 import normasService from '../../services/normasService';
 
