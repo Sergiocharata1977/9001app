@@ -108,8 +108,17 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 description: `${file.name} ha sido adjuntado`,
             });
 
-            if (onDocumentUploaded) {
-                onDocumentUploaded(response.data);
+            if (onDocumentUploaded && response.data) {
+                // Mapear DocumentUploadResponse a Document
+                const document: Document = {
+                    id: response.data.id.toString(),
+                    name: response.data.nombre,
+                    url: response.data.ruta_archivo,
+                    size: response.data.tamaño,
+                    type: response.data.mime_type,
+                    uploaded_at: new Date().toISOString()
+                };
+                onDocumentUploaded(document);
             }
 
         } catch (error) {
