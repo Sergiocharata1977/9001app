@@ -12,9 +12,29 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'react-toastify';
 import accionesService from '@/services/accionesService';
+import type { AccionPrioridad, ACCION_ESTADOS } from '@/types/acciones';
 
-const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
-  const [formData, setFormData] = useState({
+interface CrearAccionFormProps {
+  onSubmit?: () => void;
+  onCancel?: () => void;
+  isLoading?: boolean;
+}
+
+interface FormData {
+  titulo: string;
+  descripcion: string;
+  responsable: string;
+  prioridad: AccionPrioridad;
+  fechaVencimiento: string;
+  hallazgo_id: string | null;
+}
+
+const CrearAccionForm: React.FC<CrearAccionFormProps> = ({ 
+  onSubmit, 
+  onCancel, 
+  isLoading = false 
+}) => {
+  const [formData, setFormData] = useState<FormData>({
     titulo: '',
     descripcion: '',
     responsable: '',
@@ -23,7 +43,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
     hallazgo_id: null
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!formData.titulo.trim()) {
@@ -34,20 +54,20 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
     try {
       const nuevaAccion = {
         ...formData,
-        estado: 'p1_planificacion_accion',
+        estado: 'p1_planificacion_accion' as const,
         fechaCreacion: new Date().toISOString()
       };
 
       await accionesService.createAccion(nuevaAccion);
       toast.success('Acción creada con éxito');
       onSubmit && onSubmit();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al crear la acción:', error);
       toast.error(error.response?.data?.message || 'Error al crear la acción');
     }
   };
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: keyof FormData, value: string | null) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -92,7 +112,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
         <Label htmlFor="prioridad">Prioridad</Label>
         <Select
           value={formData.prioridad}
-          onValueChange={(value) => handleChange('prioridad', value)}
+          onValueChange={(value: AccionPrioridad) => handleChange('prioridad', value)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Seleccionar prioridad" />

@@ -2,9 +2,36 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Download, LayoutGrid, List, FileText, Calendar } from 'lucide-react';
+import { Plus, Search, Download, LayoutGrid, List, FileText, Calendar, LucideIcon } from 'lucide-react';
 
-const UnifiedHeader = ({ 
+type ViewMode = 'grid' | 'list';
+type PrimaryColor = 'emerald' | 'blue';
+
+interface ColorClasses {
+  gradient: string;
+  button: string;
+  badge: string;
+}
+
+interface UnifiedHeaderProps {
+  title: string;
+  description: string;
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  onNew?: () => void;
+  onExport?: () => void;
+  viewMode?: ViewMode;
+  onViewModeChange?: (mode: ViewMode) => void;
+  showViewToggle?: boolean;
+  showExport?: boolean;
+  newButtonText?: string;
+  totalCount?: number;
+  lastUpdated?: string | null;
+  icon?: LucideIcon;
+  primaryColor?: PrimaryColor;
+}
+
+const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({ 
   title, 
   description, 
   searchTerm, 
@@ -21,7 +48,7 @@ const UnifiedHeader = ({
   icon: Icon = FileText,
   primaryColor = "emerald"
 }) => {
-  const getColorClasses = () => {
+  const getColorClasses = (): ColorClasses => {
     switch (primaryColor) {
       case 'emerald':
         return {
@@ -91,7 +118,7 @@ const UnifiedHeader = ({
 
           {/* Controles */}
           <div className="flex items-center gap-2">
-            {showViewToggle && (
+            {showViewToggle && onViewModeChange && (
               <div className="flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
                 <Button
                   variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
@@ -132,4 +159,4 @@ const UnifiedHeader = ({
   );
 };
 
-export default UnifiedHeader; 
+export default UnifiedHeader;

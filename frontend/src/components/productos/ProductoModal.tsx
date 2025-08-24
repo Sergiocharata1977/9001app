@@ -21,8 +21,61 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Package, Calendar, User } from 'lucide-react';
 
-const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
-  const [formData, setFormData] = useState({
+interface Producto {
+  id?: number;
+  nombre?: string;
+  descripcion?: string;
+  codigo?: string;
+  estado?: ProductoEstado;
+  tipo?: ProductoTipo;
+  categoria?: string;
+  responsable?: string;
+  fecha_creacion?: string;
+  fecha_revision?: string;
+  version?: string;
+  especificaciones?: string;
+  requisitos_calidad?: string;
+  proceso_aprobacion?: string;
+  documentos_asociados?: string;
+  observaciones?: string;
+}
+
+type ProductoEstado = 'planificacion' | 'entrada' | 'diseno' | 'verificacion' | 'validacion' | 'aprobado' | 'produccion' | 'obsoleto';
+type ProductoTipo = 'Producto' | 'Servicio' | 'Software' | 'Documento' | 'Proceso';
+
+interface EstadoISO {
+  value: ProductoEstado;
+  label: string;
+  color: string;
+}
+
+interface FormData {
+  nombre: string;
+  descripcion: string;
+  codigo: string;
+  estado: ProductoEstado;
+  tipo: ProductoTipo;
+  categoria: string;
+  responsable: string;
+  fecha_creacion: string;
+  fecha_revision: string;
+  version: string;
+  especificaciones: string;
+  requisitos_calidad: string;
+  proceso_aprobacion: string;
+  documentos_asociados: string;
+  observaciones: string;
+}
+
+interface ProductoModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (data: FormData) => void;
+  producto?: Producto | null;
+}
+
+const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, onClose, onSave, producto }) => {
+  const [formData, setFormData] = useState<FormData>({
     nombre: '',
     descripcion: '',
     codigo: '',
@@ -41,7 +94,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
   });
 
   // Estados ISO 9001:8.3 - Proceso de Diseño y Desarrollo
-  const estadosISO = [
+  const estadosISO: EstadoISO[] = [
     { value: 'planificacion', label: 'Planificación', color: 'bg-blue-100 text-blue-800' },
     { value: 'entrada', label: 'Entradas', color: 'bg-purple-100 text-purple-800' },
     { value: 'diseno', label: 'Diseño', color: 'bg-orange-100 text-orange-800' },
@@ -52,7 +105,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     { value: 'obsoleto', label: 'Obsoleto', color: 'bg-red-100 text-red-800' }
   ];
 
-  const tiposProducto = [
+  const tiposProducto: ProductoTipo[] = [
     'Producto',
     'Servicio',
     'Software',
@@ -100,12 +153,12 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     }
   }, [producto]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     onSave(formData);
   };
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: keyof FormData, value: string): void => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -175,7 +228,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="tipo">Tipo *</Label>
-              <Select value={formData.tipo} onValueChange={(value) => handleInputChange('tipo', value)}>
+              <Select value={formData.tipo} onValueChange={(value: ProductoTipo) => handleInputChange('tipo', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -191,7 +244,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
 
             <div className="space-y-2">
               <Label htmlFor="estado">Estado *</Label>
-              <Select value={formData.estado} onValueChange={(value) => handleInputChange('estado', value)}>
+              <Select value={formData.estado} onValueChange={(value: ProductoEstado) => handleInputChange('estado', value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
