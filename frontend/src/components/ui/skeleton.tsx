@@ -664,4 +664,5 @@ export const DocumentoFormSkeleton = React.memo(() => {
 
 DocumentoFormSkeleton.displayName = 'DocumentoFormSkeleton';
 
+export { Skeleton };
 export default Skeleton;

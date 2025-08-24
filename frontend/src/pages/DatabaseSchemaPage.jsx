@@ -13,10 +13,10 @@ import {
   Download,
   Share2
 } from 'lucide-react';
-import DatabaseSchemaViewer from '../components/database/DatabaseSchemaViewer';
-import ERDDiagram from '../components/database/ERDDiagram';
-import SchemaValidator from '../components/database/SchemaValidator';
-import SchemaDocumentation from '../components/database/SchemaDocumentation';
+// import DatabaseSchemaViewer from '../components/database/DatabaseSchemaViewer';
+// import ERDDiagram from '../components/database/ERDDiagram';
+// import SchemaValidator from '../components/database/SchemaValidator';
+// import SchemaDocumentation from '../components/database/SchemaDocumentation';
 
 const DatabaseSchemaPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -293,22 +293,26 @@ const DatabaseSchemaPage = () => {
 
           {/* Esquemas */}
           <TabsContent value="schema">
-            <DatabaseSchemaViewer />
+            {/* <DatabaseSchemaViewer /> */}
+            <div>Schema Viewer Component - To be implemented</div>
           </TabsContent>
 
           {/* Diagrama ERD */}
           <TabsContent value="erd">
-            <ERDDiagram />
+            {/* <ERDDiagram /> */}
+            <div>ERD Diagram Component - To be implemented</div>
           </TabsContent>
 
           {/* Validador */}
           <TabsContent value="validator">
-            <SchemaValidator />
+            {/* <SchemaValidator /> */}
+            <div>Schema Validator Component - To be implemented</div>
           </TabsContent>
 
           {/* Documentación */}
           <TabsContent value="documentation">
-            <SchemaDocumentation />
+            {/* <SchemaDocumentation /> */}
+            <div>Schema Documentation Component - To be implemented</div>
           </TabsContent>
         </Tabs>
       </div>

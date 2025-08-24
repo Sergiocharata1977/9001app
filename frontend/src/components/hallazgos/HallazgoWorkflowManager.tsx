@@ -2,8 +2,29 @@ import React from 'react';
 import { hallazgoWorkflow } from '@/config/hallazgoWorkflow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
-const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
-  const handleSubmit = async (formData, nextState) => {
+// Tipos
+interface Hallazgo {
+  id?: number;
+  titulo?: string;
+  descripcion?: string;
+  estado: string;
+  [key: string]: any;
+}
+
+interface FormData {
+  decision?: string;
+  eficacia_verificacion?: string;
+  [key: string]: any;
+}
+
+interface HallazgoWorkflowManagerProps {
+  hallazgo: Hallazgo;
+  onUpdate: (data: any) => void;
+  onCancel: () => void;
+}
+
+const HallazgoWorkflowManager: React.FC<HallazgoWorkflowManagerProps> = ({ hallazgo, onUpdate, onCancel }) => {
+  const handleSubmit = async (formData: FormData, nextState: string) => {
     const dataToUpdate = {
       ...formData,
       estado: nextState,
@@ -41,17 +62,17 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
       );
     }
 
-    const handleFormSubmit = (formData) => {
+    const handleFormSubmit = (formData: FormData) => {
       let finalNextState = nextState;
       // Lógica de bifurcación centralizada
       if (typeof nextState === 'object' && nextState !== null) {
         // Para FormAnalisisAccion
         if (formData.decision) {
-          finalNextState = nextState[formData.decision];
+          finalNextState = (nextState as any)[formData.decision];
         }
         // Para FormVerificacionCierre
         else if (formData.eficacia_verificacion) {
-          finalNextState = nextState[formData.eficacia_verificacion];
+          finalNextState = (nextState as any)[formData.eficacia_verificacion];
         }
       }
       handleSubmit(formData, finalNextState);
