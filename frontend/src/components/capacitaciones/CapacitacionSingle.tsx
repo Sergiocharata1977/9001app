@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,30 +23,84 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const CapacitacionSingle = ({ capacitacionId, onBack }) => {
+// Tipos
+interface Capacitacion {
+  id: number;
+  titulo: string;
+  descripcion?: string;
+  estado: string;
+  fecha_inicio: string;
+  created_at: string;
+  updated_at?: string;
+  [key: string]: any;
+}
+
+interface Asistente {
+  id: number;
+  empleado_id: number;
+  nombres: string;
+  apellidos: string;
+  email: string;
+}
+
+interface Empleado {
+  id: number;
+  nombres: string;
+  apellidos: string;
+  email: string;
+}
+
+interface Tema {
+  id: number;
+  titulo: string;
+}
+
+interface Evaluacion {
+  id: number;
+  empleado_id: number;
+  tema_id: number;
+  calificacion: number | string;
+  comentarios?: string;
+  fecha_evaluacion: string;
+}
+
+interface EvalForm {
+  empleado_id: string;
+  tema_id: string;
+  calificacion: string;
+  comentarios: string;
+  fecha_evaluacion: string;
+}
+
+interface CapacitacionSingleProps {
+  capacitacionId?: string | number;
+  onBack?: () => void;
+}
+
+const CapacitacionSingle: React.FC<CapacitacionSingleProps> = ({ capacitacionId, onBack }) => {
   const { toast } = useToast();
-  const { id: paramId } = useParams();
+  const { id: paramId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [capacitacion, setCapacitacion] = useState(null);
+  const [capacitacion, setCapacitacion] = useState<Capacitacion | null>(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [asistentes, setAsistentes] = useState([]);
-  const [personal, setPersonal] = useState([]);
+  const [asistentes, setAsistentes] = useState<Asistente[]>([]);
+  const [personal, setPersonal] = useState<Empleado[]>([]);
   const [loadingAsistentes, setLoadingAsistentes] = useState(true);
-  const [evaluaciones, setEvaluaciones] = useState([]);
-  const [temas, setTemas] = useState([]);
+  const [evaluaciones, setEvaluaciones] = useState<Evaluacion[]>([]);
+  const [temas, setTemas] = useState<Tema[]>([]);
   const [evalModalOpen, setEvalModalOpen] = useState(false);
-  const [evalForm, setEvalForm] = useState({ empleado_id: '', tema_id: '', calificacion: '', comentarios: '', fecha_evaluacion: '' });
-  const [editEvalId, setEditEvalId] = useState(null);
+  const [evalForm, setEvalForm] = useState<EvalForm>({ empleado_id: '', tema_id: '', calificacion: '', comentarios: '', fecha_evaluacion: '' });
+  const [editEvalId, setEditEvalId] = useState<number | null>(null);
   const [loadingEvaluaciones, setLoadingEvaluaciones] = useState(true);
   // Estado para el modal de asistentes y búsqueda
   const [asistenteModalOpen, setAsistenteModalOpen] = useState(false);
   const [busquedaAsistente, setBusquedaAsistente] = useState("");
-  const [resultadosBusqueda, setResultadosBusqueda] = useState([]);
+  const [resultadosBusqueda, setResultadosBusqueda] = useState<Empleado[]>([]);
   const [buscando, setBuscando] = useState(false);
   // Estado para edición/creación inline de evaluaciones
-  const [editEvalInlineId, setEditEvalInlineId] = useState(null);
-  const [inlineEvalForm, setInlineEvalForm] = useState({ empleado_id: '', tema_id: '', calificacion: '', comentarios: '', fecha_evaluacion: '' });
+  const [editEvalInlineId, setEditEvalInlineId] = useState<number | 'new' | null>(null);
+  const [inlineEvalForm, setInlineEvalForm] = useState<EvalForm>({ empleado_id: '', tema_id: '', calificacion: '', comentarios: '', fecha_evaluacion: '' });
 
   // Usar el ID desde props o desde params
   const id = capacitacionId || paramId;
@@ -65,7 +119,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     try {
       setLoading(true);
       console.log(`🔍 Cargando capacitación ID: ${id}`);
-      const data = await capacitacionesService.getById(id);
+      const data = await capacitacionesService.getById(id!);
       setCapacitacion(data);
       console.log('✅ Capacitación cargada:', data);
     } catch (error) {
@@ -80,7 +134,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
   const fetchAsistentes = async () => {
     setLoadingAsistentes(true);
     try {
-      const data = await capacitacionesService.getAsistentes(id);
+      const data = await capacitacionesService.getAsistentes(id!);
       setAsistentes(data);
     } catch (error) {
       toast.error('Error al cargar asistentes');
@@ -100,7 +154,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
 
   const fetchTemas = async () => {
     try {
-      const data = await capacitacionesService.getTemas(id);
+      const data = await capacitacionesService.getTemas(id!);
       setTemas(data);
     } catch (error) {
       toast.error('Error al cargar temas');
@@ -110,7 +164,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
   const fetchEvaluaciones = async () => {
     setLoadingEvaluaciones(true);
     try {
-      const data = await capacitacionesService.getEvaluaciones(id);
+      const data = await capacitacionesService.getEvaluaciones(id!);
       setEvaluaciones(data);
     } catch (error) {
       toast.error('Error al cargar evaluaciones');
@@ -123,9 +177,9 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     setModalOpen(true);
   };
 
-  const handleSave = async (formData) => {
+  const handleSave = async (formData: any) => {
     try {
-      await capacitacionesService.update(id, formData);
+      await capacitacionesService.update(id!, formData);
       toast.success("Capacitación actualizada exitosamente");
       setModalOpen(false);
       fetchCapacitacion(); // Recargar datos
@@ -138,7 +192,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
   const handleDelete = async () => {
     if (window.confirm("¿Está seguro de que desea eliminar esta capacitación?")) {
       try {
-        await capacitacionesService.delete(id);
+        await capacitacionesService.delete(id!);
         toast.success("Capacitación eliminada exitosamente");
         handleBack();
       } catch (error) {
@@ -148,17 +202,19 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const handleToggleAsistente = async (empleado) => {
+  const handleToggleAsistente = async (empleado: Empleado) => {
     const yaEsAsistente = asistentes.some(a => a.empleado_id === empleado.id);
     try {
       if (yaEsAsistente) {
         // Buscar el id del registro de asistente
         const asist = asistentes.find(a => a.empleado_id === empleado.id);
-        await capacitacionesService.removeAsistente(id, asist.id);
-        setAsistentes(prev => prev.filter(a => a.empleado_id !== empleado.id));
-        toast.success('Asistente eliminado');
+        if (asist) {
+          await capacitacionesService.removeAsistente(id!, asist.id);
+          setAsistentes(prev => prev.filter(a => a.empleado_id !== empleado.id));
+          toast.success('Asistente eliminado');
+        }
       } else {
-        const nuevo = await capacitacionesService.addAsistente(id, empleado.id);
+        const nuevo = await capacitacionesService.addAsistente(id!, empleado.id);
         setAsistentes(prev => [...prev, nuevo]);
         toast.success('Asistente agregado');
       }
@@ -167,12 +223,12 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const handleOpenEvalModal = (empleado_id = '', tema_id = '', evaluacion = null) => {
+  const handleOpenEvalModal = (empleado_id: string = '', tema_id: string = '', evaluacion: Evaluacion | null = null) => {
     if (evaluacion) {
       setEvalForm({
-        empleado_id: evaluacion.empleado_id,
-        tema_id: evaluacion.tema_id,
-        calificacion: evaluacion.calificacion || '',
+        empleado_id: String(evaluacion.empleado_id),
+        tema_id: String(evaluacion.tema_id),
+        calificacion: String(evaluacion.calificacion || ''),
         comentarios: evaluacion.comentarios || '',
         fecha_evaluacion: evaluacion.fecha_evaluacion || ''
       });
@@ -184,18 +240,18 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     setEvalModalOpen(true);
   };
 
-  const handleEvalFormChange = (field, value) => {
+  const handleEvalFormChange = (field: keyof EvalForm, value: string) => {
     setEvalForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSaveEvaluacion = async (e) => {
+  const handleSaveEvaluacion = async (e: FormEvent) => {
     e.preventDefault();
     try {
       if (editEvalId) {
-        await capacitacionesService.updateEvaluacion(id, editEvalId, evalForm);
+        await capacitacionesService.updateEvaluacion(id!, editEvalId, evalForm);
         toast.success('Evaluación actualizada');
       } else {
-        await capacitacionesService.addEvaluacion(id, evalForm);
+        await capacitacionesService.addEvaluacion(id!, evalForm);
         toast.success('Evaluación agregada');
       }
       setEvalModalOpen(false);
@@ -205,10 +261,10 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const handleDeleteEvaluacion = async (evalId) => {
+  const handleDeleteEvaluacion = async (evalId: number) => {
     if (window.confirm('¿Eliminar esta evaluación?')) {
       try {
-        await capacitacionesService.deleteEvaluacion(id, evalId);
+        await capacitacionesService.deleteEvaluacion(id!, evalId);
         toast.success('Evaluación eliminada');
         fetchEvaluaciones();
       } catch (error) {
@@ -225,7 +281,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const getEstadoBadgeColor = (estado) => {
+  const getEstadoBadgeColor = (estado?: string) => {
     switch (estado?.toLowerCase()) {
       case 'programada':
         return 'bg-blue-100 text-blue-800 border-blue-200';
@@ -240,7 +296,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const getEstadoIcon = (estado) => {
+  const getEstadoIcon = (estado?: string) => {
     switch (estado?.toLowerCase()) {
       case 'programada':
         return <Clock className="h-5 w-5 text-blue-600" />;
@@ -255,7 +311,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     try {
       return new Date(dateString).toLocaleDateString('es-ES', {
         weekday: 'long',
@@ -268,7 +324,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const formatDateShort = (dateString) => {
+  const formatDateShort = (dateString: string) => {
     try {
       return new Date(dateString).toLocaleDateString('es-ES', {
         year: 'numeric',
@@ -281,7 +337,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
   };
 
   // Nueva función para buscar empleados por nombre y apellido, filtrando por organización
-  const buscarEmpleados = async (query) => {
+  const buscarEmpleados = async (query: string) => {
     setBuscando(true);
     try {
       // Suponiendo que personalService.getByNombreApellido(query) filtra por organización automáticamente
@@ -295,9 +351,9 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
   };
 
   // Nueva función para agregar asistente desde el modal
-  const handleAgregarAsistente = async (empleado) => {
+  const handleAgregarAsistente = async (empleado: Empleado) => {
     try {
-      const nuevo = await capacitacionesService.addAsistente(id, empleado.id);
+      const nuevo = await capacitacionesService.addAsistente(id!, empleado.id);
       setAsistentes(prev => [...prev, nuevo]);
       toast.success('Asistente agregado');
       setBusquedaAsistente("");
@@ -309,9 +365,9 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
   };
 
   // Modificar handleToggleAsistente para solo eliminar
-  const handleEliminarAsistente = async (asistente) => {
+  const handleEliminarAsistente = async (asistente: Asistente) => {
     try {
-      await capacitacionesService.removeAsistente(id, asistente.id);
+      await capacitacionesService.removeAsistente(id!, asistente.id);
       setAsistentes(prev => prev.filter(a => a.id !== asistente.id));
       // Eliminar evaluaciones asociadas a este asistente
       setEvaluaciones(prev => prev.filter(ev => ev.empleado_id !== asistente.empleado_id));
@@ -321,13 +377,13 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const handleStartInlineEval = (ev = null) => {
+  const handleStartInlineEval = (ev: Evaluacion | null = null) => {
     if (ev) {
       setEditEvalInlineId(ev.id);
       setInlineEvalForm({
-        empleado_id: ev.empleado_id,
-        tema_id: ev.tema_id,
-        calificacion: ev.calificacion || '',
+        empleado_id: String(ev.empleado_id),
+        tema_id: String(ev.tema_id),
+        calificacion: String(ev.calificacion || ''),
         comentarios: ev.comentarios || '',
         fecha_evaluacion: ev.fecha_evaluacion || ''
       });
@@ -337,17 +393,17 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const handleInlineEvalChange = (field, value) => {
+  const handleInlineEvalChange = (field: keyof EvalForm, value: string) => {
     setInlineEvalForm(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSaveInlineEval = async () => {
     try {
       if (editEvalInlineId === 'new') {
-        await capacitacionesService.addEvaluacion(id, inlineEvalForm);
+        await capacitacionesService.addEvaluacion(id!, inlineEvalForm);
         toast.success('Evaluación agregada');
-      } else {
-        await capacitacionesService.updateEvaluacion(id, editEvalInlineId, inlineEvalForm);
+      } else if (typeof editEvalInlineId === 'number') {
+        await capacitacionesService.updateEvaluacion(id!, editEvalInlineId, inlineEvalForm);
         toast.success('Evaluación actualizada');
       }
       setEditEvalInlineId(null);
@@ -710,7 +766,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                   </SelectTrigger>
                   <SelectContent>
                     {personal.filter(emp => asistentes.some(a => a.empleado_id === emp.id)).map(emp => (
-                      <SelectItem key={emp.id} value={emp.id}>{emp.nombres} {emp.apellidos}</SelectItem>
+                      <SelectItem key={emp.id} value={String(emp.id)}>{emp.nombres} {emp.apellidos}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -723,7 +779,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                   </SelectTrigger>
                   <SelectContent>
                     {temas.map(t => (
-                      <SelectItem key={t.id} value={t.id}>{t.titulo}</SelectItem>
+                      <SelectItem key={t.id} value={String(t.id)}>{t.titulo}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -758,7 +814,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
               <Input
                 placeholder="Buscar por nombre o apellido..."
                 value={busquedaAsistente}
-                onChange={e => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setBusquedaAsistente(e.target.value);
                   if (e.target.value.length > 2) buscarEmpleados(e.target.value);
                   else setResultadosBusqueda([]);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,10 +11,25 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'react-toastify';
-import accionesService from '@/services/accionesService';
+import accionesService, { AccionFormData } from '@/services/accionesService';
 
-const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
-  const [formData, setFormData] = useState({
+interface CrearAccionFormProps {
+  onSubmit?: () => void | Promise<void>;
+  onCancel?: () => void;
+  isLoading?: boolean;
+}
+
+interface FormData {
+  titulo: string;
+  descripcion: string;
+  responsable: string;
+  prioridad: 'baja' | 'media' | 'alta';
+  fechaVencimiento: string;
+  hallazgo_id: number | null;
+}
+
+const CrearAccionForm: React.FC<CrearAccionFormProps> = ({ onSubmit, onCancel, isLoading }) => {
+  const [formData, setFormData] = useState<FormData>({
     titulo: '',
     descripcion: '',
     responsable: '',
@@ -23,7 +38,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
     hallazgo_id: null
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!formData.titulo.trim()) {
@@ -32,7 +47,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
     }
 
     try {
-      const nuevaAccion = {
+      const nuevaAccion: AccionFormData = {
         ...formData,
         estado: 'p1_planificacion_accion',
         fechaCreacion: new Date().toISOString()
@@ -41,13 +56,13 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
       await accionesService.createAccion(nuevaAccion);
       toast.success('Acción creada con éxito');
       onSubmit && onSubmit();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al crear la acción:', error);
       toast.error(error.response?.data?.message || 'Error al crear la acción');
     }
   };
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: keyof FormData, value: string | number | null) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -61,7 +76,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
         <Input
           id="titulo"
           value={formData.titulo}
-          onChange={(e) => handleChange('titulo', e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('titulo', e.target.value)}
           placeholder="Título de la acción"
           required
         />
@@ -72,7 +87,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
         <Textarea
           id="descripcion"
           value={formData.descripcion}
-          onChange={(e) => handleChange('descripcion', e.target.value)}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange('descripcion', e.target.value)}
           placeholder="Descripción detallada de la acción"
           rows={3}
         />
@@ -83,7 +98,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
         <Input
           id="responsable"
           value={formData.responsable}
-          onChange={(e) => handleChange('responsable', e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('responsable', e.target.value)}
           placeholder="Nombre del responsable"
         />
       </div>
@@ -92,7 +107,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
         <Label htmlFor="prioridad">Prioridad</Label>
         <Select
           value={formData.prioridad}
-          onValueChange={(value) => handleChange('prioridad', value)}
+          onValueChange={(value: 'baja' | 'media' | 'alta') => handleChange('prioridad', value)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Seleccionar prioridad" />
@@ -111,7 +126,7 @@ const CrearAccionForm = ({ onSubmit, onCancel, isLoading }) => {
           id="fechaVencimiento"
           type="date"
           value={formData.fechaVencimiento}
-          onChange={(e) => handleChange('fechaVencimiento', e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('fechaVencimiento', e.target.value)}
         />
       </div>
 
