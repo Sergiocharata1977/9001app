@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataTable, Column, Action, KanbanColumn } from '@/components/shared/DataTable/DataTable';
+import { DataTable, Column, DataTableAction, KanbanColumn } from '@/components/shared/DataTable/DataTable';
 import productosService from '@/services/productosService';
 import { toast } from 'sonner';
 import { Edit, Trash2, Eye, FileText, CheckCircle, XCircle } from 'lucide-react';

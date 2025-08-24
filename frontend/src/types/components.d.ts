@@ -3,21 +3,7 @@
 import { ReactNode, HTMLAttributes, ButtonHTMLAttributes, InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes } from 'react';
 
 // Declaraciones para componentes custom
-declare module '@/components/ui/confirm-dialog' {
-  export interface ConfirmDialogProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    title: string;
-    description?: string;
-    confirmText?: string;
-    cancelText?: string;
-    onConfirm: () => void;
-    onCancel?: () => void;
-    variant?: 'default' | 'destructive';
-  }
-  
-  export const ConfirmDialog: React.FC<ConfirmDialogProps>;
-}
+// ConfirmDialog ahora está definido en @/components/ui/confirm-dialog.tsx
 
 // Declaraciones para DataTable
 declare module '@/components/ui/DataTable' {

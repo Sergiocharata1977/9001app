@@ -19,7 +19,7 @@ import {
 import { 
   Personal, 
   RolComercial, 
-  ClasificacionComercial, 
+  type ClasificacionComercial, 
   EspecialidadAgro, 
   ROLES_COMERCIALES,
   CLASIFICACIONES_COMERCIALES,

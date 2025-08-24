@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import HallazgoForm from './HallazgoForm';
 import HallazgoWorkflowManager from './HallazgoWorkflowManager';
 import HallazgoStatCard from './HallazgoStatCard';
-import { DataTable, Column, Action, KanbanColumn } from '../shared/DataTable/DataTable';
+import { DataTable, Column, DataTableAction, KanbanColumn } from '../shared/DataTable/DataTable';
 import { 
   Hallazgo, 
   HallazgoEstado, 
@@ -329,7 +329,7 @@ const HallazgosListingNEW: React.FC = () => {
   ];
 
   // Definición de acciones
-  const actions: Action[] = [
+  const actions: DataTableAction[] = [
     {
       icon: Eye,
       label: 'Ver',
@@ -388,7 +388,7 @@ const HallazgosListingNEW: React.FC = () => {
   ];
 
   // Renderizado personalizado para tarjetas
-  const renderCard = (hallazgo: Hallazgo, actions: Action[]): React.ReactNode => {
+  const renderCard = (hallazgo: Hallazgo, actions: DataTableAction[]): React.ReactNode => {
     const StatusIcon = getEstadoIcon(hallazgo.estado);
 
     return (
@@ -477,7 +477,7 @@ const HallazgosListingNEW: React.FC = () => {
   };
 
   // Renderizado personalizado para tarjetas Kanban
-  const renderKanbanCard = (hallazgo: Hallazgo, actions: Action[]): React.ReactNode => {
+  const renderKanbanCard = (hallazgo: Hallazgo, actions: DataTableAction[]): React.ReactNode => {
     const StatusIcon = getEstadoIcon(hallazgo.estado);
 
     return (

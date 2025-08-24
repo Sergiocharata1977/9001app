@@ -37,7 +37,7 @@ const Capacitaciones: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const queryClient = useQueryClient();
-  const { showToast } = useToast();
+  const { toast } = useToast();
 
   // Query para obtener capacitaciones
   const {
@@ -55,10 +55,10 @@ const Capacitaciones: React.FC = () => {
     mutationFn: capacitacionesService.deleteCapacitacion,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['capacitaciones'] });
-      showToast('Capacitación eliminada exitosamente', 'success');
+      toast({ title: 'Capacitación eliminada exitosamente', variant: 'default' });
     },
     onError: () => {
-      showToast('Error al eliminar capacitación', 'error');
+      toast({ title: 'Error al eliminar capacitación', variant: 'destructive' });
     }
   });
 

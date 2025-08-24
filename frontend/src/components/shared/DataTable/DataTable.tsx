@@ -34,7 +34,7 @@ import {
   BarChart3,
   Trello,
 } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
+import Skeleton from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -50,7 +50,7 @@ export interface Column<T = any> {
   className?: string;
 }
 
-export interface Action<T = any> {
+export interface DataTableAction<T = any> {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   onClick: (row: T) => void;
@@ -76,7 +76,7 @@ export interface DataTableProps<T = any> {
   error?: string | null;
   
   // Acciones
-  actions?: Action<T>[];
+  actions?: DataTableAction<T>[];
   onRefresh?: () => void;
   onCreate?: () => void;
   
@@ -122,8 +122,8 @@ export interface DataTableProps<T = any> {
   gridColumns?: number;
   
   // Renderizado personalizado para vistas
-  renderCard?: (row: T, actions: Action<T>[]) => React.ReactNode;
-  renderKanbanCard?: (row: T, actions: Action<T>[]) => React.ReactNode;
+  renderCard?: (row: T, actions: DataTableAction<T>[]) => React.ReactNode;
+  renderKanbanCard?: (row: T, actions: DataTableAction<T>[]) => React.ReactNode;
   
   // Eventos de vista
   onCardClick?: (row: T) => void;
@@ -303,7 +303,7 @@ export function DataTable<T extends Record<string, any>>({
   // ========== RENDERIZADO DE VISTAS ==========
   
   // Renderizado por defecto de tarjeta
-  const renderDefaultCard = (row: T, actions: Action<T>[]) => {
+  const renderDefaultCard = (row: T, actions: DataTableAction<T>[]) => {
     const key = getRowKey(row);
     const isSelected = selectedRows.has(key);
     
@@ -366,7 +366,7 @@ export function DataTable<T extends Record<string, any>>({
   };
 
   // Renderizado por defecto de tarjeta Kanban
-  const renderDefaultKanbanCard = (row: T, actions: Action<T>[]) => {
+  const renderDefaultKanbanCard = (row: T, actions: DataTableAction<T>[]) => {
     const key = getRowKey(row);
     
     return (

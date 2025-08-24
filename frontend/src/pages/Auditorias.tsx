@@ -23,7 +23,7 @@ const Auditorias: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const queryClient = useQueryClient();
-  const { showToast } = useToast();
+  const { toast } = useToast();
 
   // Query para obtener auditorías
   const {
@@ -41,10 +41,10 @@ const Auditorias: React.FC = () => {
     mutationFn: auditoriasService.deleteAuditoria,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['auditorias'] });
-      showToast('Auditoría eliminada exitosamente', 'success');
+      toast({ title: 'Auditoría eliminada exitosamente', variant: 'default' });
     },
     onError: () => {
-      showToast('Error al eliminar auditoría', 'error');
+      toast({ title: 'Error al eliminar auditoría', variant: 'destructive' });
     }
   });
 
