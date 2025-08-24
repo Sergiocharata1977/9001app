@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "../../components/ui/button";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../../components/ui/dialog";
-import { Input } from "../../components/ui/input";
-import { Textarea } from "../../components/ui/textarea";
-import { Label } from "../../components/ui/label";
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
 import { Building2, FileText, Target, X } from "lucide-react";
 
 const initialFormData = {
