@@ -1,17 +1,42 @@
+import { FC } from 'react';
 import PlanificacionAccionForm from '@/components/acciones/forms/PlanificacionAccionForm';
 import EjecucionAccionForm from '@/components/acciones/forms/EjecucionAccionForm';
 import PlanificarVerificacionForm from '@/components/acciones/forms/PlanificarVerificacionForm';
 import EjecutarVerificacionForm from '@/components/acciones/forms/EjecutarVerificacionForm';
+import { AccionData } from '@/services/accionesService';
 
+// Enumeración de estados de acción
 export const ACCION_ESTADOS = {
   PLANIFICACION: 'p1_planificacion_accion',
   EJECUCION: 'e2_ejecucion_accion',
   PLANIFICACION_VERIFICACION: 'v3_planificacion_verificacion',
   EJECUCION_VERIFICACION: 'v4_ejecucion_verificacion',
   CERRADA: 'c5_cerrada',
+} as const;
+
+export type AccionEstado = typeof ACCION_ESTADOS[keyof typeof ACCION_ESTADOS];
+
+// Interface para props de componentes del workflow
+interface WorkflowComponentProps {
+  accion: AccionData;
+  onSubmit: (formData: any) => void | Promise<void>;
+  isLoading?: boolean;
+}
+
+// Interface para configuración del workflow
+interface WorkflowStep {
+  title: string;
+  component: FC<WorkflowComponentProps> | null;
+  nextState?: AccionEstado;
+  color: string;
+  colorClasses: string;
+}
+
+type WorkflowConfig = {
+  [key in AccionEstado]?: WorkflowStep;
 };
 
-export const accionWorkflow = {
+export const accionWorkflow: WorkflowConfig = {
   [ACCION_ESTADOS.PLANIFICACION]: {
     title: 'Planificación de la Acción',
     component: PlanificacionAccionForm,

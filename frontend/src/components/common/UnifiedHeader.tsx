@@ -1,17 +1,42 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Download, LayoutGrid, List, FileText, Calendar } from 'lucide-react';
+import { Plus, Search, Download, LayoutGrid, List, FileText, Calendar, LucideIcon } from 'lucide-react';
 
-const UnifiedHeader = ({ 
+// Interfaces para props
+interface UnifiedHeaderProps {
+  title: string;
+  description?: string;
+  searchTerm?: string;
+  onSearchChange?: (value: string) => void;
+  onNew?: () => void;
+  onExport?: () => void;
+  viewMode?: 'grid' | 'list';
+  onViewModeChange?: (mode: 'grid' | 'list') => void;
+  showViewToggle?: boolean;
+  showExport?: boolean;
+  newButtonText?: string;
+  totalCount?: number;
+  lastUpdated?: string | null;
+  icon?: LucideIcon;
+  primaryColor?: 'emerald' | 'blue';
+}
+
+interface ColorClasses {
+  gradient: string;
+  button: string;
+  badge: string;
+}
+
+const UnifiedHeader: FC<UnifiedHeaderProps> = ({ 
   title, 
   description, 
-  searchTerm, 
+  searchTerm = '', 
   onSearchChange, 
   onNew, 
   onExport, 
-  viewMode, 
+  viewMode = 'grid', 
   onViewModeChange, 
   showViewToggle = true,
   showExport = true,
@@ -21,7 +46,7 @@ const UnifiedHeader = ({
   icon: Icon = FileText,
   primaryColor = "emerald"
 }) => {
-  const getColorClasses = () => {
+  const getColorClasses = (): ColorClasses => {
     switch (primaryColor) {
       case 'emerald':
         return {
@@ -55,7 +80,7 @@ const UnifiedHeader = ({
             <Icon className="h-8 w-8" />
             <div>
               <h1 className="text-2xl font-bold">{title}</h1>
-              <p className="text-white/90 text-sm mt-1">{description}</p>
+              {description && <p className="text-white/90 text-sm mt-1">{description}</p>}
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -84,14 +109,14 @@ const UnifiedHeader = ({
             <Input
               placeholder={`Buscar ${title.toLowerCase()}...`}
               value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
+              onChange={(e) => onSearchChange?.(e.target.value)}
               className="pl-10"
             />
           </div>
 
           {/* Controles */}
           <div className="flex items-center gap-2">
-            {showViewToggle && (
+            {showViewToggle && onViewModeChange && (
               <div className="flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
                 <Button
                   variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
@@ -132,4 +157,4 @@ const UnifiedHeader = ({
   );
 };
 
-export default UnifiedHeader; 
+export default UnifiedHeader;

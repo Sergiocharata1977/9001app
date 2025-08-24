@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { FC, useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,34 +22,92 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Capacitacion, CapacitacionFormData } from '@/types/capacitaciones';
 
-const CapacitacionSingle = ({ capacitacionId, onBack }) => {
+// Interfaces locales
+interface CapacitacionSingleProps {
+  capacitacionId?: number | string;
+  onBack?: () => void;
+}
+
+interface Asistente {
+  id: number;
+  empleado_id: number;
+  nombres: string;
+  apellidos: string;
+  email?: string;
+}
+
+interface Empleado {
+  id: number;
+  nombres: string;
+  apellidos: string;
+  email?: string;
+  organizacion_id?: number;
+}
+
+interface Tema {
+  id: number;
+  titulo: string;
+  descripcion?: string;
+}
+
+interface Evaluacion {
+  id: number;
+  empleado_id: number;
+  tema_id: number;
+  calificacion?: number | string;
+  comentarios?: string;
+  fecha_evaluacion?: string;
+}
+
+interface EvaluacionForm {
+  empleado_id: string;
+  tema_id: string;
+  calificacion: string;
+  comentarios: string;
+  fecha_evaluacion: string;
+}
+
+const CapacitacionSingle: FC<CapacitacionSingleProps> = ({ capacitacionId, onBack }) => {
   const { toast } = useToast();
-  const { id: paramId } = useParams();
+  const { id: paramId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [capacitacion, setCapacitacion] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [asistentes, setAsistentes] = useState([]);
-  const [personal, setPersonal] = useState([]);
-  const [loadingAsistentes, setLoadingAsistentes] = useState(true);
-  const [evaluaciones, setEvaluaciones] = useState([]);
-  const [temas, setTemas] = useState([]);
-  const [evalModalOpen, setEvalModalOpen] = useState(false);
-  const [evalForm, setEvalForm] = useState({ empleado_id: '', tema_id: '', calificacion: '', comentarios: '', fecha_evaluacion: '' });
-  const [editEvalId, setEditEvalId] = useState(null);
-  const [loadingEvaluaciones, setLoadingEvaluaciones] = useState(true);
+  const [capacitacion, setCapacitacion] = useState<Capacitacion | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [asistentes, setAsistentes] = useState<Asistente[]>([]);
+  const [personal, setPersonal] = useState<Empleado[]>([]);
+  const [loadingAsistentes, setLoadingAsistentes] = useState<boolean>(true);
+  const [evaluaciones, setEvaluaciones] = useState<Evaluacion[]>([]);
+  const [temas, setTemas] = useState<Tema[]>([]);
+  const [evalModalOpen, setEvalModalOpen] = useState<boolean>(false);
+  const [evalForm, setEvalForm] = useState<EvaluacionForm>({ 
+    empleado_id: '', 
+    tema_id: '', 
+    calificacion: '', 
+    comentarios: '', 
+    fecha_evaluacion: '' 
+  });
+  const [editEvalId, setEditEvalId] = useState<number | null>(null);
+  const [loadingEvaluaciones, setLoadingEvaluaciones] = useState<boolean>(true);
   // Estado para el modal de asistentes y búsqueda
-  const [asistenteModalOpen, setAsistenteModalOpen] = useState(false);
-  const [busquedaAsistente, setBusquedaAsistente] = useState("");
-  const [resultadosBusqueda, setResultadosBusqueda] = useState([]);
-  const [buscando, setBuscando] = useState(false);
+  const [asistenteModalOpen, setAsistenteModalOpen] = useState<boolean>(false);
+  const [busquedaAsistente, setBusquedaAsistente] = useState<string>("");
+  const [resultadosBusqueda, setResultadosBusqueda] = useState<Empleado[]>([]);
+  const [buscando, setBuscando] = useState<boolean>(false);
   // Estado para edición/creación inline de evaluaciones
-  const [editEvalInlineId, setEditEvalInlineId] = useState(null);
-  const [inlineEvalForm, setInlineEvalForm] = useState({ empleado_id: '', tema_id: '', calificacion: '', comentarios: '', fecha_evaluacion: '' });
+  const [editEvalInlineId, setEditEvalInlineId] = useState<number | string | null>(null);
+  const [inlineEvalForm, setInlineEvalForm] = useState<EvaluacionForm>({ 
+    empleado_id: '', 
+    tema_id: '', 
+    calificacion: '', 
+    comentarios: '', 
+    fecha_evaluacion: '' 
+  });
 
   // Usar el ID desde props o desde params
-  const id = capacitacionId || paramId;
+  const id = capacitacionId ? String(capacitacionId) : paramId;
 
   useEffect(() => {
     if (id) {
@@ -61,118 +119,168 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   }, [id]);
 
-  const fetchCapacitacion = async () => {
+  const fetchCapacitacion = async (): Promise<void> => {
     try {
       setLoading(true);
       console.log(`🔍 Cargando capacitación ID: ${id}`);
-      const data = await capacitacionesService.getById(id);
+      const data = await capacitacionesService.getById(Number(id));
       setCapacitacion(data);
       console.log('✅ Capacitación cargada:', data);
     } catch (error) {
       console.error("❌ Error al obtener capacitación:", error);
-      toast.error("Error al cargar la capacitación");
+      toast({ 
+        title: "Error",
+        description: "Error al cargar la capacitación",
+        variant: "destructive"
+      });
       handleBack();
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchAsistentes = async () => {
+  const fetchAsistentes = async (): Promise<void> => {
     setLoadingAsistentes(true);
     try {
-      const data = await capacitacionesService.getAsistentes(id);
+      const data = await capacitacionesService.getAsistentes(Number(id));
       setAsistentes(data);
     } catch (error) {
-      toast.error('Error al cargar asistentes');
+      toast({ 
+        title: "Error",
+        description: "Error al cargar asistentes",
+        variant: "destructive"
+      });
     } finally {
       setLoadingAsistentes(false);
     }
   };
 
-  const fetchPersonal = async () => {
+  const fetchPersonal = async (): Promise<void> => {
     try {
       const data = await personalService.getAllPersonal();
       setPersonal(data);
     } catch (error) {
-      toast.error('Error al cargar personal');
+      toast({ 
+        title: "Error",
+        description: "Error al cargar personal",
+        variant: "destructive"
+      });
     }
   };
 
-  const fetchTemas = async () => {
+  const fetchTemas = async (): Promise<void> => {
     try {
-      const data = await capacitacionesService.getTemas(id);
+      const data = await capacitacionesService.getTemas(Number(id));
       setTemas(data);
     } catch (error) {
-      toast.error('Error al cargar temas');
+      toast({ 
+        title: "Error",
+        description: "Error al cargar temas",
+        variant: "destructive"
+      });
     }
   };
 
-  const fetchEvaluaciones = async () => {
+  const fetchEvaluaciones = async (): Promise<void> => {
     setLoadingEvaluaciones(true);
     try {
-      const data = await capacitacionesService.getEvaluaciones(id);
+      const data = await capacitacionesService.getEvaluaciones(Number(id));
       setEvaluaciones(data);
     } catch (error) {
-      toast.error('Error al cargar evaluaciones');
+      toast({ 
+        title: "Error",
+        description: "Error al cargar evaluaciones",
+        variant: "destructive"
+      });
     } finally {
       setLoadingEvaluaciones(false);
     }
   };
 
-  const handleEdit = () => {
+  const handleEdit = (): void => {
     setModalOpen(true);
   };
 
-  const handleSave = async (formData) => {
+  const handleSave = async (formData: Partial<CapacitacionFormData>): Promise<void> => {
     try {
-      await capacitacionesService.update(id, formData);
-      toast.success("Capacitación actualizada exitosamente");
+      await capacitacionesService.update(Number(id), formData);
+      toast({ 
+        title: "Éxito",
+        description: "Capacitación actualizada exitosamente"
+      });
       setModalOpen(false);
       fetchCapacitacion(); // Recargar datos
     } catch (error) {
       console.error('Error al actualizar capacitación:', error);
-      toast.error("Error al actualizar la capacitación");
+      toast({ 
+        title: "Error",
+        description: "Error al actualizar la capacitación",
+        variant: "destructive"
+      });
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (): Promise<void> => {
     if (window.confirm("¿Está seguro de que desea eliminar esta capacitación?")) {
       try {
-        await capacitacionesService.delete(id);
-        toast.success("Capacitación eliminada exitosamente");
+        await capacitacionesService.delete(Number(id));
+        toast({ 
+          title: "Éxito",
+          description: "Capacitación eliminada exitosamente"
+        });
         handleBack();
       } catch (error) {
         console.error("Error al eliminar capacitación:", error);
-        toast.error("Error al eliminar la capacitación");
+        toast({ 
+          title: "Error",
+          description: "Error al eliminar la capacitación",
+          variant: "destructive"
+        });
       }
     }
   };
 
-  const handleToggleAsistente = async (empleado) => {
+  const handleToggleAsistente = async (empleado: Empleado): Promise<void> => {
     const yaEsAsistente = asistentes.some(a => a.empleado_id === empleado.id);
     try {
       if (yaEsAsistente) {
         // Buscar el id del registro de asistente
         const asist = asistentes.find(a => a.empleado_id === empleado.id);
-        await capacitacionesService.removeAsistente(id, asist.id);
-        setAsistentes(prev => prev.filter(a => a.empleado_id !== empleado.id));
-        toast.success('Asistente eliminado');
+        if (asist) {
+          await capacitacionesService.removeAsistente(Number(id), asist.id);
+          setAsistentes(prev => prev.filter(a => a.empleado_id !== empleado.id));
+          toast({ 
+            title: "Éxito",
+            description: "Asistente eliminado"
+          });
+        }
       } else {
-        const nuevo = await capacitacionesService.addAsistente(id, empleado.id);
+        const nuevo = await capacitacionesService.addAsistente(Number(id), empleado.id);
         setAsistentes(prev => [...prev, nuevo]);
-        toast.success('Asistente agregado');
+        toast({ 
+          title: "Éxito",
+          description: "Asistente agregado"
+        });
       }
     } catch (error) {
-      toast.error('Error al actualizar asistentes');
+      toast({ 
+        title: "Error",
+        description: "Error al actualizar asistentes",
+        variant: "destructive"
+      });
     }
   };
 
-  const handleOpenEvalModal = (empleado_id = '', tema_id = '', evaluacion = null) => {
+  const handleOpenEvalModal = (
+    empleado_id: string = '', 
+    tema_id: string = '', 
+    evaluacion: Evaluacion | null = null
+  ): void => {
     if (evaluacion) {
       setEvalForm({
-        empleado_id: evaluacion.empleado_id,
-        tema_id: evaluacion.tema_id,
-        calificacion: evaluacion.calificacion || '',
+        empleado_id: String(evaluacion.empleado_id),
+        tema_id: String(evaluacion.tema_id),
+        calificacion: String(evaluacion.calificacion || ''),
         comentarios: evaluacion.comentarios || '',
         fecha_evaluacion: evaluacion.fecha_evaluacion || ''
       });
@@ -184,40 +292,57 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     setEvalModalOpen(true);
   };
 
-  const handleEvalFormChange = (field, value) => {
+  const handleEvalFormChange = (field: keyof EvaluacionForm, value: string): void => {
     setEvalForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSaveEvaluacion = async (e) => {
+  const handleSaveEvaluacion = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     try {
       if (editEvalId) {
-        await capacitacionesService.updateEvaluacion(id, editEvalId, evalForm);
-        toast.success('Evaluación actualizada');
+        await capacitacionesService.updateEvaluacion(Number(id), editEvalId, evalForm);
+        toast({ 
+          title: "Éxito",
+          description: "Evaluación actualizada"
+        });
       } else {
-        await capacitacionesService.addEvaluacion(id, evalForm);
-        toast.success('Evaluación agregada');
+        await capacitacionesService.addEvaluacion(Number(id), evalForm);
+        toast({ 
+          title: "Éxito",
+          description: "Evaluación agregada"
+        });
       }
       setEvalModalOpen(false);
       fetchEvaluaciones();
     } catch (error) {
-      toast.error('Error al guardar evaluación');
+      toast({ 
+        title: "Error",
+        description: "Error al guardar evaluación",
+        variant: "destructive"
+      });
     }
   };
 
-  const handleDeleteEvaluacion = async (evalId) => {
+  const handleDeleteEvaluacion = async (evalId: number): Promise<void> => {
     if (window.confirm('¿Eliminar esta evaluación?')) {
       try {
-        await capacitacionesService.deleteEvaluacion(id, evalId);
-        toast.success('Evaluación eliminada');
+        await capacitacionesService.deleteEvaluacion(Number(id), evalId);
+        toast({ 
+          title: "Éxito",
+          description: "Evaluación eliminada"
+        });
         fetchEvaluaciones();
       } catch (error) {
-        toast.error('Error al eliminar evaluación');
+        toast({ 
+          title: "Error",
+          description: "Error al eliminar evaluación",
+          variant: "destructive"
+        });
       }
     }
   };
 
-  const handleBack = () => {
+  const handleBack = (): void => {
     if (onBack) {
       onBack();
     } else {
@@ -225,7 +350,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const getEstadoBadgeColor = (estado) => {
+  const getEstadoBadgeColor = (estado?: string): string => {
     switch (estado?.toLowerCase()) {
       case 'programada':
         return 'bg-blue-100 text-blue-800 border-blue-200';
@@ -240,7 +365,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const getEstadoIcon = (estado) => {
+  const getEstadoIcon = (estado?: string): JSX.Element => {
     switch (estado?.toLowerCase()) {
       case 'programada':
         return <Clock className="h-5 w-5 text-blue-600" />;
@@ -255,7 +380,8 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString?: string): string => {
+    if (!dateString) return 'Fecha no válida';
     try {
       return new Date(dateString).toLocaleDateString('es-ES', {
         weekday: 'long',
@@ -268,7 +394,8 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const formatDateShort = (dateString) => {
+  const formatDateShort = (dateString?: string): string => {
+    if (!dateString) return 'Fecha no válida';
     try {
       return new Date(dateString).toLocaleDateString('es-ES', {
         year: 'numeric',
@@ -281,53 +408,70 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
   };
 
   // Nueva función para buscar empleados por nombre y apellido, filtrando por organización
-  const buscarEmpleados = async (query) => {
+  const buscarEmpleados = async (query: string): Promise<void> => {
     setBuscando(true);
     try {
-      // Suponiendo que personalService.getByNombreApellido(query) filtra por organización automáticamente
       const data = await personalService.getByNombreApellido(query);
       setResultadosBusqueda(data);
     } catch (error) {
-      toast.error('Error al buscar empleados');
+      toast({ 
+        title: "Error",
+        description: "Error al buscar empleados",
+        variant: "destructive"
+      });
     } finally {
       setBuscando(false);
     }
   };
 
   // Nueva función para agregar asistente desde el modal
-  const handleAgregarAsistente = async (empleado) => {
+  const handleAgregarAsistente = async (empleado: Empleado): Promise<void> => {
     try {
-      const nuevo = await capacitacionesService.addAsistente(id, empleado.id);
+      const nuevo = await capacitacionesService.addAsistente(Number(id), empleado.id);
       setAsistentes(prev => [...prev, nuevo]);
-      toast.success('Asistente agregado');
+      toast({ 
+        title: "Éxito",
+        description: "Asistente agregado"
+      });
       setBusquedaAsistente("");
       setResultadosBusqueda([]);
       setAsistenteModalOpen(false);
     } catch (error) {
-      toast.error('Error al agregar asistente');
+      toast({ 
+        title: "Error",
+        description: "Error al agregar asistente",
+        variant: "destructive"
+      });
     }
   };
 
   // Modificar handleToggleAsistente para solo eliminar
-  const handleEliminarAsistente = async (asistente) => {
+  const handleEliminarAsistente = async (asistente: Asistente): Promise<void> => {
     try {
-      await capacitacionesService.removeAsistente(id, asistente.id);
+      await capacitacionesService.removeAsistente(Number(id), asistente.id);
       setAsistentes(prev => prev.filter(a => a.id !== asistente.id));
       // Eliminar evaluaciones asociadas a este asistente
       setEvaluaciones(prev => prev.filter(ev => ev.empleado_id !== asistente.empleado_id));
-      toast.success('Asistente eliminado');
+      toast({ 
+        title: "Éxito",
+        description: "Asistente eliminado"
+      });
     } catch (error) {
-      toast.error('Error al eliminar asistente');
+      toast({ 
+        title: "Error",
+        description: "Error al eliminar asistente",
+        variant: "destructive"
+      });
     }
   };
 
-  const handleStartInlineEval = (ev = null) => {
+  const handleStartInlineEval = (ev: Evaluacion | null = null): void => {
     if (ev) {
       setEditEvalInlineId(ev.id);
       setInlineEvalForm({
-        empleado_id: ev.empleado_id,
-        tema_id: ev.tema_id,
-        calificacion: ev.calificacion || '',
+        empleado_id: String(ev.empleado_id),
+        tema_id: String(ev.tema_id),
+        calificacion: String(ev.calificacion || ''),
         comentarios: ev.comentarios || '',
         fecha_evaluacion: ev.fecha_evaluacion || ''
       });
@@ -337,28 +481,38 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
     }
   };
 
-  const handleInlineEvalChange = (field, value) => {
+  const handleInlineEvalChange = (field: keyof EvaluacionForm, value: string): void => {
     setInlineEvalForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSaveInlineEval = async () => {
+  const handleSaveInlineEval = async (): Promise<void> => {
     try {
       if (editEvalInlineId === 'new') {
-        await capacitacionesService.addEvaluacion(id, inlineEvalForm);
-        toast.success('Evaluación agregada');
-      } else {
-        await capacitacionesService.updateEvaluacion(id, editEvalInlineId, inlineEvalForm);
-        toast.success('Evaluación actualizada');
+        await capacitacionesService.addEvaluacion(Number(id), inlineEvalForm);
+        toast({ 
+          title: "Éxito",
+          description: "Evaluación agregada"
+        });
+      } else if (typeof editEvalInlineId === 'number') {
+        await capacitacionesService.updateEvaluacion(Number(id), editEvalInlineId, inlineEvalForm);
+        toast({ 
+          title: "Éxito",
+          description: "Evaluación actualizada"
+        });
       }
       setEditEvalInlineId(null);
       setInlineEvalForm({ empleado_id: '', tema_id: '', calificacion: '', comentarios: '', fecha_evaluacion: '' });
       fetchEvaluaciones();
     } catch (error) {
-      toast.error('Error al guardar evaluación');
+      toast({ 
+        title: "Error",
+        description: "Error al guardar evaluación",
+        variant: "destructive"
+      });
     }
   };
 
-  const handleCancelInlineEval = () => {
+  const handleCancelInlineEval = (): void => {
     setEditEvalInlineId(null);
     setInlineEvalForm({ empleado_id: '', tema_id: '', calificacion: '', comentarios: '', fecha_evaluacion: '' });
   };
@@ -445,7 +599,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <CardTitle className="text-xl font-semibold text-gray-900 mb-2">
-                      {capacitacion.titulo}
+                      {capacitacion.titulo || capacitacion.nombre}
                     </CardTitle>
                     <div className="flex items-center gap-3">
                       <Badge className={getEstadoBadgeColor(capacitacion.estado)}>
@@ -535,7 +689,12 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                       {editEvalInlineId === 'new' && (
                         <tr className="bg-blue-50">
                           <td className="px-4 py-2">
-                            <select className="w-full border rounded px-2 py-1" value={inlineEvalForm.empleado_id} onChange={e => handleInlineEvalChange('empleado_id', e.target.value)} required>
+                            <select 
+                              className="w-full border rounded px-2 py-1" 
+                              value={inlineEvalForm.empleado_id} 
+                              onChange={e => handleInlineEvalChange('empleado_id', e.target.value)} 
+                              required
+                            >
                               <option value="">Selecciona asistente</option>
                               {asistentes.map(a => (
                                 <option key={a.empleado_id} value={a.empleado_id}>{a.nombres} {a.apellidos}</option>
@@ -543,7 +702,12 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                             </select>
                           </td>
                           <td className="px-4 py-2">
-                            <select className="w-full border rounded px-2 py-1" value={inlineEvalForm.tema_id} onChange={e => handleInlineEvalChange('tema_id', e.target.value)} required>
+                            <select 
+                              className="w-full border rounded px-2 py-1" 
+                              value={inlineEvalForm.tema_id} 
+                              onChange={e => handleInlineEvalChange('tema_id', e.target.value)} 
+                              required
+                            >
                               <option value="">Selecciona tema</option>
                               {temas.map(t => (
                                 <option key={t.id} value={t.id}>{t.titulo}</option>
@@ -551,13 +715,32 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                             </select>
                           </td>
                           <td className="px-4 py-2">
-                            <input type="number" className="w-full border rounded px-2 py-1" value={inlineEvalForm.calificacion} onChange={e => handleInlineEvalChange('calificacion', e.target.value)} required min="0" max="100" />
+                            <input 
+                              type="number" 
+                              className="w-full border rounded px-2 py-1" 
+                              value={inlineEvalForm.calificacion} 
+                              onChange={e => handleInlineEvalChange('calificacion', e.target.value)} 
+                              required 
+                              min="0" 
+                              max="100" 
+                            />
                           </td>
                           <td className="px-4 py-2">
-                            <input type="text" className="w-full border rounded px-2 py-1" value={inlineEvalForm.comentarios} onChange={e => handleInlineEvalChange('comentarios', e.target.value)} />
+                            <input 
+                              type="text" 
+                              className="w-full border rounded px-2 py-1" 
+                              value={inlineEvalForm.comentarios} 
+                              onChange={e => handleInlineEvalChange('comentarios', e.target.value)} 
+                            />
                           </td>
                           <td className="px-4 py-2">
-                            <input type="date" className="w-full border rounded px-2 py-1" value={inlineEvalForm.fecha_evaluacion} onChange={e => handleInlineEvalChange('fecha_evaluacion', e.target.value)} required />
+                            <input 
+                              type="date" 
+                              className="w-full border rounded px-2 py-1" 
+                              value={inlineEvalForm.fecha_evaluacion} 
+                              onChange={e => handleInlineEvalChange('fecha_evaluacion', e.target.value)} 
+                              required 
+                            />
                           </td>
                           <td className="px-4 py-2 flex gap-2">
                             <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSaveInlineEval}>Guardar</Button>
@@ -575,7 +758,13 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                             return (
                               <tr key={ev.id} className="bg-blue-50">
                                 <td className="px-4 py-2">
-                                  <select className="w-full border rounded px-2 py-1" value={inlineEvalForm.empleado_id} onChange={e => handleInlineEvalChange('empleado_id', e.target.value)} required disabled>
+                                  <select 
+                                    className="w-full border rounded px-2 py-1" 
+                                    value={inlineEvalForm.empleado_id} 
+                                    onChange={e => handleInlineEvalChange('empleado_id', e.target.value)} 
+                                    required 
+                                    disabled
+                                  >
                                     <option value="">Selecciona asistente</option>
                                     {asistentes.map(a => (
                                       <option key={a.empleado_id} value={a.empleado_id}>{a.nombres} {a.apellidos}</option>
@@ -583,7 +772,13 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                                   </select>
                                 </td>
                                 <td className="px-4 py-2">
-                                  <select className="w-full border rounded px-2 py-1" value={inlineEvalForm.tema_id} onChange={e => handleInlineEvalChange('tema_id', e.target.value)} required disabled>
+                                  <select 
+                                    className="w-full border rounded px-2 py-1" 
+                                    value={inlineEvalForm.tema_id} 
+                                    onChange={e => handleInlineEvalChange('tema_id', e.target.value)} 
+                                    required 
+                                    disabled
+                                  >
                                     <option value="">Selecciona tema</option>
                                     {temas.map(t => (
                                       <option key={t.id} value={t.id}>{t.titulo}</option>
@@ -591,13 +786,32 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
                                   </select>
                                 </td>
                                 <td className="px-4 py-2">
-                                  <input type="number" className="w-full border rounded px-2 py-1" value={inlineEvalForm.calificacion} onChange={e => handleInlineEvalChange('calificacion', e.target.value)} required min="0" max="100" />
+                                  <input 
+                                    type="number" 
+                                    className="w-full border rounded px-2 py-1" 
+                                    value={inlineEvalForm.calificacion} 
+                                    onChange={e => handleInlineEvalChange('calificacion', e.target.value)} 
+                                    required 
+                                    min="0" 
+                                    max="100" 
+                                  />
                                 </td>
                                 <td className="px-4 py-2">
-                                  <input type="text" className="w-full border rounded px-2 py-1" value={inlineEvalForm.comentarios} onChange={e => handleInlineEvalChange('comentarios', e.target.value)} />
+                                  <input 
+                                    type="text" 
+                                    className="w-full border rounded px-2 py-1" 
+                                    value={inlineEvalForm.comentarios} 
+                                    onChange={e => handleInlineEvalChange('comentarios', e.target.value)} 
+                                  />
                                 </td>
                                 <td className="px-4 py-2">
-                                  <input type="date" className="w-full border rounded px-2 py-1" value={inlineEvalForm.fecha_evaluacion} onChange={e => handleInlineEvalChange('fecha_evaluacion', e.target.value)} required />
+                                  <input 
+                                    type="date" 
+                                    className="w-full border rounded px-2 py-1" 
+                                    value={inlineEvalForm.fecha_evaluacion} 
+                                    onChange={e => handleInlineEvalChange('fecha_evaluacion', e.target.value)} 
+                                    required 
+                                  />
                                 </td>
                                 <td className="px-4 py-2 flex gap-2">
                                   <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleSaveInlineEval}>Guardar</Button>
@@ -704,41 +918,66 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
             <form onSubmit={handleSaveEvaluacion} className="space-y-4 mt-2">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Asistente</label>
-                <Select value={evalForm.empleado_id} onValueChange={v => handleEvalFormChange('empleado_id', v)} required disabled={!!editEvalId}>
+                <Select 
+                  value={evalForm.empleado_id} 
+                  onValueChange={v => handleEvalFormChange('empleado_id', v)} 
+                  required 
+                  disabled={!!editEvalId}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Selecciona un asistente" />
                   </SelectTrigger>
                   <SelectContent>
                     {personal.filter(emp => asistentes.some(a => a.empleado_id === emp.id)).map(emp => (
-                      <SelectItem key={emp.id} value={emp.id}>{emp.nombres} {emp.apellidos}</SelectItem>
+                      <SelectItem key={emp.id} value={String(emp.id)}>{emp.nombres} {emp.apellidos}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Tema tratado</label>
-                <Select value={evalForm.tema_id} onValueChange={v => handleEvalFormChange('tema_id', v)} required disabled={!!editEvalId}>
+                <Select 
+                  value={evalForm.tema_id} 
+                  onValueChange={v => handleEvalFormChange('tema_id', v)} 
+                  required 
+                  disabled={!!editEvalId}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Selecciona un tema" />
                   </SelectTrigger>
                   <SelectContent>
                     {temas.map(t => (
-                      <SelectItem key={t.id} value={t.id}>{t.titulo}</SelectItem>
+                      <SelectItem key={t.id} value={String(t.id)}>{t.titulo}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Calificación</label>
-                <Input type="number" min={1} max={10} value={evalForm.calificacion} onChange={e => handleEvalFormChange('calificacion', e.target.value)} required />
+                <Input 
+                  type="number" 
+                  min={1} 
+                  max={10} 
+                  value={evalForm.calificacion} 
+                  onChange={e => handleEvalFormChange('calificacion', e.target.value)} 
+                  required 
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Comentarios</label>
-                <Textarea value={evalForm.comentarios} onChange={e => handleEvalFormChange('comentarios', e.target.value)} rows={3} />
+                <Textarea 
+                  value={evalForm.comentarios} 
+                  onChange={e => handleEvalFormChange('comentarios', e.target.value)} 
+                  rows={3} 
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de evaluación</label>
-                <Input type="date" value={evalForm.fecha_evaluacion} onChange={e => handleEvalFormChange('fecha_evaluacion', e.target.value)} />
+                <Input 
+                  type="date" 
+                  value={evalForm.fecha_evaluacion} 
+                  onChange={e => handleEvalFormChange('fecha_evaluacion', e.target.value)} 
+                />
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <Button type="button" variant="outline" onClick={() => setEvalModalOpen(false)}>Cancelar</Button>
@@ -758,7 +997,7 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
               <Input
                 placeholder="Buscar por nombre o apellido..."
                 value={busquedaAsistente}
-                onChange={e => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setBusquedaAsistente(e.target.value);
                   if (e.target.value.length > 2) buscarEmpleados(e.target.value);
                   else setResultadosBusqueda([]);
@@ -768,7 +1007,11 @@ const CapacitacionSingle = ({ capacitacionId, onBack }) => {
               {buscando && <div className="text-blue-600">Buscando...</div>}
               <ul className="divide-y divide-blue-100 max-h-60 overflow-y-auto">
                 {resultadosBusqueda.map(emp => (
-                  <li key={emp.id} className="flex items-center gap-3 py-2 cursor-pointer hover:bg-blue-100 rounded px-2" onClick={() => handleAgregarAsistente(emp)}>
+                  <li 
+                    key={emp.id} 
+                    className="flex items-center gap-3 py-2 cursor-pointer hover:bg-blue-100 rounded px-2" 
+                    onClick={() => handleAgregarAsistente(emp)}
+                  >
                     <span className="font-medium text-gray-900">{emp.nombres} {emp.apellidos}</span>
                     <span className="text-gray-500 text-sm">{emp.email}</span>
                   </li>

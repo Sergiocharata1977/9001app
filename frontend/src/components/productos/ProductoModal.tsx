@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,8 +21,44 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Package, Calendar, User } from 'lucide-react';
 
-const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
-  const [formData, setFormData] = useState({
+// Interfaces
+interface ProductoFormData {
+  nombre: string;
+  descripcion: string;
+  codigo: string;
+  estado: string;
+  tipo: string;
+  categoria: string;
+  responsable: string;
+  fecha_creacion: string;
+  fecha_revision: string;
+  version: string;
+  especificaciones: string;
+  requisitos_calidad: string;
+  proceso_aprobacion: string;
+  documentos_asociados: string;
+  observaciones: string;
+}
+
+interface Producto extends Partial<ProductoFormData> {
+  id?: number | string;
+}
+
+interface ProductoModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (formData: ProductoFormData) => void;
+  producto?: Producto | null;
+}
+
+interface EstadoISO {
+  value: string;
+  label: string;
+  color: string;
+}
+
+const ProductoModal: FC<ProductoModalProps> = ({ isOpen, onClose, onSave, producto }) => {
+  const [formData, setFormData] = useState<ProductoFormData>({
     nombre: '',
     descripcion: '',
     codigo: '',
@@ -41,7 +77,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
   });
 
   // Estados ISO 9001:8.3 - Proceso de Diseño y Desarrollo
-  const estadosISO = [
+  const estadosISO: EstadoISO[] = [
     { value: 'planificacion', label: 'Planificación', color: 'bg-blue-100 text-blue-800' },
     { value: 'entrada', label: 'Entradas', color: 'bg-purple-100 text-purple-800' },
     { value: 'diseno', label: 'Diseño', color: 'bg-orange-100 text-orange-800' },
@@ -52,7 +88,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     { value: 'obsoleto', label: 'Obsoleto', color: 'bg-red-100 text-red-800' }
   ];
 
-  const tiposProducto = [
+  const tiposProducto: string[] = [
     'Producto',
     'Servicio',
     'Software',
@@ -98,30 +134,35 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
         observaciones: ''
       });
     }
-  }, [producto]);
+  }, [producto, isOpen]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: keyof ProductoFormData, value: string): void => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    onSave(formData);
+    onClose();
+  };
+
+  const getEstadoInfo = (estado: string): EstadoISO | undefined => {
+    return estadosISO.find(e => e.value === estado);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Package className="h-5 w-5 text-emerald-600" />
-            {producto ? 'Editar Proyecto de Diseño' : 'Nuevo Proyecto de Diseño'}
+            <Package className="h-5 w-5" />
+            {producto ? 'Editar' : 'Nuevo'} Proyecto de Diseño y Desarrollo
           </DialogTitle>
           <DialogDescription>
-            {producto ? 'Modifica la información del proyecto de diseño y desarrollo' : 'Crea un nuevo proyecto de diseño y desarrollo según ISO 9001:8.3'}
+            Gestión conforme a ISO 9001:2015 - Cláusula 8.3: Diseño y desarrollo de productos y servicios
           </DialogDescription>
         </DialogHeader>
 
@@ -129,58 +170,52 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
           {/* Información Básica */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nombre">Nombre del Producto *</Label>
+              <Label htmlFor="nombre">Nombre del Proyecto *</Label>
               <Input
                 id="nombre"
                 value={formData.nombre}
-                onChange={(e) => handleInputChange('nombre', e.target.value)}
-                placeholder="Ej: Software SGC Pro"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange('nombre', e.target.value)}
+                placeholder="Nombre del producto o servicio"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="codigo">Código</Label>
+              <Label htmlFor="codigo">Código del Proyecto *</Label>
               <Input
                 id="codigo"
                 value={formData.codigo}
-                onChange={(e) => handleInputChange('codigo', e.target.value)}
-                placeholder="Ej: PROD-001"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange('codigo', e.target.value)}
+                placeholder="PROJ-2024-001"
+                required
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="descripcion">Descripción</Label>
+            <Label htmlFor="descripcion">Descripción del Proyecto</Label>
             <Textarea
               id="descripcion"
               value={formData.descripcion}
-              onChange={(e) => handleInputChange('descripcion', e.target.value)}
-              placeholder="Describe el producto o servicio..."
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange('descripcion', e.target.value)}
+              placeholder="Descripción detallada del proyecto de diseño y desarrollo..."
               rows={3}
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="categoria">Categoría</Label>
-            <Input
-              id="categoria"
-              value={formData.categoria}
-              onChange={(e) => handleInputChange('categoria', e.target.value)}
-              placeholder="Ej: Software, Hardware, Servicio, Documento"
-            />
-          </div>
-
-          {/* Clasificación y Estado */}
+          {/* Tipo y Estado */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="tipo">Tipo *</Label>
-              <Select value={formData.tipo} onValueChange={(value) => handleInputChange('tipo', value)}>
+              <Label htmlFor="tipo">Tipo de Proyecto</Label>
+              <Select
+                value={formData.tipo}
+                onValueChange={(value: string) => handleInputChange('tipo', value)}
+              >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Seleccionar tipo" />
                 </SelectTrigger>
                 <SelectContent>
-                  {tiposProducto.map((tipo) => (
+                  {tiposProducto.map(tipo => (
                     <SelectItem key={tipo} value={tipo}>
                       {tipo}
                     </SelectItem>
@@ -190,10 +225,19 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="estado">Estado *</Label>
-              <Select value={formData.estado} onValueChange={(value) => handleInputChange('estado', value)}>
+              <Label htmlFor="estado">Estado ISO 9001:8.3</Label>
+              <Select
+                value={formData.estado}
+                onValueChange={(value: string) => handleInputChange('estado', value)}
+              >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue>
+                    {getEstadoInfo(formData.estado) && (
+                      <Badge className={getEstadoInfo(formData.estado)?.color}>
+                        {getEstadoInfo(formData.estado)?.label}
+                      </Badge>
+                    )}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {estadosISO.map((estado) => (
@@ -212,7 +256,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
               <Input
                 id="version"
                 value={formData.version}
-                onChange={(e) => handleInputChange('version', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange('version', e.target.value)}
                 placeholder="1.0"
               />
             </div>
@@ -227,7 +271,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                 <Input
                   id="responsable"
                   value={formData.responsable}
-                  onChange={(e) => handleInputChange('responsable', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange('responsable', e.target.value)}
                   placeholder="Nombre del responsable"
                   className="pl-10"
                 />
@@ -242,7 +286,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                   id="fecha_creacion"
                   type="date"
                   value={formData.fecha_creacion}
-                  onChange={(e) => handleInputChange('fecha_creacion', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange('fecha_creacion', e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -262,7 +306,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                 <Textarea
                   id="especificaciones"
                   value={formData.especificaciones}
-                  onChange={(e) => handleInputChange('especificaciones', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange('especificaciones', e.target.value)}
                   placeholder="Define los requisitos funcionales y de desempeño del producto/servicio..."
                   rows={3}
                 />
@@ -273,7 +317,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                 <Textarea
                   id="requisitos_calidad"
                   value={formData.requisitos_calidad}
-                  onChange={(e) => handleInputChange('requisitos_calidad', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange('requisitos_calidad', e.target.value)}
                   placeholder="Normas ISO aplicables, requisitos legales y reglamentarios..."
                   rows={3}
                 />
@@ -289,7 +333,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                 <Textarea
                   id="proceso_aprobacion"
                   value={formData.proceso_aprobacion}
-                  onChange={(e) => handleInputChange('proceso_aprobacion', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange('proceso_aprobacion', e.target.value)}
                   placeholder="Actividades de verificación y validación programadas..."
                   rows={3}
                 />
@@ -303,7 +347,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                     id="fecha_revision"
                     type="date"
                     value={formData.fecha_revision}
-                    onChange={(e) => handleInputChange('fecha_revision', e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange('fecha_revision', e.target.value)}
                     className="pl-10"
                   />
                 </div>
@@ -319,7 +363,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                 <Textarea
                   id="documentos_asociados"
                   value={formData.documentos_asociados}
-                  onChange={(e) => handleInputChange('documentos_asociados', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange('documentos_asociados', e.target.value)}
                   placeholder="Documentos de planificación, evidencias de revisiones, autorizaciones..."
                   rows={3}
                 />
@@ -330,7 +374,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
                 <Textarea
                   id="observaciones"
                   value={formData.observaciones}
-                  onChange={(e) => handleInputChange('observaciones', e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange('observaciones', e.target.value)}
                   placeholder="Registros de revisiones, cambios realizados, autorizaciones..."
                   rows={3}
                 />

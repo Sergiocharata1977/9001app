@@ -1,9 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import React, { FC, useState, useEffect } from 'react';
+import { DndContext, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import AuditoriaKanbanColumn from './AuditoriaKanbanColumn';
+import { Auditoria, AuditoriaEstado } from '@/types/auditorias';
+
+// Interfaces para configuración de columnas
+interface ColumnConfig {
+  id: string;
+  title: string;
+  states: string[];
+  colorClasses: string;
+  bgColor: string;
+}
+
+// Interfaces para props
+interface AuditoriaKanbanBoardProps {
+  auditorias: Auditoria[];
+  onCardClick?: (auditoria: Auditoria) => void;
+  onAuditoriaStateChange?: (auditoriaId: number, newEstado: string) => void;
+}
+
+interface ItemsState {
+  [key: string]: Auditoria[];
+}
 
 // Definición de las columnas del Kanban para auditorías
-const columnConfig = [
+const columnConfig: ColumnConfig[] = [
   { 
     id: 'planificacion', 
     title: 'Planificación', 
@@ -48,7 +69,11 @@ const columnConfig = [
   },
 ];
 
-const AuditoriaKanbanBoard = ({ auditorias, onCardClick, onAuditoriaStateChange }) => {
+const AuditoriaKanbanBoard: FC<AuditoriaKanbanBoardProps> = ({ 
+  auditorias, 
+  onCardClick, 
+  onAuditoriaStateChange 
+}) => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -57,12 +82,14 @@ const AuditoriaKanbanBoard = ({ auditorias, onCardClick, onAuditoriaStateChange 
     })
   );
   
-  const [items, setItems] = useState({});
+  const [items, setItems] = useState<ItemsState>({});
 
   useEffect(() => {
     // Agrupa las auditorías en las columnas definidas en columnConfig
-    const auditoriasPorColumna = columnConfig.reduce((acc, column) => {
-      acc[column.id] = auditorias.filter(a => column.states.includes(a.estado));
+    const auditoriasPorColumna = columnConfig.reduce<ItemsState>((acc, column) => {
+      acc[column.id] = auditorias.filter(a => 
+        a.estado && column.states.includes(a.estado)
+      );
       return acc;
     }, {});
     setItems(auditoriasPorColumna);
@@ -71,21 +98,23 @@ const AuditoriaKanbanBoard = ({ auditorias, onCardClick, onAuditoriaStateChange 
     console.log('📊 Total auditorías recibidas:', auditorias.length);
   }, [auditorias]);
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: DragEndEvent): void => {
     const { active, over } = event;
 
     if (!over) return;
 
-    const auditoria = auditorias.find(a => a.id === active.id);
+    const auditoriaId = Number(active.id);
+    const auditoria = auditorias.find(a => a.id === auditoriaId);
     if (!auditoria) return;
 
-    const activeColumn = columnConfig.find(c => c.states.includes(auditoria.estado));
+    const activeColumn = columnConfig.find(c => 
+      auditoria.estado && c.states.includes(auditoria.estado)
+    );
     
     // Si se suelta sobre la misma columna, no hacer nada
     if (over.id === activeColumn?.id) return;
 
-    const auditoriaId = active.id;
-    const newColumnId = over.id;
+    const newColumnId = String(over.id);
 
     const targetColumn = columnConfig.find(c => c.id === newColumnId);
     if (!targetColumn) return;

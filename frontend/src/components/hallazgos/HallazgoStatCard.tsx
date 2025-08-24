@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
-const HallazgoStatCard = ({ title, value, icon, colorClass }) => {
+// Interface para props
+interface HallazgoStatCardProps {
+  title: string;
+  value: string | number;
+  icon?: ReactNode;
+  colorClass?: string;
+}
+
+const HallazgoStatCard: FC<HallazgoStatCardProps> = ({ 
+  title, 
+  value, 
+  icon, 
+  colorClass = 'bg-gray-500' 
+}) => {
   return (
     <Card className={`text-white ${colorClass}`}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

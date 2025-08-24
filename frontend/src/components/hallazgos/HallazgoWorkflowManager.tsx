@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { hallazgoWorkflow } from '@/config/hallazgoWorkflow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
-const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
-  const handleSubmit = async (formData, nextState) => {
+// Interfaces
+interface Hallazgo {
+  id?: number | string;
+  titulo?: string;
+  descripcion?: string;
+  estado: string;
+  [key: string]: any;
+}
+
+interface HallazgoWorkflowManagerProps {
+  hallazgo: Hallazgo;
+  onUpdate: (dataToUpdate: any) => void;
+  onCancel?: () => void;
+}
+
+interface WorkflowFormData {
+  decision?: string;
+  eficacia_verificacion?: string;
+  [key: string]: any;
+}
+
+const HallazgoWorkflowManager: FC<HallazgoWorkflowManagerProps> = ({ hallazgo, onUpdate, onCancel }) => {
+  const handleSubmit = async (formData: WorkflowFormData, nextState: string): Promise<void> => {
     const dataToUpdate = {
       ...formData,
       estado: nextState,
@@ -11,7 +32,7 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
     onUpdate(dataToUpdate);
   };
 
-  const renderCurrentStep = () => {
+  const renderCurrentStep = (): JSX.Element => {
     const currentStateConfig = hallazgoWorkflow[hallazgo.estado];
 
     if (!currentStateConfig) {
@@ -19,7 +40,9 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
         <Card>
           <CardHeader>
             <CardTitle>Estado no reconocido</CardTitle>
-            <CardDescription>El estado actual del hallazgo ({hallazgo.estado}) no corresponde a un paso procesable.</CardDescription>
+            <CardDescription>
+              El estado actual del hallazgo ({hallazgo.estado}) no corresponde a un paso procesable.
+            </CardDescription>
           </CardHeader>
         </Card>
       );
@@ -41,7 +64,7 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
       );
     }
 
-    const handleFormSubmit = (formData) => {
+    const handleFormSubmit = (formData: WorkflowFormData): void => {
       let finalNextState = nextState;
       // Lógica de bifurcación centralizada
       if (typeof nextState === 'object' && nextState !== null) {
@@ -54,7 +77,7 @@ const HallazgoWorkflowManager = ({ hallazgo, onUpdate, onCancel }) => {
           finalNextState = nextState[formData.eficacia_verificacion];
         }
       }
-      handleSubmit(formData, finalNextState);
+      handleSubmit(formData, finalNextState as string);
     };
 
     return <Component hallazgo={hallazgo} onSubmit={handleFormSubmit} onCancel={onCancel} />;
