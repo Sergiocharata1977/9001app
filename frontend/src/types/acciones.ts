@@ -91,6 +91,7 @@ export interface AccionTableAction {
   onClick: (accion: Accion) => void;
   variant?: 'ghost' | 'destructive' | 'default';
   show?: (accion: Accion) => boolean;
+  className?: string;
 }
 
 // Columna de tabla

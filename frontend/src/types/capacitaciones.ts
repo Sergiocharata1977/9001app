@@ -25,6 +25,7 @@ export interface Capacitacion {
   hora_inicio?: string;
   hora_fin?: string;
   participantes?: any[];
+  temas?: string[];
 }
 
 export interface CapacitacionFormData {
