@@ -9,10 +9,10 @@ import {
 } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { getFileStructure, regenerateFileStructure } from '../../services/fileStructureService';
-import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Input } from '../ui/Input';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Input } from '../ui/input';
 
 const FileStructureViewer = () => {
   const [fileStructure, setFileStructure] = useState(null);
@@ -205,12 +205,6 @@ const FileStructureViewer = () => {
           </Button>
           <Button
             variant={selectedSection === 'documentation' ? 'default' : 'outline'}
-            onClick={() => setSelectedSection('documentation')}
-          >
-            Documentación
-          </Button>
-          <Button
-            variant="outline"
             onClick={handleRegenerate}
             disabled={loading}
             className="ml-auto"
