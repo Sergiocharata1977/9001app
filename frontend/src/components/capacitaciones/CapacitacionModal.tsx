@@ -38,7 +38,7 @@ interface FormErrors {
   [key: string]: string | undefined;
 }
 
-function CapacitacionModal({ open, onOpenChange, onSave, capacitacion }: CapacitacionModalProps): JSX.Element {
+function CapacitacionModal({ open, onOpenChange, onSave, capacitacion }: CapacitacionModalProps): React.ReactElement {
   const [formData, setFormData] = useState<CapacitacionFormData>({
     nombre: "",
     descripcion: "",
@@ -86,7 +86,9 @@ function CapacitacionModal({ open, onOpenChange, onSave, capacitacion }: Capacit
         evaluacion: capacitacion.evaluacion || "",
         certificacion: capacitacion.certificacion || false
       });
-      setTemas(capacitacion.temas || []); // Si viene con temas
+      // TODO: Agregar propiedad 'temas' al tipo Capacitacion si es necesario
+      // setTemas(capacitacion.temas || []); // Si viene con temas
+      setTemas([]); // Por ahora inicializar vacío
     } else {
       setFormData({
         nombre: "",
